@@ -5,16 +5,16 @@ const testChannelId = '1171406565434212373'
 
 export type Message = {
   content: string
-  detail: string
+  detail?: string
 }
 
 export const sendMessage = async ({ content, detail }: Message) => {
   const message = {
     'tts': false,
     content,
-    embeds: [{
+    embeds: detail ? [{
       description: detail
-    }]
+    }] : []
   }
 
   const response = await fetch(`${baseURL}/channels/${testChannelId}/messages`, {

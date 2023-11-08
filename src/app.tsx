@@ -38,7 +38,12 @@ const App = () => {
 }
 
 const container = document.getElementById('App')
-const root = createRoot(container);
+if (container === null) {
+  throw new Error('App Container not found')
+}
+
+const root = createRoot(container)
+
 root.render(
   <>
     <App />
