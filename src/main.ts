@@ -17,8 +17,8 @@ const session = createSession(characterRepository)
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 960,
+    width: 1280,
+    height: 720,
     backgroundColor: '#002b47',
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
@@ -26,7 +26,7 @@ const createWindow = () => {
   });
 
   // Hide the menu bad (needed in DEV mode)
-  mainWindow.setMenuBarVisibility(false)
+  mainWindow.setMenuBarVisibility(true)
 
   // and load the index.html of the app.
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
@@ -36,7 +36,7 @@ const createWindow = () => {
   }
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools();
+  mainWindow.webContents.openDevTools();
 };
 
 // This method will be called when Electron has finished
@@ -74,13 +74,18 @@ app.on('activate', () => {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
 
-const handleTestDiscord = async () => {
+const handleGetCurrentCharacter = () => {
+  return JSON.stringify(session.getCurrentCharacter())
+}
+
+const handleCheckAbility = (event: unknown, abilityName: string, modifier: number) => {
   const currentCharacter = session.getCurrentCharacter()
   if (currentCharacter !== null) {
-    return currentCharacter.attemptTo('Perception', 5)
+    return currentCharacter.attemptTo(abilityName, modifier)
   }
 }
 
 app.whenReady().then(() => {
-  ipcMain.handle('testDiscord', handleTestDiscord)
+  ipcMain.handle('getCurrentCharacter', handleGetCurrentCharacter)
+  ipcMain.handle('checkAbility', handleCheckAbility)
 })

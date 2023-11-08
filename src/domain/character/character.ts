@@ -10,12 +10,12 @@ export type Entity = {
   id: Readonly<EntityId>
 }
 
-type Attribute = Nominal<'Attribute', Readonly<{
+export type Attribute = Nominal<'Attribute', Readonly<{
   name: string,
   value: number
 }>>
 
-type Ability = Nominal<'Ability', Readonly<{
+export type Ability = Nominal<'Ability', Readonly<{
   name: string,
   value: number
 }>>

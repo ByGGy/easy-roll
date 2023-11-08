@@ -1,7 +1,7 @@
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
 import { createRoot } from 'react-dom/client'
-import { DiscordTest } from './components/discordTest'
+import { CharacterSheet } from './components/character-sheet'
 
 const darkTheme = createTheme({
   palette: {
@@ -32,7 +32,7 @@ const App = () => {
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
-      <DiscordTest />
+      <CharacterSheet />
     </ThemeProvider>
   )
 }
