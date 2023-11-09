@@ -1,36 +1,29 @@
-import { ThemeProvider, createTheme } from '@mui/material/styles'
+import { ThemeProvider, ThemeOptions, createTheme } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
 import { createRoot } from 'react-dom/client'
 import { CharacterSheet } from './components/character-sheet'
 
-const darkTheme = createTheme({
+
+export const themeOptions: ThemeOptions = {
   palette: {
     mode: 'dark',
-    background: {
-      default: '#002b47',
-      paper: '#004877',
-    },
     primary: {
-      main: '#7ab9ea',
+      main: '#b95a34',
     },
     secondary: {
-      main: '#FFD740',
+      main: '#3493b9',
+    },
+    background: {
+      default: '#0e100b',
     },
   },
-  components: {
-    MuiTooltip: {
-      styleOverrides: {
-        tooltip: {
-          backgroundColor: '#242424',
-        },
-      },
-    },
-  },
-});
+}
+
+const theme = createTheme(themeOptions)
 
 const App = () => {
   return (
-    <ThemeProvider theme={darkTheme}>
+    <ThemeProvider theme={theme}>
       <CssBaseline />
       <CharacterSheet />
     </ThemeProvider>

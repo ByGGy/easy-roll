@@ -12,53 +12,13 @@ import Divider from '@mui/material/Divider'
 import ToggleButton from '@mui/material/ToggleButton'
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
 import Button from '@mui/material/Button'
+import CasinoIcon from '@mui/icons-material/Casino'
+
 import { InputSlider } from './input-slider'
+import { DifficultyMultiplier } from './difficulty-multiplier'
+import { BasicPopover } from './pop-over'
 import { Character, Attribute, Ability } from '../domain/character/character'
-
-type DifficultyMultiplierProps = {
-  value: number
-  onChange: (value: number) => void
-}
-export const DifficultyMultiplier = ({ value, onChange }: DifficultyMultiplierProps) => {
-  const handleChange = (
-    event: React.MouseEvent<HTMLElement>,
-    value: number | null,
-  ) => {
-    console.log(value)
-    if (value !== null && onChange !== null) {
-      onChange(Number(value))
-    }
-  }
-
-  return (
-    <Stack direction="row" spacing={4} alignItems='center'>
-      <Typography variant='caption' color='secondary'>
-        Multiplier
-      </Typography>
-      <ToggleButtonGroup
-        value={value.toString()}
-        exclusive
-        onChange={handleChange}
-      >
-        <ToggleButton value='1'>
-          <Typography variant='overline' color='text.primary'>x1</Typography>
-        </ToggleButton>
-        <ToggleButton value='2'>
-          <Typography variant='overline' color='text.primary'>x2</Typography>
-        </ToggleButton>
-        <ToggleButton value='3'>
-          <Typography variant='overline' color='text.primary'>x3</Typography>
-        </ToggleButton>
-        <ToggleButton value='4'>
-          <Typography variant='overline' color='text.primary'>x4</Typography>
-        </ToggleButton>
-        <ToggleButton value='5'>
-          <Typography variant='overline' color='text.primary'>x5</Typography>
-        </ToggleButton>
-      </ToggleButtonGroup>
-    </Stack>
-  )
-}
+import { CharacterAttributeRoll } from './character-roll'
 
 type AttributeProps = {
   attribute: Attribute
@@ -84,24 +44,18 @@ export const AttributeBlock = ({ attribute }: AttributeProps) => {
     <Card>
       <Grid container alignItems='center' padding={1} spacing={6}>
         <Grid item xs>
-          <Typography variant='subtitle1' color='text.primary'>
+          <Typography variant='h6'>
             {attribute.name}
           </Typography>
         </Grid>
         <Grid item xs='auto'>
-          <Typography variant='body1' color='text.primary'>
+          <Typography variant='h6' color='secondary'>
             {attribute.value}
           </Typography>
         </Grid>
         <Grid item xs='auto'>
-          <DifficultyMultiplier value={difficulty} onChange={handleDifficultyChange}/>
+          <BasicPopover triggerContent={<CasinoIcon />} popoverContent={<CharacterAttributeRoll attributeName={attribute.name} />} />
         </Grid>
-        <Grid item xs='auto'>
-          <InputSlider min={-30} max={+30} step={10} value={modifier} onChange={handleModifierChange} />
-        </Grid>
-        <Grid item xs='auto'>
-          <Button variant='contained' size='small' onClick={handleClick}>Roll Dice</Button>
-        </Grid>        
       </Grid>
   </Card>
   )
@@ -126,7 +80,7 @@ export const AbilityBlock = ({ ability }: AbilityProps) => {
     <Card>
       <Grid container alignItems='center' padding={1} spacing={6}>
         <Grid item xs>
-          <Typography variant='subtitle1' color='text.primary'>
+          <Typography variant='subtitle1' color='primary'>
             {ability.name}
           </Typography>
         </Grid>
@@ -139,7 +93,9 @@ export const AbilityBlock = ({ ability }: AbilityProps) => {
           <InputSlider min={-30} max={+30} step={10} value={modifier} onChange={handleModifierChange} />
         </Grid>
         <Grid item xs='auto'>
-          <Button variant='contained' size='small' onClick={handleClick}>Roll Dice</Button>
+          <Button variant="outlined" endIcon={<CasinoIcon />} onClick={handleClick}>
+            Roll
+          </Button>
         </Grid>
       </Grid>
   </Card>
@@ -161,27 +117,31 @@ export const CharacterSheet = () => {
 
   if (character !== null) {
     return (
-      <Box padding={4}>
-        <Grid container>
-          <Grid item xs>
-            <Typography variant='h3' color='secondary' gutterBottom>
-              <Box sx={{ fontWeight: 'bold' }}>{character.name}</Box>
-            </Typography>
+      <Paper elevation={4}>
+        <Box padding={4}>
+          <Grid container>
+            <Grid item xs>
+              <Paper elevation={1}>
+                <Typography padding={2} variant='h3' color='secondary' gutterBottom>
+                  <Box sx={{ fontWeight: 'bold' }}>{character.name}</Box>
+                </Typography>
+              </Paper>
+            </Grid>
           </Grid>
-        </Grid>
-        <Stack spacing={4} direction={'row'}>
-          <Paper elevation={1}>
-            <Stack spacing={1}>
-              {character.attributes.sort((aA, aB) => aA.name.localeCompare(aB.name)).map((attribute) => <AttributeBlock attribute={attribute} />)}
-            </Stack>
-          </Paper>
-          <Paper elevation={1}>
-            <Stack spacing={1}>
-              {character.abilities.sort((aA, aB) => aA.name.localeCompare(aB.name)).map((ability) => <AbilityBlock ability={ability} />)}
-            </Stack>
-          </Paper>
-        </Stack>
-      </Box>
+          <Stack spacing={4} direction={'row'}>
+            <Paper elevation={8}>
+              <Stack spacing={1} padding={2}>
+                {character.attributes.sort((aA, aB) => aA.name.localeCompare(aB.name)).map((attribute) => <AttributeBlock attribute={attribute} />)}
+              </Stack>
+            </Paper>
+            <Paper elevation={8}>
+              <Stack spacing={1} padding={2}>
+                {character.abilities.sort((aA, aB) => aA.name.localeCompare(aB.name)).map((ability) => <AbilityBlock ability={ability} />)}
+              </Stack>
+            </Paper>
+          </Stack>
+        </Box>
+      </Paper>
     )
   }
 
