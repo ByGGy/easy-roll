@@ -21,18 +21,22 @@ export const createRelay = (characterRepository: Repository<Character>) => {
     }
   }
 
-  const handleCharacterAttempt = (roll: RollCheck) => {
+  const handleCharacterCheck = (roll: RollCheck) => {
     const relevantCharacter = characterRepository.getById(roll.characterId)
     if (relevantCharacter) {
-      const rollResult = `\`\`\`diff\n${roll.isSuccess ? '+' : '-'} <${relevantCharacter.name}> ${roll.statName} ${roll.isSuccess ? 'success' : 'failure'} (${roll.value})\n\`\`\``
-      const relevantAbility = relevantCharacter.abilities.find((a) => a.name === roll.statName)
-      let rollDetail = ''
-      if (relevantAbility) {
-        rollDetail = `1d100 = ${roll.value} | ${roll.statName}: ${relevantAbility.value} | mod: ${roll.modifier >= 0 ? '+' :''}${roll.modifier}`
+      const rollResult = `\`\`\`diff\n${roll.isSuccess ? '+' : '-'} <${relevantCharacter.name}> ${roll.statName} : ${roll.isSuccess ? 'success' : 'failure'} (${roll.value})\n\`\`\``
+      
+      const details = []
+      details.push(`1d100 = ${roll.value}`)
+      details.push(`${roll.statName}: ${roll.statValue}`)
+      if (roll.difficulty) {
+        details.push(`difficulty: x${roll.difficulty}`)
       }
+      details.push(`mod: ${roll.modifier >= 0 ? '+' :''}${roll.modifier}`)
+
       sendMessage({
         content: rollResult,
-        detail: rollDetail
+        detail: details.join(' | ')
       })
     }
   }
@@ -40,7 +44,7 @@ export const createRelay = (characterRepository: Repository<Character>) => {
   messageBus.on('Domain.Session.start', handleSessionStart)
   messageBus.on('Domain.Session.end', handleSessionEnd)
 
-  messageBus.on('Domain.Character.attempt', handleCharacterAttempt)
+  messageBus.on('Domain.Character.check', handleCharacterCheck)
 
   return {}
 }

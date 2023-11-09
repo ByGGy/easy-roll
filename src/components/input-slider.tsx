@@ -14,10 +14,11 @@ type Props = {
   value: number
   min: number
   max: number
+  step: number
   onChange?: (value: number) => void
 }
 
-export const InputSlider = ({ value, min, max, onChange }: Props) => {
+export const InputSlider = ({ value, min, max, step, onChange }: Props) => {
   const update = (value: number) => {
     if (onChange) {
       onChange(value)
@@ -45,7 +46,7 @@ export const InputSlider = ({ value, min, max, onChange }: Props) => {
       <Grid container spacing={2} alignItems='center'>
         <Grid item>
           <Typography id='input-slider' variant='caption' color='secondary'>
-            Mod.
+            Offset
           </Typography>
         </Grid>
         <Grid item xs>
@@ -53,7 +54,7 @@ export const InputSlider = ({ value, min, max, onChange }: Props) => {
             value={typeof value === 'number' ? value : 0}
             onChange={handleSliderChange}
             aria-labelledby='input-slider'
-            step={5}
+            step={step}
             min={min}
             max={max}
             size='small'
@@ -68,7 +69,7 @@ export const InputSlider = ({ value, min, max, onChange }: Props) => {
             onChange={handleInputChange}
             onBlur={handleBlur}
             inputProps={{
-              step: 5,
+              step: step,
               min,
               max,
               type: 'number',

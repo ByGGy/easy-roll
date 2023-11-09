@@ -78,14 +78,22 @@ const handleGetCurrentCharacter = () => {
   return JSON.stringify(session.getCurrentCharacter())
 }
 
+const handleCheckAttribute = (event: unknown, attributeName: string, difficulty: number, modifier: number) => {
+  const currentCharacter = session.getCurrentCharacter()
+  if (currentCharacter !== null) {
+    return currentCharacter.checkAttribute(attributeName, difficulty, modifier)
+  }
+}
+
 const handleCheckAbility = (event: unknown, abilityName: string, modifier: number) => {
   const currentCharacter = session.getCurrentCharacter()
   if (currentCharacter !== null) {
-    return currentCharacter.attemptTo(abilityName, modifier)
+    return currentCharacter.checkAbility(abilityName, modifier)
   }
 }
 
 app.whenReady().then(() => {
   ipcMain.handle('getCurrentCharacter', handleGetCurrentCharacter)
+  ipcMain.handle('checkAttribute', handleCheckAttribute)
   ipcMain.handle('checkAbility', handleCheckAbility)
 })

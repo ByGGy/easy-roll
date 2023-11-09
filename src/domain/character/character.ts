@@ -24,12 +24,16 @@ export type Character = Entity & Readonly<{
   name: string
   attributes: Array<Attribute>
   abilities: Array<Ability>
-  attemptTo: (abilityName: string, modifier: number) => RollCheck | null
+  checkAttribute: (attributeName: string, difficulty: number, modifier: number) => RollCheck | null
+  checkAbility: (abilityName: string, modifier: number) => RollCheck | null
 }>
 
+// NB: there is always a difficulty multiplier and a difficulty offset
 export type RollCheck = Readonly<{
-  characterId: EntityId,
-  statName: string,
+  characterId: EntityId
+  statName: string
+  statValue: number
+  difficulty?: number
   modifier: number
   value: number
   isSuccess: boolean
@@ -72,20 +76,42 @@ export const createCharacter = (): Character => {
     { name: 'Voler', value: 54 } as Ability,
   ]
 
-  const attemptTo = (abilityName: string, modifier: number): RollCheck | null => {
+  const checkAttribute = (attributeName: string, difficulty: number, modifier: number): RollCheck | null => {
+    const attribute = attributes.find((a) => a.name === attributeName)
+    if (attribute) {
+      const diceValue = rollDice(100)
+      const isSuccess = diceValue <= attribute.value * difficulty + modifier
+      const rollCheck = {
+        characterId: id,
+        statName: attribute.name,
+        statValue: attribute.value,
+        difficulty: difficulty,
+        modifier,
+        value: diceValue,
+        isSuccess
+      }
+
+      messageBus.emit('Domain.Character.check', rollCheck)
+      return rollCheck
+    }
+    return null
+  }
+
+  const checkAbility = (abilityName: string, modifier: number): RollCheck | null => {
     const ability = abilities.find((a) => a.name === abilityName)
     if (ability) {
       const diceValue = rollDice(100)
       const isSuccess = diceValue <= ability.value + modifier
       const rollCheck = {
         characterId: id,
-        statName: abilityName,
+        statName: ability.name,
+        statValue: ability.value,
         modifier,
         value: diceValue,
         isSuccess
       }
 
-      messageBus.emit('Domain.Character.attempt', rollCheck)
+      messageBus.emit('Domain.Character.check', rollCheck)
       return rollCheck
     }
     return null
@@ -96,6 +122,7 @@ export const createCharacter = (): Character => {
     name,
     attributes,
     abilities,
-    attemptTo,
+    checkAttribute,
+    checkAbility,
   }
 }

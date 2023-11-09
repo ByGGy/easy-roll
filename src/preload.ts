@@ -11,5 +11,6 @@ declare global {
 
 contextBridge.exposeInMainWorld('electronAPI', {
   getCurrentCharacter: () => ipcRenderer.invoke('getCurrentCharacter'),
+  checkAttribute: (attributeName: string, difficulty: number, modifier: number) => ipcRenderer.invoke('checkAttribute', attributeName, difficulty, modifier),
   checkAbility: (abilityName: string, modifier: number) => ipcRenderer.invoke('checkAbility', abilityName, modifier),
 })
