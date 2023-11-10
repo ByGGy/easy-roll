@@ -26,7 +26,7 @@ const PrimaryToggleButton = styled(ToggleButton)(props => ({
   }
 }))
 
-export const CharacterAttributeRoll = ({ rollStat, statName }: Props) => {
+export const CharacterRoll = ({ rollStat, statName }: Props) => {
   const [difficulty, setDifficulty] = useState(3)
   const [modifier, setModifier] = useState(0)
 

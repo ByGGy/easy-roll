@@ -4,8 +4,8 @@ import Stack from '@mui/material/Stack'
 import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
 
-import { AttributeBlock } from './attribute-block'
-import { AbilityBlock } from './ability-block'
+import { CharacterAttributes } from './character-attributes'
+import { CharacterAbilities } from './character-abilities'
 
 import { Character } from '../domain/character/character'
 
@@ -24,27 +24,21 @@ export const CharacterSheet = () => {
 
   if (character !== null) {
     return (
-      <Paper elevation={4}>
+      <Paper elevation={1}>
         <Box padding={2}>
-          <Paper elevation={1}>
-            <Typography padding={2} variant='h4' color='secondary'>
+          <Paper elevation={2}>
+            <Typography padding={2} variant='h4' color='primary'>
               <Box sx={{ fontWeight: 'bold' }}>{character.name}</Box>
             </Typography>
-          </Paper>
-          <Paper elevation={2}>
-          <Box padding={1}>
-            <Stack spacing={1} direction={'row'}>
-              <Paper elevation={6}>
-                <Stack spacing={1} padding={1}>
-                  {character.attributes.sort((aA, aB) => aA.name.localeCompare(aB.name)).map((attribute) => <AttributeBlock attribute={attribute} />)}
-                </Stack>
-              </Paper>
-              <Paper elevation={6}>
-                <Stack spacing={1} padding={1}>
-                  {character.abilities.sort((aA, aB) => aA.name.localeCompare(aB.name)).map((ability) => <AbilityBlock ability={ability} />)}
-                </Stack>
-              </Paper>
-            </Stack>
+            <Box padding={1}>
+              <Stack spacing={1} direction={'row'}>
+                <Paper elevation={4}>
+                  <CharacterAttributes attributes={character.attributes} />
+                </Paper>
+                <Paper elevation={4}>
+                  <CharacterAbilities abilities={character.abilities} />
+                </Paper>
+              </Stack>
             </Box>
           </Paper>
         </Box>

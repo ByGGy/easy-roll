@@ -1,6 +1,6 @@
 import * as React from 'react'
 import Popover from '@mui/material/Popover'
-import Button from '@mui/material/Button'
+import IconButton from '@mui/material/IconButton'
 
 type Props = {
   triggerContent: React.ReactNode
@@ -23,9 +23,9 @@ export const BasicPopover = ({ triggerContent, popoverContent }: Props) => {
 
   return (
     <div>
-      <Button aria-describedby={id} variant='outlined' onClick={handleClick}>
+      <IconButton aria-describedby={id} onClick={handleClick} color='secondary'>
         {triggerContent}
-      </Button>
+      </IconButton>
       <Popover
         id={id}
         open={open}
