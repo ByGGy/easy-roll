@@ -8,12 +8,15 @@ import ToggleButton from '@mui/material/ToggleButton'
 import Slider from '@mui/material/Slider'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
-import { CardContent, CardActions, Paper } from '@mui/material'
+import { CardContent, CardActions } from '@mui/material'
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore'
 import { styled } from '@mui/material/styles'
 
+type RollStat = 'Attribute' | 'Ability'
+
 type Props = {
-  attributeName: string
+  rollStat: RollStat
+  statName: string
 }
 
 const PrimaryToggleButton = styled(ToggleButton)(props => ({
@@ -23,7 +26,7 @@ const PrimaryToggleButton = styled(ToggleButton)(props => ({
   }
 }))
 
-export const CharacterAttributeRoll = ({ attributeName }: Props) => {
+export const CharacterAttributeRoll = ({ rollStat, statName }: Props) => {
   const [difficulty, setDifficulty] = useState(3)
   const [modifier, setModifier] = useState(0)
 
@@ -46,15 +49,23 @@ export const CharacterAttributeRoll = ({ attributeName }: Props) => {
   }
 
   const handleRoll = useCallback(() => {
-    window.electronAPI.checkAttribute(attributeName, difficulty, modifier)
-  }, [attributeName, difficulty, modifier])
+    switch (rollStat) {
+      case 'Attribute': 
+        window.electronAPI.checkAttribute(statName, difficulty, modifier)
+        break
+      
+      case 'Ability':
+        window.electronAPI.checkAbility(statName, modifier)
+        break
+    }
+  }, [rollStat, statName, difficulty, modifier])
 
   return (
     <Card>
-      <Box padding={2}>
+      <Box padding={2} sx={{ minWidth: 300 }}>
         <Grid container alignItems='center'>
           <Grid item xs>
-            <Typography variant='h5'>{attributeName}</Typography>
+            <Typography variant='h5'>{statName}</Typography>
           </Grid>
           <Grid item xs='auto'>
             <Button onClick={handleReset}>
@@ -64,33 +75,35 @@ export const CharacterAttributeRoll = ({ attributeName }: Props) => {
         </Grid>
         <CardContent>
           <Stack direction='column' spacing={2}>
-            <Stack direction='row' spacing={4} alignItems='center'>
-              <Typography variant='button' color='primary'>
-                Multiplier
-              </Typography>
-              <ToggleButtonGroup
-                value={difficulty.toString()}
-                exclusive
-                onChange={handleDifficultyChange}
-                size='small'
-              >
-                <PrimaryToggleButton value='1'>
-                  <Typography>x1</Typography>
-                </PrimaryToggleButton>
-                <PrimaryToggleButton value='2'>
-                  <Typography>x2</Typography>
-                </PrimaryToggleButton>
-                <PrimaryToggleButton value='3'>
-                  <Typography>x3</Typography>
-                </PrimaryToggleButton>
-                <PrimaryToggleButton value='4'>
-                  <Typography>x4</Typography>
-                </PrimaryToggleButton>
-                <PrimaryToggleButton value='5'>
-                  <Typography>x5</Typography>
-                </PrimaryToggleButton>
-              </ToggleButtonGroup>
-            </Stack>
+            { rollStat === 'Attribute' &&
+              <Stack direction='row' spacing={4} alignItems='center'>
+                <Typography variant='button' color='primary'>
+                  Multiplier
+                </Typography>
+                <ToggleButtonGroup
+                  value={difficulty.toString()}
+                  exclusive
+                  onChange={handleDifficultyChange}
+                  size='small'
+                >
+                  <PrimaryToggleButton value='1'>
+                    <Typography>x1</Typography>
+                  </PrimaryToggleButton>
+                  <PrimaryToggleButton value='2'>
+                    <Typography>x2</Typography>
+                  </PrimaryToggleButton>
+                  <PrimaryToggleButton value='3'>
+                    <Typography>x3</Typography>
+                  </PrimaryToggleButton>
+                  <PrimaryToggleButton value='4'>
+                    <Typography>x4</Typography>
+                  </PrimaryToggleButton>
+                  <PrimaryToggleButton value='5'>
+                    <Typography>x5</Typography>
+                  </PrimaryToggleButton>
+                </ToggleButtonGroup>
+              </Stack>
+            }
             <Stack />
             <Stack />
             <Stack direction='row' spacing={4}>
