@@ -2,6 +2,7 @@ import { botToken } from './discordBotToken'
 
 const baseURL = 'https://discord.com/api/v10'
 const testChannelId = '1171406565434212373'
+const ariaChannelId = '418435103622955039'
 
 export type Message = {
   content: string
@@ -17,7 +18,7 @@ export const sendMessage = async ({ content, detail }: Message) => {
     }] : []
   }
 
-  const response = await fetch(`${baseURL}/channels/${testChannelId}/messages`, {
+  const response = await fetch(`${baseURL}/channels/${ariaChannelId}/messages`, {
     method: 'POST',
     headers: {
       'Authorization': botToken,
