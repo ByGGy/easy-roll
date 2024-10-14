@@ -1,6 +1,7 @@
 import { messageBus } from '../events/messageBus'
 import { sendMessage } from '../../api/discordAPI'
-import { Character, EntityId, RollCheck } from '../character/character'
+import { EntityId } from '../common/types'
+import { Character, RollCheck } from '../character/character'
 import { Repository } from '../character/repository'
 
 export const createRelay = (characterRepository: Repository<Character>) => {
@@ -8,7 +9,7 @@ export const createRelay = (characterRepository: Repository<Character>) => {
   const handleSessionStart = (characterId: EntityId) => {
     const relevantCharacter = characterRepository.getById(characterId)
     if (relevantCharacter) {
-      const content = `<${relevantCharacter.name}> has entered the realm.`
+      const content = `<${relevantCharacter.sheet.name}> has entered the realm.`
       sendMessage({ content })
     }
   }
@@ -16,7 +17,7 @@ export const createRelay = (characterRepository: Repository<Character>) => {
   const handleSessionEnd = (characterId: EntityId) => {
     const relevantCharacter = characterRepository.getById(characterId)
     if (relevantCharacter) {
-      const content = `<${relevantCharacter.name}> has left the realm.`
+      const content = `<${relevantCharacter.sheet.name}> has left the realm.`
       sendMessage({ content })
     }
   }
@@ -24,7 +25,7 @@ export const createRelay = (characterRepository: Repository<Character>) => {
   const handleCharacterCheck = (roll: RollCheck) => {
     const relevantCharacter = characterRepository.getById(roll.characterId)
     if (relevantCharacter) {
-      const rollResult = `\`\`\`diff\n${roll.isSuccess ? '+' : '-'} <${relevantCharacter.name}> ${roll.statName} : ${roll.isSuccess ? 'success' : 'failure'} (${roll.value})\n\`\`\``
+      const rollResult = `\`\`\`diff\n${roll.isSuccess ? '+' : '-'} <${relevantCharacter.sheet.name}> ${roll.statName} : ${roll.isSuccess ? 'success' : 'failure'} (${roll.value})\n\`\`\``
       
       const details = []
       details.push(`1d100 = ${roll.value}`)

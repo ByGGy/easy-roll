@@ -1,4 +1,5 @@
-import { EntityId, Character } from '../character/character'
+import { EntityId } from '../common/types'
+import { Character } from '../character/character'
 import { Repository } from '../character/repository'
 import { messageBus } from '../events/messageBus'
 

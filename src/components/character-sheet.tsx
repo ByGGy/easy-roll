@@ -28,15 +28,15 @@ export const CharacterSheet = () => {
         <Box padding={2}>
           <Paper elevation={2}>
             <Typography padding={2} variant='h4' color='primary'>
-              <Box sx={{ fontWeight: 'bold' }}>{character.name}</Box>
+              <Box sx={{ fontWeight: 'bold' }}>{character.sheet.name}</Box>
             </Typography>
             <Box padding={1}>
               <Stack spacing={1} direction={'row'}>
                 <Paper elevation={4}>
-                  <CharacterAttributes attributes={character.attributes} />
+                  <CharacterAttributes attributes={character.sheet.attributes} />
                 </Paper>
                 <Paper elevation={4}>
-                  <CharacterAbilities abilities={character.abilities} />
+                  <CharacterAbilities abilities={character.sheet.abilities} />
                 </Paper>
               </Stack>
             </Box>
