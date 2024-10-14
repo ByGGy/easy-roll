@@ -1,0 +1,271 @@
+{
+  "name": "Johann",
+  "attributes": [
+    {
+      "name": "Taille",
+      "value": 12
+    },
+    {
+      "name": "Apparence",
+      "value": 9
+    },
+    {
+      "name": "Constitution",
+      "value": 14
+    },
+    {
+      "name": "Force",
+      "value": 9
+    },
+    {
+      "name": "Agilité",
+      "value": 11
+    },
+    {
+      "name": "Dextérité",
+      "value": 12
+    },
+    {
+      "name": "Vue",
+      "value": 13
+    },
+    {
+      "name": "Ouïe",
+      "value": 10
+    },
+    {
+      "name": "Odorat-Goût",
+      "value": 8
+    },
+    {
+      "name": "Volonté",
+      "value": 12
+    },
+    {
+      "name": "Intellect",
+      "value": 13
+    },
+    {
+      "name": "Empathie",
+      "value": 10
+    },
+    {
+      "name": "Rêve",
+      "value": 15
+    },
+    {
+      "name": "Chance",
+      "value": 12
+    },
+    {
+      "name": "Mêlée",
+      "value": 10
+    },
+    {
+      "name": "Tir",
+      "value": 12
+    },
+    {
+      "name": "Lancer",
+      "value": 10
+    },
+    {
+      "name": "Dérobée",
+      "value": 10
+    }
+  ],
+  "abilities": [
+    {
+      "name": "Bricolage",
+      "value": -4
+    },
+    {
+      "name": "Chant",
+      "value": 1
+    },
+    {
+      "name": "Course",
+      "value": 2
+    },
+    {
+      "name": "Cuisine",
+      "value": 0
+    },
+    {
+      "name": "Danse",
+      "value": -4
+    },
+    {
+      "name": "Dessin",
+      "value": -4
+    },
+    {
+      "name": "Discrétion",
+      "value": 2
+    },
+    {
+      "name": "Escalade",
+      "value": 2
+    },
+    {
+      "name": "Saut",
+      "value": 2
+    },
+    {
+      "name": "Séduction",
+      "value": -4
+    },
+    {
+      "name": "Vigilance",
+      "value": 2
+    },
+    {
+      "name": "Charpenterie",
+      "value": -8
+    },
+    {
+      "name": "Comédie",
+      "value": -2
+    },
+    {
+      "name": "Commerce",
+      "value": 0
+    },
+    {
+      "name": "Equitation",
+      "value": 0
+    },
+    {
+      "name": "Maçonnerie",
+      "value": -8
+    },
+    {
+      "name": "Musique",
+      "value": -8
+    },
+    {
+      "name": "Pickpocket",
+      "value": -8
+    },
+    {
+      "name": "Survie en Cité",
+      "value": 1
+    },
+    {
+      "name": "Survie en Extérieur",
+      "value": 1
+    },
+    {
+      "name": "Survie Désert",
+      "value": -8
+    },
+    {
+      "name": "Survie Forêt",
+      "value": -8
+    },
+    {
+      "name": "Survie Glaces",
+      "value": -8
+    },
+    {
+      "name": "Survie Marais",
+      "value": -8
+    },
+    {
+      "name": "Survie Montagne",
+      "value": -8
+    },
+    {
+      "name": "Survie Sous-sol",
+      "value": -8
+    },
+    {
+      "name": "Travestissement",
+      "value": 1
+    },
+    {
+      "name": "Acrobatie",
+      "value": -11
+    },
+    {
+      "name": "Chirurgie",
+      "value": 1
+    },
+    {
+      "name": "Jeu",
+      "value": -11
+    },
+    {
+      "name": "Jonglerie",
+      "value": -11
+    },
+    {
+      "name": "Maroquinerie",
+      "value": -11
+    },
+    {
+      "name": "Métallurgie",
+      "value": -11
+    },
+    {
+      "name": "Natation",
+      "value": -3
+    },
+    {
+      "name": "Navigation",
+      "value": -11
+    },
+    {
+      "name": "Orfèvrerie",
+      "value": -11
+    },
+    {
+      "name": "Serrurerie",
+      "value": -11
+    },
+    {
+      "name": "Alchimie",
+      "value": -11
+    },
+    {
+      "name": "Astrologie",
+      "value": -11
+    },
+    {
+      "name": "Botanique",
+      "value": -3
+    },
+    {
+      "name": "Ecriture",
+      "value": 1
+    },
+    {
+      "name": "Légendes",
+      "value": 1
+    },
+    {
+      "name": "Médecine",
+      "value": 1
+    },
+    {
+      "name": "Zoologie",
+      "value": 2
+    },
+    {
+      "name": "Oniros",
+      "value": -11
+    },
+    {
+      "name": "Hypnos",
+      "value": -11
+    },
+    {
+      "name": "Narcos",
+      "value": -11
+    },
+    {
+      "name": "Thanatos",
+      "value": 3
+    }
+  ]
+}
