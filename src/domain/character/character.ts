@@ -65,7 +65,6 @@ export const createCharacter = (): Character => {
     { name: 'Intimider', value: 46 } as Ability,
     { name: 'Lire, écrire', value: 65 } as Ability,
     { name: 'Mentir, convaincre', value: 65 } as Ability,
-    { name: 'Mentir, convaincre', value: 65 } as Ability,
     { name: 'Perception', value: 60 } as Ability,
     { name: 'Piloter', value: 46 } as Ability,
     { name: 'Psychologie', value: 48 } as Ability,
