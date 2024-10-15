@@ -4,7 +4,6 @@ import { messageBus } from '../events/messageBus'
 
 import { EntityId } from '../common/types'
 
-
 export const createRelay = (window: BrowserWindow) => {
 
   const handleSessionStart = (characterId: EntityId) => {

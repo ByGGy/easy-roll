@@ -11,8 +11,6 @@ import { CharacterAbilities } from './character-abilities'
 
 import { CharacterSheet } from '../domain/character/characterSheet'
 
-// import { Character } from '../domain/character/character'
-
 export const CharacterPage = () => {
   const [character, setCharacter] = useState<CharacterSheet | null>(null)
 

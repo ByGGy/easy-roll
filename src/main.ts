@@ -3,6 +3,7 @@ import path from 'path';
 
 import { createRepository } from './domain/character/repository'
 import { createSession } from './domain/session/session'
+import { engine } from './domain/aria/engine'
 import { createRelay as createDiscordRelay } from './domain/discord/relay'
 import { createRelay as createFrontRelay } from './domain/front/relay'
 import { EntityId } from './domain/common/types'
@@ -94,16 +95,16 @@ const handleGetCurrentCharacter = () => {
 
 const handleCheckAttribute = (event: unknown, attributeName: string, difficulty: number, modifier: number) => {
   const currentCharacter = session.getCurrentCharacter()
-  // if (currentCharacter !== null) {
-  //   return currentCharacter.checkAttribute(attributeName, difficulty, modifier)
-  // }
+  if (currentCharacter !== null) {
+    engine.checkAttribute(currentCharacter, attributeName, difficulty, modifier)
+  }
 }
 
 const handleCheckAbility = (event: unknown, abilityName: string, modifier: number) => {
   const currentCharacter = session.getCurrentCharacter()
-  // if (currentCharacter !== null) {
-  //   return currentCharacter.checkAbility(abilityName, modifier)
-  // }
+  if (currentCharacter !== null) {
+    engine.checkAbility(currentCharacter, abilityName, modifier)
+  }
 }
 
 app.whenReady().then(() => {
