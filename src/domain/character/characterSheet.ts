@@ -11,6 +11,7 @@ export type Ability = Nominal<'Ability', Readonly<{
 }>>
 
 export type CharacterSheet = Entity & Readonly<{
+  game: string
   name: string
   attributes: Array<Attribute>
   abilities: Array<Ability>
@@ -18,5 +19,11 @@ export type CharacterSheet = Entity & Readonly<{
 
 // TODO: need better validation..
 export const isCharacterSheet = (o: unknown): o is CharacterSheet => {
-  return (o !== null) && (o !== undefined) && ((o as CharacterSheet).id !== undefined) && ((o as CharacterSheet).name !== undefined) && ((o as CharacterSheet).attributes !== undefined) && ((o as CharacterSheet).abilities !== undefined)
+  return (o !== null)
+    && (o !== undefined)
+    && ((o as CharacterSheet).id !== undefined)
+    && ((o as CharacterSheet).game !== undefined)
+    && ((o as CharacterSheet).name !== undefined)
+    && ((o as CharacterSheet).attributes !== undefined)
+    && ((o as CharacterSheet).abilities !== undefined)
 }

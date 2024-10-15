@@ -110,9 +110,9 @@ const handleCheckAbility = (event: unknown, abilityName: string, modifier: numbe
 app.whenReady().then(() => {
   ipcMain.handle('getAllCharacterSheets', handleGetAllCharacterSheets)
   ipcMain.handle('openSession', handleOpenSession)
+  ipcMain.handle('getCurrentCharacter', handleGetCurrentCharacter)
   ipcMain.handle('closeSession', handleCloseSession)
 
-  ipcMain.handle('getCurrentCharacter', handleGetCurrentCharacter)
   ipcMain.handle('checkAttribute', handleCheckAttribute)
   ipcMain.handle('checkAbility', handleCheckAbility)
 })
