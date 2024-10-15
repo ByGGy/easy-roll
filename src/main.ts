@@ -1,9 +1,11 @@
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserWindow, ipcMain } from 'electron'
 import path from 'path';
 
 import { createRepository } from './domain/character/repository'
 import { createSession } from './domain/session/session'
-import { createRelay } from './domain/discord/relay'
+import { createRelay as createDiscordRelay } from './domain/discord/relay'
+import { createRelay as createFrontRelay } from './domain/front/relay'
+import { EntityId } from './domain/common/types'
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -11,8 +13,9 @@ if (require('electron-squirrel-startup')) {
 }
 
 const characterRepository = createRepository()
-const discordRelay = createRelay(characterRepository)
+const discordRelay = createDiscordRelay(characterRepository)
 const session = createSession(characterRepository)
+let frontRelay
 
 const createWindow = () => {
   // Create the browser window.
@@ -37,6 +40,8 @@ const createWindow = () => {
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools();
+
+  frontRelay = createFrontRelay(mainWindow)
 };
 
 // This method will be called when Electron has finished
@@ -44,9 +49,6 @@ const createWindow = () => {
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
   createWindow()
-  
-  const characters = characterRepository.getAll()
-  session.start(characters[0].id)
 });
 
 app.on('before-quit', () => {
@@ -74,25 +76,41 @@ app.on('activate', () => {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
 
+const handleGetAllCharacterSheets = () => {
+  return JSON.stringify(characterRepository.getAll())
+}
+
+const handleOpenSession = (event: unknown, id: EntityId) => {
+  session.start(id)
+}
+
+const handleCloseSession = (event: unknown) => {
+  session.end()
+}
+
 const handleGetCurrentCharacter = () => {
   return JSON.stringify(session.getCurrentCharacter())
 }
 
 const handleCheckAttribute = (event: unknown, attributeName: string, difficulty: number, modifier: number) => {
   const currentCharacter = session.getCurrentCharacter()
-  if (currentCharacter !== null) {
-    return currentCharacter.checkAttribute(attributeName, difficulty, modifier)
-  }
+  // if (currentCharacter !== null) {
+  //   return currentCharacter.checkAttribute(attributeName, difficulty, modifier)
+  // }
 }
 
 const handleCheckAbility = (event: unknown, abilityName: string, modifier: number) => {
   const currentCharacter = session.getCurrentCharacter()
-  if (currentCharacter !== null) {
-    return currentCharacter.checkAbility(abilityName, modifier)
-  }
+  // if (currentCharacter !== null) {
+  //   return currentCharacter.checkAbility(abilityName, modifier)
+  // }
 }
 
 app.whenReady().then(() => {
+  ipcMain.handle('getAllCharacterSheets', handleGetAllCharacterSheets)
+  ipcMain.handle('openSession', handleOpenSession)
+  ipcMain.handle('closeSession', handleCloseSession)
+
   ipcMain.handle('getCurrentCharacter', handleGetCurrentCharacter)
   ipcMain.handle('checkAttribute', handleCheckAttribute)
   ipcMain.handle('checkAbility', handleCheckAbility)

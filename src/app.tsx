@@ -1,8 +1,7 @@
 import { ThemeProvider, ThemeOptions, createTheme } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
 import { createRoot } from 'react-dom/client'
-import { CharacterSheet } from './components/character-sheet'
-
+import { CheapRouter } from './components/cheap-router'
 
 export const themeOptions: ThemeOptions = {
   palette: {
@@ -25,7 +24,7 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <CharacterSheet />
+      <CheapRouter />
     </ThemeProvider>
   )
 }

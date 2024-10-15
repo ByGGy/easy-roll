@@ -1,9 +1,9 @@
 import { globSync } from 'glob'
 import { readFileSync } from 'fs'
+import { randomUUID } from 'crypto'
 import { isNotNull } from '../common/tools'
 import { Entity, EntityId } from '../common/types'
 import { CharacterSheet, isCharacterSheet } from './characterSheet'
-import { createCharacter, Character } from "./character"
 
 export type Repository<T extends Entity> = {
   getAll: () => Readonly<Array<T>>
@@ -15,6 +15,8 @@ const loadSheetsFromDisk = (): Array<CharacterSheet> => {
   return relevantFiles.map((filePath) => {
     const data = readFileSync(filePath, 'utf8')
     const maybeSheet = JSON.parse(data)
+    // TODO: we do not need to store the ids at the moment ?
+    maybeSheet.id = randomUUID()
     if (isCharacterSheet(maybeSheet)) {
       return maybeSheet
     }
@@ -24,11 +26,11 @@ const loadSheetsFromDisk = (): Array<CharacterSheet> => {
   }).filter(isNotNull)
 }
 
-export const createRepository = (): Repository<Character> => {
-  const characters = loadSheetsFromDisk().map(createCharacter)
+export const createRepository = (): Repository<CharacterSheet> => {
+  const characterSheets = loadSheetsFromDisk()
 
-  const getAll = () => characters
-  const getById = (id: EntityId) => characters.find((c) => c.id === id)
+  const getAll = () => characterSheets
+  const getById = (id: EntityId) => characterSheets.find((sheet) => sheet.id === id)
 
   return {
     getAll,

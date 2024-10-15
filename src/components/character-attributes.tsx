@@ -7,7 +7,7 @@ import CasinoIcon from '@mui/icons-material/Casino'
 import { BasicPopover } from './common/pop-over'
 import { CharacterRoll } from './character-roll'
 
-import { Attribute } from '../domain/character/character'
+import { Attribute } from '../domain/character/characterSheet'
 
 type Props = {
   attributes: Array<Attribute>
