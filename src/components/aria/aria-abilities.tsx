@@ -4,33 +4,33 @@ import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
 import CasinoIcon from '@mui/icons-material/Casino'
 
-import { BasicPopover } from './common/pop-over'
-import { CharacterRoll } from './character-roll'
+import { BasicPopover } from '../common/pop-over'
+import { AriaRoll } from './aria-roll'
 
-import { Attribute } from '../domain/character/characterSheet'
+import { Ability } from '../../domain/character/characterSheet'
 
 type Props = {
-  attributes: Array<Attribute>
+  abilities: Array<Ability>
 }
 
-export const CharacterAttributes = ({ attributes }: Props) => {
+export const AriaAbilities = ({ abilities }: Props) => {
   return (
     <List dense>
-      {attributes.sort((aA, aB) => aA.name.localeCompare(aB.name)).map((attribute) =>
-        <ListItem
+      {abilities.sort((aA, aB) => aA.name.localeCompare(aB.name)).map((ability) =>
+        <ListItem key={ability.name}
           secondaryAction={
-            <BasicPopover triggerContent={<CasinoIcon />} popoverContent={<CharacterRoll rollStat='Attribute' statName={attribute.name} />} />
+            <BasicPopover triggerContent={<CasinoIcon />} popoverContent={<AriaRoll rollStat='Ability' statName={ability.name} />} />
           }
         >
         <Grid container alignItems='center' spacing={4}>
           <Grid item xs>
             <Typography variant='body1' color='primary'>
-              {attribute.name}
+              {ability.name}
             </Typography>
           </Grid>
           <Grid item xs='auto' paddingRight={2}>
             <Typography variant='body1' >
-              {attribute.value}
+              {`${ability.value}%`}
             </Typography>
           </Grid>
         </Grid>

@@ -19,6 +19,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
   getCurrentCharacter: () => ipcRenderer.invoke('getCurrentCharacter'),
   closeSession: () => ipcRenderer.invoke('closeSession'),
 
-  checkAttribute: (attributeName: string, difficulty: number, modifier: number) => ipcRenderer.invoke('checkAttribute', attributeName, difficulty, modifier),
-  checkAbility: (abilityName: string, modifier: number) => ipcRenderer.invoke('checkAbility', abilityName, modifier),
+  ariaCheckAttribute: (attributeName: string, difficulty: number, modifier: number) => ipcRenderer.invoke('ariaCheckAttribute', attributeName, difficulty, modifier),
+  ariaCheckAbility: (abilityName: string, modifier: number) => ipcRenderer.invoke('ariaCheckAbility', abilityName, modifier),
 })

@@ -12,10 +12,10 @@ import { CardContent, CardActions } from '@mui/material'
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore'
 import { styled } from '@mui/material/styles'
 
-type RollStat = 'Attribute' | 'Ability'
+type AriaRollStat = 'Attribute' | 'Ability'
 
 type Props = {
-  rollStat: RollStat
+  rollStat: AriaRollStat
   statName: string
 }
 
@@ -26,7 +26,7 @@ const PrimaryToggleButton = styled(ToggleButton)(props => ({
   }
 }))
 
-export const CharacterRoll = ({ rollStat, statName }: Props) => {
+export const AriaRoll = ({ rollStat, statName }: Props) => {
   const [difficulty, setDifficulty] = useState(3)
   const [modifier, setModifier] = useState(0)
 
@@ -51,11 +51,11 @@ export const CharacterRoll = ({ rollStat, statName }: Props) => {
   const handleRoll = useCallback(() => {
     switch (rollStat) {
       case 'Attribute': 
-        window.electronAPI.checkAttribute(statName, difficulty, modifier)
+        window.electronAPI.ariaCheckAttribute(statName, difficulty, modifier)
         break
       
       case 'Ability':
-        window.electronAPI.checkAbility(statName, modifier)
+        window.electronAPI.ariaCheckAbility(statName, modifier)
         break
     }
   }, [rollStat, statName, difficulty, modifier])

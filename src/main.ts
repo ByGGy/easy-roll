@@ -3,7 +3,7 @@ import path from 'path';
 
 import { createRepository } from './domain/character/repository'
 import { createSession } from './domain/session/session'
-import { engine } from './domain/aria/engine'
+import { engine as ariaEngine } from './domain/aria/engine'
 import { createRelay as createDiscordRelay } from './domain/discord/relay'
 import { createRelay as createFrontRelay } from './domain/front/relay'
 import { EntityId } from './domain/common/types'
@@ -93,17 +93,17 @@ const handleGetCurrentCharacter = () => {
   return JSON.stringify(session.getCurrentCharacter())
 }
 
-const handleCheckAttribute = (event: unknown, attributeName: string, difficulty: number, modifier: number) => {
+const handleAriaCheckAttribute = (event: unknown, attributeName: string, difficulty: number, modifier: number) => {
   const currentCharacter = session.getCurrentCharacter()
   if (currentCharacter !== null) {
-    engine.checkAttribute(currentCharacter, attributeName, difficulty, modifier)
+    ariaEngine.checkAttribute(currentCharacter, attributeName, difficulty, modifier)
   }
 }
 
-const handleCheckAbility = (event: unknown, abilityName: string, modifier: number) => {
+const handleAriaCheckAbility = (event: unknown, abilityName: string, modifier: number) => {
   const currentCharacter = session.getCurrentCharacter()
   if (currentCharacter !== null) {
-    engine.checkAbility(currentCharacter, abilityName, modifier)
+    ariaEngine.checkAbility(currentCharacter, abilityName, modifier)
   }
 }
 
@@ -113,6 +113,6 @@ app.whenReady().then(() => {
   ipcMain.handle('getCurrentCharacter', handleGetCurrentCharacter)
   ipcMain.handle('closeSession', handleCloseSession)
 
-  ipcMain.handle('checkAttribute', handleCheckAttribute)
-  ipcMain.handle('checkAbility', handleCheckAbility)
+  ipcMain.handle('ariaCheckAttribute', handleAriaCheckAttribute)
+  ipcMain.handle('ariaCheckAbility', handleAriaCheckAbility)
 })

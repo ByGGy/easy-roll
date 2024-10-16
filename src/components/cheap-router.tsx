@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 
 import { CharacterSelection } from './character-selection'
-import { CharacterPage } from './character-page'
+import { AriaPage } from './aria/aria-page'
+import { RddPage } from './rdd/rdd-page'
 
 import { CharacterSheet } from '../domain/character/characterSheet'
 
@@ -23,7 +24,16 @@ export const CheapRouter = () => {
   }, [])
 
   if (character !== null) {
-    return <CharacterPage />
+    // TODO: need a better check
+    if (character.game === 'Aria') {
+      return <AriaPage character={character} />
+    }
+
+    if (character.game === 'Rêve de Dragon') {
+      return <RddPage character={character} />
+    }
+
+    return <p>Game not supported</p>
   }
 
   return <CharacterSelection />
