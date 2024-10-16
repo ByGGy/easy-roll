@@ -9,6 +9,8 @@ import { createRelay as createDiscordRelay } from './domain/discord/relay'
 import { createRelay as createFrontRelay } from './domain/front/relay'
 import { EntityId } from './domain/common/types'
 
+// import { runTest } from './domain/dice/roll'
+
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
   app.quit();
@@ -18,6 +20,8 @@ const characterRepository = createRepository()
 const discordRelay = createDiscordRelay(characterRepository)
 const session = createSession(characterRepository)
 let frontRelay
+
+// runTest()
 
 const createWindow = () => {
   // Create the browser window.

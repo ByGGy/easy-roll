@@ -2,6 +2,7 @@ import { messageBus } from '../events/messageBus'
 
 import { EntityId } from '../common/types'
 import { CharacterSheet } from '../character/characterSheet'
+import { rollDice } from '../dice/roll'
 
 // modifiers from -10 to +7
 const thresholdLUT: Record<number, Array<number>> = {
@@ -45,8 +46,6 @@ export type RollCheck = Readonly<{
   value: number
   isSuccess: boolean
 }>
-
-const rollDice = (max: number) => Math.round(Math.random() * max)
 
 const checkAttribute = (character: CharacterSheet, attributeName: string, abilityName: string, modifier: number): RollCheck | null => {
   const attribute = character.attributes.find((a) => a.name === attributeName)
