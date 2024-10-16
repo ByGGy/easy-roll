@@ -104,5 +104,8 @@
       "name": "Voler",
       "value": 54
     }
-  ]
+  ],
+  "discordConfiguration": {
+    "channelId": "1171406565434212373"
+  }
 }

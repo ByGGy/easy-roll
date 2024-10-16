@@ -41,7 +41,7 @@ export const RddRoll = ({ attributeName, abilities }: Props) => {
 
   return (
     <Card>
-      <Box padding={2} sx={{ minWidth: 300 }}>
+      <Box padding={2} sx={{ minWidth: 400 }}>
         <Grid container alignItems='center'>
           <Grid item xs>
             <Typography variant='h5'>{attributeName}</Typography>

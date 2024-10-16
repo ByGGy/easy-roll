@@ -268,5 +268,8 @@
       "name": "Thanatos",
       "value": 3
     }
-  ]
+  ],
+  "discordConfiguration": {
+    "channelId": "1295362513784803449"
+  }
 }

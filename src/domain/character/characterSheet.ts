@@ -10,11 +10,16 @@ export type Ability = Nominal<'Ability', Readonly<{
   value: number
 }>>
 
+export type DiscordConfiguration = {
+  channelId: string
+}
+
 export type CharacterSheet = Entity & Readonly<{
   game: string
   name: string
   attributes: Array<Attribute>
   abilities: Array<Ability>
+  discordConfiguration: DiscordConfiguration
 }>
 
 // TODO: need better validation..
@@ -26,4 +31,5 @@ export const isCharacterSheet = (o: unknown): o is CharacterSheet => {
     && ((o as CharacterSheet).name !== undefined)
     && ((o as CharacterSheet).attributes !== undefined)
     && ((o as CharacterSheet).abilities !== undefined)
+    && ((o as CharacterSheet).discordConfiguration !== undefined)
 }

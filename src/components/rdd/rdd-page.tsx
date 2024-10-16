@@ -7,7 +7,6 @@ import { RddAttributes } from './rdd-attributes'
 
 import { CharacterSheet } from '../../domain/character/characterSheet'
 
-
 type Props = {
   character: CharacterSheet
 }

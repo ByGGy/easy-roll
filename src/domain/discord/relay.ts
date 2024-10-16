@@ -12,7 +12,10 @@ export const createRelay = (repository: Repository<CharacterSheet>) => {
     const relevantCharacter = repository.getById(characterId)
     if (relevantCharacter) {
       const content = `<${relevantCharacter.name}> has entered the realm.`
-      sendMessage({ content })
+      sendMessage({
+        channelId: relevantCharacter.discordConfiguration.channelId,
+        content
+      })
     }
   }
 
@@ -20,7 +23,10 @@ export const createRelay = (repository: Repository<CharacterSheet>) => {
     const relevantCharacter = repository.getById(characterId)
     if (relevantCharacter) {
       const content = `<${relevantCharacter.name}> has left the realm.`
-      sendMessage({ content })
+      sendMessage({
+        channelId: relevantCharacter.discordConfiguration.channelId,
+        content
+      })
     }
   }
 
@@ -39,6 +45,7 @@ export const createRelay = (repository: Repository<CharacterSheet>) => {
       details.push(`threshold: ${roll.threshold}`)
 
       sendMessage({
+        channelId: relevantCharacter.discordConfiguration.channelId,
         content: rollResult,
         detail: details.join(' | ')
       })
@@ -60,6 +67,7 @@ export const createRelay = (repository: Repository<CharacterSheet>) => {
       details.push(`threshold: ${roll.threshold}`)
 
       sendMessage({
+        channelId: relevantCharacter.discordConfiguration.channelId,
         content: rollResult,
         detail: details.join(' | ')
       })
