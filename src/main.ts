@@ -4,6 +4,7 @@ import path from 'path';
 import { createRepository } from './domain/character/repository'
 import { createSession } from './domain/session/session'
 import { engine as ariaEngine } from './domain/aria/engine'
+import { engine as rddEngine } from './domain/rdd/engine'
 import { createRelay as createDiscordRelay } from './domain/discord/relay'
 import { createRelay as createFrontRelay } from './domain/front/relay'
 import { EntityId } from './domain/common/types'
@@ -107,6 +108,13 @@ const handleAriaCheckAbility = (event: unknown, abilityName: string, modifier: n
   }
 }
 
+const handleRddCheckAttribute = (event: unknown, attributeName: string, abilityName: string, modifier: number) => {
+  const currentCharacter = session.getCurrentCharacter()
+  if (currentCharacter !== null) {
+    rddEngine.checkAttribute(currentCharacter, attributeName, abilityName, modifier)
+  }
+}
+
 app.whenReady().then(() => {
   ipcMain.handle('getAllCharacterSheets', handleGetAllCharacterSheets)
   ipcMain.handle('openSession', handleOpenSession)
@@ -115,4 +123,6 @@ app.whenReady().then(() => {
 
   ipcMain.handle('ariaCheckAttribute', handleAriaCheckAttribute)
   ipcMain.handle('ariaCheckAbility', handleAriaCheckAbility)
+
+  ipcMain.handle('rddCheckAttribute', handleRddCheckAttribute)
 })
