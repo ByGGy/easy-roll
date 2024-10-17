@@ -13,6 +13,23 @@ import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore
 
 import { Ability } from '../../domain/character/characterSheet'
 
+type AbilityItemProps = {
+  ability: Ability
+}
+
+const AbilityItem = ({ ability }: AbilityItemProps) => {
+  return (
+    <Box display='flex' alignItems='center' gap={2}>
+      <Typography variant='body1'>
+        {ability.name}
+      </Typography>
+      <Typography variant='caption' color={ability.value < 0 ? 'orange' : ability.value > 0 ? 'lime' : ''}>
+        {ability.value > 0 ? `+${ability.value}`: ability.value}
+      </Typography>
+    </Box>
+  )
+}
+
 type Props = {
   attributeName: string
   abilities: Array<Ability>
@@ -67,7 +84,9 @@ export const RddRoll = ({ attributeName, abilities }: Props) => {
                   >
                     <MenuItem value=''>None</MenuItem>
                     {abilities.sort((aA, aB) => aA.name.localeCompare(aB.name)).map((ability) =>
-                      <MenuItem key={ability.name} value={ability.name}>{`${ability.name} (${ability.value}) `}</MenuItem>
+                      <MenuItem key={ability.name} value={ability.name}>
+                        <AbilityItem ability={ability} />
+                      </MenuItem>
                     )}
                   </Select>
                 </FormControl>
