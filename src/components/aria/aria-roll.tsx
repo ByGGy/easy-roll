@@ -11,6 +11,7 @@ import Button from '@mui/material/Button'
 import { CardContent, CardActions } from '@mui/material'
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore'
 import { styled } from '@mui/material/styles'
+import { evaluateModifierColor } from '../common/style-helpers'
 
 type AriaRollStat = 'Attribute' | 'Ability'
 
@@ -108,7 +109,7 @@ export const AriaRoll = ({ rollStat, statName }: Props) => {
             <Stack />
             <Stack direction='row' spacing={4}>
                 <Typography variant='button' color='primary'>
-                  Offset
+                  Modifier
                 </Typography>
                 <Slider
                   value={modifier}
@@ -118,6 +119,9 @@ export const AriaRoll = ({ rollStat, statName }: Props) => {
                   step={10}
                   marks
                   valueLabelDisplay='on'
+                  sx={{
+                    color: evaluateModifierColor(modifier)
+                  }}
                 />
             </Stack>
           </Stack>

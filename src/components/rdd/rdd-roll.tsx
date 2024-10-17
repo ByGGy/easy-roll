@@ -10,6 +10,7 @@ import { CardContent, CardActions, FormControl, InputLabel } from '@mui/material
 import MenuItem from '@mui/material/MenuItem'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore'
+import { evaluateModifierColor } from '../common/style-helpers'
 
 import { Ability } from '../../domain/character/characterSheet'
 
@@ -23,7 +24,7 @@ const AbilityItem = ({ ability }: AbilityItemProps) => {
       <Typography variant='body1'>
         {ability.name}
       </Typography>
-      <Typography variant='caption' color={ability.value < 0 ? 'orange' : ability.value > 0 ? 'lime' : ''}>
+      <Typography variant='caption' color={evaluateModifierColor(ability.value)}>
         {ability.value > 0 ? `+${ability.value}`: ability.value}
       </Typography>
     </Box>
@@ -95,7 +96,7 @@ export const RddRoll = ({ attributeName, abilities }: Props) => {
             <Stack />
             <Stack direction='row' spacing={4}>
                 <Typography variant='button' color='primary'>
-                  Offset
+                  Modifier
                 </Typography>
                 <Slider
                   value={modifier}
@@ -105,6 +106,9 @@ export const RddRoll = ({ attributeName, abilities }: Props) => {
                   step={1}
                   marks
                   valueLabelDisplay='on'
+                  sx={{
+                    color: evaluateModifierColor(modifier)
+                  }}
                 />
             </Stack>
           </Stack>
