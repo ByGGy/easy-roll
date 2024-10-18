@@ -41,7 +41,9 @@ NB: atm, `Aria` and `Rêve de Dragon` are the exact values expected for the `gam
 
 ### For Devs
 
-To build a version locally, run `npm run package` then `npm run make`.  
+To build a version locally, run `npm run package`.
+
+To make an installer locally, run `npm run make`.  
 _(it is not necessary to provide the `.nupkg` file with the installer)_
 
 ### Links
