@@ -20,9 +20,9 @@ jobs:
         run: npm ci
 
       - name: Publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm run publish
-        with:
-          github-token: ${{ secrets.github_token }}
 
   publish_on_mac:
     runs-on: macos-latest
@@ -39,9 +39,9 @@ jobs:
         run: npm ci
 
       - name: Publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm run publish
-        with:
-          github-token: ${{ secrets.github_token }}
 
   publish_on_win:
     runs-on: windows-latest
@@ -58,6 +58,6 @@ jobs:
         run: npm ci
 
       - name: Publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm run publish
-        with:
-          github-token: ${{ secrets.github_token }}
