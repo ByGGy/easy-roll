@@ -127,7 +127,7 @@ export const AriaRoll = ({ rollStat, statName }: Props) => {
           </Stack>
         </CardContent>
         <CardActions>
-          <Button variant='contained' onClick={handleRoll} fullWidth>
+          <Button variant='contained' color='secondary' onClick={handleRoll} fullWidth>
             Roll
           </Button>
         </CardActions>

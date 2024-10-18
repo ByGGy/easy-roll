@@ -1,3 +1,4 @@
+import Stack from '@mui/material/Stack'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import Grid from '@mui/material/Grid'
@@ -16,27 +17,30 @@ type Props = {
 
 export const RddAttributes = ({ attributes, abilities }: Props) => {
   return (
-    <List dense>
-      {attributes.sort((aA, aB) => aA.name.localeCompare(aB.name)).map((attribute) =>
-        <ListItem key={attribute.name}
-          secondaryAction={
-            <BasicPopover triggerContent={<CasinoIcon />} popoverContent={<RddRoll attributeName={attribute.name} abilities={abilities} />} />
-          }
-        >
-        <Grid container alignItems='center' spacing={4}>
-          <Grid item xs>
-            <Typography variant='body1' color='primary'>
-              {attribute.name}
-            </Typography>
+    <Stack padding={2}>
+      <Typography variant='h5'>Attributes</Typography>
+      <List dense>
+        {attributes.sort((aA, aB) => aA.name.localeCompare(aB.name)).map((attribute) =>
+          <ListItem key={attribute.name}
+            secondaryAction={
+              <BasicPopover triggerContent={<CasinoIcon />} popoverContent={<RddRoll attributeName={attribute.name} abilities={abilities} />} />
+            }
+          >
+          <Grid container alignItems='center' spacing={4}>
+            <Grid item xs>
+              <Typography variant='body1' color='primary'>
+                {attribute.name}
+              </Typography>
+            </Grid>
+            <Grid item xs='auto' paddingRight={2}>
+              <Typography variant='body1' >
+                {attribute.value}
+              </Typography>
+            </Grid>
           </Grid>
-          <Grid item xs='auto' paddingRight={2}>
-            <Typography variant='body1' >
-              {attribute.value}
-            </Typography>
-          </Grid>
-        </Grid>
-        </ListItem>
-      )}
-    </List>
+          </ListItem>
+        )}
+      </List>
+    </Stack>
   )
 }

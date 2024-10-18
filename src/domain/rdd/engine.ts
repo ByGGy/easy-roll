@@ -2,7 +2,7 @@ import { messageBus } from '../events/messageBus'
 
 import { EntityId } from '../common/types'
 import { CharacterSheet } from '../character/characterSheet'
-import { rollDice } from '../dice/roll'
+import { rollDice } from '../dicetray/roll'
 
 // modifiers from -10 to +7
 const thresholdLUT: Record<number, Array<number>> = {

@@ -1,3 +1,4 @@
+import Stack from '@mui/material/Stack'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import Grid from '@mui/material/Grid'
@@ -15,27 +16,30 @@ type Props = {
 
 export const AriaAbilities = ({ abilities }: Props) => {
   return (
-    <List dense>
-      {abilities.sort((aA, aB) => aA.name.localeCompare(aB.name)).map((ability) =>
-        <ListItem key={ability.name}
-          secondaryAction={
-            <BasicPopover triggerContent={<CasinoIcon />} popoverContent={<AriaRoll rollStat='Ability' statName={ability.name} />} />
-          }
-        >
-        <Grid container alignItems='center' spacing={4}>
-          <Grid item xs>
-            <Typography variant='body1' color='primary'>
-              {ability.name}
-            </Typography>
+    <Stack padding={2}>
+      <Typography variant='h5'>Abilities</Typography>
+      <List dense>
+        {abilities.sort((aA, aB) => aA.name.localeCompare(aB.name)).map((ability) =>
+          <ListItem key={ability.name}
+            secondaryAction={
+              <BasicPopover triggerContent={<CasinoIcon />} popoverContent={<AriaRoll rollStat='Ability' statName={ability.name} />} />
+            }
+          >
+          <Grid container alignItems='center' spacing={4}>
+            <Grid item xs>
+              <Typography variant='body1' color='primary'>
+                {ability.name}
+              </Typography>
+            </Grid>
+            <Grid item xs='auto' paddingRight={2}>
+              <Typography variant='body1' >
+                {`${ability.value}%`}
+              </Typography>
+            </Grid>
           </Grid>
-          <Grid item xs='auto' paddingRight={2}>
-            <Typography variant='body1' >
-              {`${ability.value}%`}
-            </Typography>
-          </Grid>
-        </Grid>
-        </ListItem>
-      )}
-    </List>
+          </ListItem>
+        )}
+      </List>
+    </Stack>
   )
 }

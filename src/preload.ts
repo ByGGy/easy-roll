@@ -19,6 +19,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
   getCurrentCharacter: () => ipcRenderer.invoke('getCurrentCharacter'),
   closeSession: () => ipcRenderer.invoke('closeSession'),
 
+  diceTrayRoll: (diceFaceQty: number, diceQty: number, modifier: number) => ipcRenderer.invoke('diceTrayRoll', diceFaceQty, diceQty, modifier),
+
   ariaCheckAttribute: (attributeName: string, difficulty: number, modifier: number) => ipcRenderer.invoke('ariaCheckAttribute', attributeName, difficulty, modifier),
   ariaCheckAbility: (abilityName: string, modifier: number) => ipcRenderer.invoke('ariaCheckAbility', abilityName, modifier),
 

@@ -3,6 +3,7 @@ import path from 'path';
 
 import { createRepository } from './domain/character/repository'
 import { createSession } from './domain/session/session'
+import { engine as diceTrayEngine } from './domain/dicetray/engine'
 import { engine as ariaEngine } from './domain/aria/engine'
 import { engine as rddEngine } from './domain/rdd/engine'
 import { createRelay as createDiscordRelay } from './domain/discord/relay'
@@ -26,8 +27,8 @@ let frontRelay
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 700,
-    height: 1000,
+    width: 1150,
+    height: 900,
     backgroundColor: '#0e100b',
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
@@ -45,7 +46,7 @@ const createWindow = () => {
   }
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
 
   frontRelay = createFrontRelay(mainWindow)
 };
@@ -98,6 +99,13 @@ const handleGetCurrentCharacter = () => {
   return JSON.stringify(session.getCurrentCharacter())
 }
 
+const handleDiceTrayRoll = (event: unknown, diceFaceQty: number, diceQty: number, modifier: number) => {
+  const currentCharacter = session.getCurrentCharacter()
+  if (currentCharacter !== null) {
+    diceTrayEngine.rollDices(currentCharacter, diceFaceQty, diceQty, modifier)
+  }
+}
+
 const handleAriaCheckAttribute = (event: unknown, attributeName: string, difficulty: number, modifier: number) => {
   const currentCharacter = session.getCurrentCharacter()
   if (currentCharacter !== null) {
@@ -124,6 +132,8 @@ app.whenReady().then(() => {
   ipcMain.handle('openSession', handleOpenSession)
   ipcMain.handle('getCurrentCharacter', handleGetCurrentCharacter)
   ipcMain.handle('closeSession', handleCloseSession)
+
+  ipcMain.handle('diceTrayRoll', handleDiceTrayRoll)
 
   ipcMain.handle('ariaCheckAttribute', handleAriaCheckAttribute)
   ipcMain.handle('ariaCheckAbility', handleAriaCheckAbility)
