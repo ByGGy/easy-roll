@@ -1,3 +1,5 @@
+import path from 'path'
+import { app } from 'electron'
 import { globSync } from 'glob'
 import { readFileSync } from 'fs'
 import { randomUUID } from 'crypto'
@@ -11,8 +13,10 @@ export type Repository<T extends Entity> = {
 }
 
 const loadSheetsFromDisk = (): Array<CharacterSheet> => {
-  // TODO: would be better to check in the user profile AppData folder (or allow browsing for a specific file..)
-  const relevantFiles = globSync('characters/*.json')
+  // TODO: would be better to allow browsing for a specific file..
+  const pathToLookAt = path.join(app.getPath('userData'), 'characters')
+  const searchPattern = path.join(pathToLookAt, '*.json').replace(/\\/g,'/')
+  const relevantFiles = globSync(searchPattern, { posix: true })
   return relevantFiles.map((filePath) => {
     const data = readFileSync(filePath, 'utf8')
     const maybeSheet = JSON.parse(data)
