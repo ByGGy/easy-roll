@@ -25,7 +25,7 @@ jobs:
 
       - name: Recreate .env file
         run: |
-          echo DISCORD_TOKEN="${{ secrets.DISCORD_TOKEN }}" >> .env
+          echo DISCORD_TOKEN=\"${{ secrets.DISCORD_TOKEN }}\" >> .env
         shell: bash
 
       - name: Debug .env file
