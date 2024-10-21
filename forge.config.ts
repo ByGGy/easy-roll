@@ -17,7 +17,8 @@ const config: ForgeConfig = {
           owner: 'benjamin manderscheid',
           name: 'easy-roll'
         },
-        prerelease: true
+        prerelease: false,
+        draft: false
       }
     }
   ],
