@@ -4,11 +4,8 @@
 
 Setting up the app is a bit clunky atm.
 
-Installation:
-* on Windows, use the `*setup.exe` file provided  
+Download the latest release at https://github.com/ByGGy/easy-roll/releases/latest
 _(the installer is minimalist, you will not get a progression feedback nor be asked where you want to install the app..)_
-* on MacOS, there is no build atm, I'm looking into it
-* on Linux, there is no build, and I do not expect to work on this anytime soon
 
 Once the app is installed, you will have to create a `.json` file per character, in a specific folder, e.g.
 `./characters/myCharacter.json`  
