@@ -19,15 +19,23 @@ The character `.json` file should follow the following "schema":
   "name": "My character name",
   "attributes": [
     {
-      "name": "Example",
-      "value": 10
+      "name": "Attribute A",
+      "value": 8
     },
+    {
+      "name": "Attribute B",
+      "value": 12
+    }
   ],
   "abilities": [
     {
-      "name": "Another example",
-      "value": 10
+      "name": "Ability A",
+      "value": 4
     },
+    {
+      "name": "Ability B",
+      "value": 2
+    }
   ],
   "discordConfiguration": {
     "channelId": "In Discord, you can activate Dev mode, then right click a channel to copy/paste its id here"
@@ -35,7 +43,11 @@ The character `.json` file should follow the following "schema":
 }
 ```
 
-NB: atm, `Aria` or `Rêve de Dragon` are the exact values expected for the `game` property
+NB: atm, the exact values expected for the `game` property are: `Aria` or `Rêve de Dragon`
+
+Below is a screenshot using the `.json` from the example:  
+<img src='./EasyRoll_Example.png' width=400>
+
 
 ### For Devs
 
