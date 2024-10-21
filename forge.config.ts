@@ -14,7 +14,7 @@ const config: ForgeConfig = {
       name: '@electron-forge/publisher-github',
       config: {
         repository: {
-          owner: 'benjamin manderscheid',
+          owner: 'ByGGy',
           name: 'easy-roll'
         },
         prerelease: false,
