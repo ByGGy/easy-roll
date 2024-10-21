@@ -1,4 +1,4 @@
-// import { botToken } from './discordBotToken'
+import 'dotenv/config'
 
 const baseURL = 'https://discord.com/api/v10'
 // const test_ariaChannelId = '1171406565434212373'
