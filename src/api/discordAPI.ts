@@ -7,6 +7,11 @@ const baseURL = 'https://discord.com/api/v10'
 // const rddChannelId = '1157440787265634364'
 
 const botToken = process.env.DISCORD_TOKEN
+if (!botToken) {
+  // TODO: throw / catch and store in log files (or display notifications in UI)
+  console.error('discord token not defined in the process environment variables.')
+  process.exit(1)
+}
 
 export type Message = {
   channelId: string

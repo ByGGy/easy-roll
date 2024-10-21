@@ -11,6 +11,7 @@ export type Repository<T extends Entity> = {
 }
 
 const loadSheetsFromDisk = (): Array<CharacterSheet> => {
+  // TODO: would be better to check in the user profile AppData folder (or allow browsing for a specific file..)
   const relevantFiles = globSync('characters/*.json')
   return relevantFiles.map((filePath) => {
     const data = readFileSync(filePath, 'utf8')
