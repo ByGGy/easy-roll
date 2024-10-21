@@ -23,13 +23,13 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Recreate .env file
+      - name: Recreate discord token file
         run: |
-          echo DISCORD_TOKEN=\"${{ secrets.DISCORD_TOKEN }}\" >> .env
+          echo export const DISCORD_TOKEN=\"${{ secrets.DISCORD_TOKEN }}\" >> ./src/api/discordBotToken.ts
         shell: bash
 
-      - name: Debug .env file
-        run: head -c -30 .env
+      - name: Debug discord token file
+        run: head -c -30 ./src/api/discordBotToken.ts
         shell: bash
 
       - name: Publish

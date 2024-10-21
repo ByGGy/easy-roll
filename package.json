@@ -44,7 +44,6 @@
     "@fontsource/roboto": "^5.0.8",
     "@mui/icons-material": "^5.14.14",
     "@mui/material": "^5.14.14",
-    "dotenv": "^16.4.5",
     "electron-squirrel-startup": "^1.0.0",
     "glob": "^11.0.0",
     "react": "^18.2.0",
