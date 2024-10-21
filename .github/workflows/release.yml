@@ -28,10 +28,6 @@ jobs:
           echo export const DISCORD_TOKEN=\"${{ secrets.DISCORD_TOKEN }}\" >> ./src/api/discordBotToken.ts
         shell: bash
 
-      - name: Debug discord token file
-        run: head -c -30 ./src/api/discordBotToken.ts
-        shell: bash
-
       - name: Publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
