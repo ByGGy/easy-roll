@@ -4,7 +4,7 @@
 
 Setting up the app is a bit clunky atm.
 
-Download the latest release at https://github.com/ByGGy/easy-roll/releases/latest
+Download the latest release at https://github.com/ByGGy/easy-roll/releases/latest  
 _(the installer is minimalist, you will not get a progression feedback nor be asked where you want to install the app..)_
 
 Once the app is installed, you will have to create a `.json` file per character, in a specific folder, e.g.
