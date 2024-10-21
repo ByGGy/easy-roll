@@ -7,9 +7,10 @@ Setting up the app is a bit clunky atm.
 Download the latest release at https://github.com/ByGGy/easy-roll/releases/latest  
 _(the installer is minimalist, you will not get a progression feedback nor be asked where you want to install the app..)_
 
-Once the app is installed, you will have to create a `.json` file per character, in a specific folder, e.g.
-`./characters/myCharacter.json`  
-_(note its a relative path to the installed application `.exe` file)_
+Once the app is installed, you will have to create a `.json` file per character, in a specific folder (`userData`), e.g.:
+* on Windows: `C:\Users\<User>\AppData\Roaming\easy-roll\characters\myCharacter.json`
+* on macOS: `/Users/<User>/Library/Application Support/easy-roll/characters/myCharacter.json`
+* on Linux: `/home/<User>/.config/easy-roll/characters/myCharacter.json`
 
 The character `.json` file should follow the following "schema":
 ```
@@ -34,7 +35,7 @@ The character `.json` file should follow the following "schema":
 }
 ```
 
-NB: atm, `Aria` and `Rêve de Dragon` are the exact values expected for the `game` property
+NB: atm, `Aria` or `Rêve de Dragon` are the exact values expected for the `game` property
 
 ### For Devs
 
