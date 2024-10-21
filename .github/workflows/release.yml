@@ -28,6 +28,10 @@ jobs:
           echo DISCORD_TOKEN="${{ secrets.DISCORD_TOKEN }}" >> .env
         shell: bash
 
+      - name: Debug .env file
+        run: head -c -30 .env
+        shell: bash
+
       - name: Publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
