@@ -1,10 +1,12 @@
-import { botToken } from './discordBotToken'
+// import { botToken } from './discordBotToken'
 
 const baseURL = 'https://discord.com/api/v10'
 // const test_ariaChannelId = '1171406565434212373'
 // const test_rddChannelId = '1295362513784803449'
 // const ariaChannelId = '418435103622955039'
 // const rddChannelId = '1157440787265634364'
+
+const botToken = process.env.DISCORD_TOKEN
 
 export type Message = {
   channelId: string
