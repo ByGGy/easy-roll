@@ -23,8 +23,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
-        run: DEBUG=electron-forge:* npm run publish
-        # run: npm run publish
+        run: npm run publish
 
   publish_on_mac:
     runs-on: macos-latest
@@ -44,8 +43,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
-        run: DEBUG=electron-forge:* npm run publish
-        # run: npm run publish
+        run: npm run publish
 
   publish_on_win:
     runs-on: windows-latest
@@ -65,5 +63,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
-        run: DEBUG=electron-forge:* npm run publish
-        # run: npm run publish
+        run: npm run publish
