@@ -1,36 +1,36 @@
 import { EntityId } from '../common/types'
 import { CharacterSheet } from '../character/characterSheet'
 import { Repository } from '../character/repository'
-import { messageBus } from '../events/messageBus'
+import { StateEmitter, createState } from '../events/stateEmitter'
+
+export type SessionState = {
+  character: CharacterSheet | null
+}
 
 type Session = {
-  getCurrentCharacter: () => CharacterSheet | null
+  state: StateEmitter<SessionState>
   start: (characterId: EntityId) => void
   end: () => void
 }
 
 export const createSession = (repository: Repository<CharacterSheet>): Session => {
-  let currentCharacter: CharacterSheet | null = null
-
-  const getCurrentCharacter = () => currentCharacter
+  const state = createState<SessionState>({ character: null }, 'Domain.Session')
 
   const start = (characterId: EntityId) => {
     const relevantCharacter = repository.getById(characterId)
     if (relevantCharacter) {
-      currentCharacter = relevantCharacter
-      messageBus.emit('Domain.Session.start', currentCharacter.id)
+      state.update('character', relevantCharacter)
     }
   }
 
   const end = () => {
-    if (currentCharacter !== null) {
-      messageBus.emit('Domain.Session.end', currentCharacter.id)
-      currentCharacter = null  
+    if (state.character !== null) {
+      state.update('character', null)
     }
   }
 
   return {
-    getCurrentCharacter,
+    state,
     start,
     end
   }

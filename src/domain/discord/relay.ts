@@ -1,33 +1,35 @@
 import { messageBus } from '../events/messageBus'
 import { sendMessage } from '../../api/discordAPI'
-import { EntityId } from '../common/types'
 import { DiceTrayRoll } from '../dicetray/engine'
 import { RollCheck as AriaRollCheck } from '../aria/engine'
 import { RollCheck as RddRollCheck } from '../rdd/engine'
 import { Repository } from '../character/repository'
 import { CharacterSheet } from '../character/characterSheet'
+import { SessionState } from '../session/session'
 
 export const createRelay = (repository: Repository<CharacterSheet>) => {
 
-  const handleSessionStart = (characterId: EntityId) => {
-    const relevantCharacter = repository.getById(characterId)
-    if (relevantCharacter) {
-      const content = `<${relevantCharacter.name}> has entered the realm.`
-      sendMessage({
-        channelId: relevantCharacter.discordConfiguration.channelId,
-        content
-      })
-    }
-  }
-
-  const handleSessionEnd = (characterId: EntityId) => {
-    const relevantCharacter = repository.getById(characterId)
-    if (relevantCharacter) {
-      const content = `<${relevantCharacter.name}> has left the realm.`
-      sendMessage({
-        channelId: relevantCharacter.discordConfiguration.channelId,
-        content
-      })
+  const handleSessionUpdate = (previousState: SessionState, currentState: SessionState) => {
+    if (currentState.character !== null) {
+      const relevantCharacter = repository.getById(currentState.character.id)
+      if (relevantCharacter) {
+        const content = `<${relevantCharacter.name}> has entered the realm.`
+        sendMessage({
+          channelId: relevantCharacter.discordConfiguration.channelId,
+          content
+        })
+      }
+    } else {
+      if (previousState.character !== null) {
+        const relevantCharacter = repository.getById(previousState.character.id)
+        if (relevantCharacter) {
+          const content = `<${relevantCharacter.name}> has left the realm.`
+          sendMessage({
+            channelId: relevantCharacter.discordConfiguration.channelId,
+            content
+          })
+        }
+      }
     }
   }
 
@@ -92,8 +94,7 @@ export const createRelay = (repository: Repository<CharacterSheet>) => {
     }
   }
 
-  messageBus.on('Domain.Session.start', handleSessionStart)
-  messageBus.on('Domain.Session.end', handleSessionEnd)
+  messageBus.on('Domain.Session.update', handleSessionUpdate)
 
   messageBus.on('Domain.DiceTray.roll', handleDiceTrayRoll)
   messageBus.on('Domain.Aria.check', handleAriaCheck)

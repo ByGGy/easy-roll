@@ -95,33 +95,29 @@ const handleCloseSession = (event: unknown) => {
   session.end()
 }
 
-const handleGetCurrentCharacter = () => {
-  return JSON.stringify(session.getCurrentCharacter())
-}
-
 const handleDiceTrayRoll = (event: unknown, diceFaceQty: number, diceQty: number, modifier: number) => {
-  const currentCharacter = session.getCurrentCharacter()
+  const currentCharacter = session.state.character
   if (currentCharacter !== null) {
     diceTrayEngine.rollDices(currentCharacter, diceFaceQty, diceQty, modifier)
   }
 }
 
 const handleAriaCheckAttribute = (event: unknown, attributeName: string, difficulty: number, modifier: number) => {
-  const currentCharacter = session.getCurrentCharacter()
+  const currentCharacter = session.state.character
   if (currentCharacter !== null) {
     ariaEngine.checkAttribute(currentCharacter, attributeName, difficulty, modifier)
   }
 }
 
 const handleAriaCheckAbility = (event: unknown, abilityName: string, modifier: number) => {
-  const currentCharacter = session.getCurrentCharacter()
+  const currentCharacter = session.state.character
   if (currentCharacter !== null) {
     ariaEngine.checkAbility(currentCharacter, abilityName, modifier)
   }
 }
 
 const handleRddCheckAttribute = (event: unknown, attributeName: string, abilityName: string, modifier: number) => {
-  const currentCharacter = session.getCurrentCharacter()
+  const currentCharacter = session.state.character
   if (currentCharacter !== null) {
     rddEngine.checkAttribute(currentCharacter, attributeName, abilityName, modifier)
   }
@@ -130,7 +126,6 @@ const handleRddCheckAttribute = (event: unknown, attributeName: string, abilityN
 app.whenReady().then(() => {
   ipcMain.handle('getAllCharacterSheets', handleGetAllCharacterSheets)
   ipcMain.handle('openSession', handleOpenSession)
-  ipcMain.handle('getCurrentCharacter', handleGetCurrentCharacter)
   ipcMain.handle('closeSession', handleCloseSession)
 
   ipcMain.handle('diceTrayRoll', handleDiceTrayRoll)

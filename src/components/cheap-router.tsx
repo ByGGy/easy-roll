@@ -10,16 +10,9 @@ export const CheapRouter = () => {
   const [character, setCharacter] = useState<CharacterSheet | null>(null)
 
   useEffect(() => {
-    const fetchData = async () => {
-      const data = await window.electronAPI.getCurrentCharacter()
-      const character = JSON.parse(data)
-      setCharacter(character)
-    }
-
-    fetchData()
-
-    window.electronAPI.onMessage('domain-update', () => {
-      fetchData()
+    window.electronAPI.onMessage('Domain.Session.update', (data: string) => {
+      const states = JSON.parse(data)
+      setCharacter(states.current.character)
     })
   }, [])
 

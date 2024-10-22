@@ -2,20 +2,21 @@ import { BrowserWindow } from 'electron'
 
 import { messageBus } from '../events/messageBus'
 
-import { EntityId } from '../common/types'
+import { SessionState } from '../session/session'
 
 export const createRelay = (window: BrowserWindow) => {
 
-  const handleSessionStart = (characterId: EntityId) => {
-    window.webContents.send('domain-update', `character ${characterId} session has begun`)
+  // NB: this is just to guaranty that we will propagate the event with the same name
+  const transfer = (eventName: string, listener: (...args: any[]) => void) => {
+    messageBus.on(eventName, (...args) => listener(eventName, ...args))
   }
 
-  const handleSessionEnd = (characterId: EntityId) => {
-    window.webContents.send('domain-update', `character ${characterId} session has ended`)
+  const handleSessionUpdate = (eventName: string, previousState: SessionState, currentState: SessionState) => {
+    const data = JSON.stringify({ previous: previousState, current: currentState })
+    window.webContents.send(eventName, data)
   }
 
-  messageBus.on('Domain.Session.start', handleSessionStart)
-  messageBus.on('Domain.Session.end', handleSessionEnd)
+  transfer('Domain.Session.update', handleSessionUpdate)
 
   return {}
 }

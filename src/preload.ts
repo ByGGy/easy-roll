@@ -16,7 +16,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
 
   getAllCharacterSheets: () => ipcRenderer.invoke('getAllCharacterSheets'),
   openSession: (id: EntityId) => ipcRenderer.invoke('openSession', id),
-  getCurrentCharacter: () => ipcRenderer.invoke('getCurrentCharacter'),
   closeSession: () => ipcRenderer.invoke('closeSession'),
 
   diceTrayRoll: (diceFaceQty: number, diceQty: number, modifier: number) => ipcRenderer.invoke('diceTrayRoll', diceFaceQty, diceQty, modifier),
