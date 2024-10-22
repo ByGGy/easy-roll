@@ -4,6 +4,8 @@ import Typography from '@mui/material/Typography'
 import IconButton from '@mui/material/IconButton'
 import LogoutIcon from '@mui/icons-material/Logout'
 
+import { DiscordConfiguration } from './discord-configuration'
+
 import { CharacterSheet } from '../domain/character/characterSheet'
 
 type Props = {
@@ -11,7 +13,6 @@ type Props = {
 }
 
 export const CharacterHeader = ({ character }: Props) => {
-  
   const handleCloseSession = () => {
     window.electronAPI.closeSession()
   }
@@ -23,7 +24,7 @@ export const CharacterHeader = ({ character }: Props) => {
           <LogoutIcon fontSize='large' />
         </IconButton>
       </Grid>
-      <Grid item xs='auto'>
+      <Grid item xs>
         <Box>
           <Grid container alignItems='flex-end'>
             <Grid item xs='auto'>
@@ -38,6 +39,9 @@ export const CharacterHeader = ({ character }: Props) => {
             </Grid>
           </Grid>
         </Box>
+      </Grid>
+      <Grid item xs='auto' padding={2}>
+        <DiscordConfiguration />
       </Grid>
     </Grid>
   )

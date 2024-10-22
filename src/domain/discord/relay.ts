@@ -6,8 +6,35 @@ import { RollCheck as RddRollCheck } from '../rdd/engine'
 import { Repository } from '../character/repository'
 import { CharacterSheet } from '../character/characterSheet'
 import { SessionState } from '../session/session'
+import { StateEmitter, createState } from '../events/stateEmitter'
 
-export const createRelay = (repository: Repository<CharacterSheet>) => {
+export type RelayState = {
+  isEnabled: boolean
+}
+
+type Relay = {
+  state: StateEmitter<RelayState>
+  enable: () => void
+  disable: () => void
+}
+
+export const createRelay = (repository: Repository<CharacterSheet>): Relay => {
+  const state = createState<RelayState>({ isEnabled: false }, 'Domain.Discord')
+
+  const enable = () => {
+    state.update('isEnabled', true)
+  }
+
+  const disable = () => {
+    state.update('isEnabled', false)
+  }
+
+  const maybeHandle = (handler: (...args: any[]) => void) => (...args: any[]) => {
+    if (state.isEnabled)
+    {
+      handler(...args)
+    }
+  }
 
   const handleSessionUpdate = (previousState: SessionState, currentState: SessionState) => {
     if (currentState.character !== null) {
@@ -94,11 +121,15 @@ export const createRelay = (repository: Repository<CharacterSheet>) => {
     }
   }
 
-  messageBus.on('Domain.Session.update', handleSessionUpdate)
+  messageBus.on('Domain.Session.update', maybeHandle(handleSessionUpdate))
 
-  messageBus.on('Domain.DiceTray.roll', handleDiceTrayRoll)
-  messageBus.on('Domain.Aria.check', handleAriaCheck)
-  messageBus.on('Domain.Rdd.check', handleRddCheck)
+  messageBus.on('Domain.DiceTray.roll', maybeHandle(handleDiceTrayRoll))
+  messageBus.on('Domain.Aria.check', maybeHandle(handleAriaCheck))
+  messageBus.on('Domain.Rdd.check', maybeHandle(handleRddCheck))
 
-  return {}
+  return {
+    state,
+    enable,
+    disable
+  }
 }
