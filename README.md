@@ -4,8 +4,23 @@
 
 Setting up the app is a bit clunky atm.
 
+---
+
 Download the latest release at https://github.com/ByGGy/easy-roll/releases/latest  
 _(the installer is minimalist, you will not get a progression feedback nor be asked where you want to install the app..)_
+
+NB: the app is not signed / notarized, therefore:
+* on Windows, you will be warned and asked for an install confirmation
+* on macOS, you will have to do the following (cf https://discussions.apple.com/thread/253714860?sortBy=best):
+> When an application gets downloaded from any source other than those that Apple seems suited, the application gets an extended attribute "com.apple.Quarantine".  
+This triggers the message: "<application> is damaged and can't be opened. You should move it to the Bin."  
+Remove the attribute and you can launch the application.  
+To do this, open a console and type:
+```
+$ xattr -c <path/to/application.app>
+```
+
+---
 
 Once the app is installed, you will have to create a `.json` file per character, in a specific folder (`userData`), e.g.:
 * on Windows: `C:\Users\<User>\AppData\Roaming\easy-roll\characters\myCharacter.json`
@@ -44,6 +59,8 @@ The character `.json` file should follow the following "schema":
 ```
 
 NB: atm, the exact values expected for the `game` property are: `Aria` or `Rêve de Dragon`
+
+---
 
 Below is a screenshot using the `.json` from the example:  
 <img src='./EasyRoll_Example.png' width=400>
