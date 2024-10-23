@@ -1,20 +1,12 @@
-import { useState, useEffect } from 'react'
+import { useSelector } from 'react-redux'
+import { RootState } from '../store/store'
 
 import { CharacterSelection } from './character-selection'
 import { AriaPage } from './aria/aria-page'
 import { RddPage } from './rdd/rdd-page'
 
-import { CharacterSheet } from '../domain/character/characterSheet'
-
 export const CheapRouter = () => {
-  const [character, setCharacter] = useState<CharacterSheet | null>(null)
-
-  useEffect(() => {
-    window.electronAPI.onMessage('Domain.Session.update', (data: string) => {
-      const states = JSON.parse(data)
-      setCharacter(states.current.character)
-    })
-  }, [])
+  const character = useSelector((state: RootState) => state.session.character)
 
   if (character !== null) {
     // TODO: need a better check

@@ -1,6 +1,9 @@
 import { ThemeProvider, ThemeOptions, createTheme } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
 import { createRoot } from 'react-dom/client'
+import { store } from './store/store'
+import { Provider } from 'react-redux'
+
 import { CheapRouter } from './components/cheap-router'
 
 export const themeOptions: ThemeOptions = {
@@ -22,10 +25,12 @@ const theme = createTheme(themeOptions)
 
 const App = () => {
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <CheapRouter />
-    </ThemeProvider>
+    <Provider store={store}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <CheapRouter />
+      </ThemeProvider>
+    </Provider>
   )
 }
 
@@ -37,7 +42,5 @@ if (container === null) {
 const root = createRoot(container)
 
 root.render(
-  <>
-    <App />
-  </>
+  <App />
 )

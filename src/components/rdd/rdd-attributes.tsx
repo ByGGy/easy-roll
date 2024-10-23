@@ -11,16 +11,18 @@ import { RddRoll } from './rdd-roll'
 import { Ability, Attribute } from '../../domain/character/characterSheet'
 
 type Props = {
-  attributes: Array<Attribute>
-  abilities: Array<Ability>
+  attributes: Readonly<Array<Attribute>>
+  abilities: Readonly<Array<Ability>>
 }
 
 export const RddAttributes = ({ attributes, abilities }: Props) => {
+  const sortedAttributes = attributes.toSorted((aA, aB) => aA.name.localeCompare(aB.name))
+
   return (
     <Stack padding={2}>
       <Typography variant='h5'>Attributes</Typography>
       <List dense>
-        {attributes.sort((aA, aB) => aA.name.localeCompare(aB.name)).map((attribute) =>
+        {sortedAttributes.map((attribute) =>
           <ListItem key={attribute.name}
             secondaryAction={
               <BasicPopover triggerContent={<CasinoIcon />} popoverContent={<RddRoll attributeName={attribute.name} abilities={abilities} />} />

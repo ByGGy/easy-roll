@@ -33,7 +33,7 @@ const AbilityItem = ({ ability }: AbilityItemProps) => {
 
 type Props = {
   attributeName: string
-  abilities: Array<Ability>
+  abilities: Readonly<Array<Ability>>
 }
 
 export const RddRoll = ({ attributeName, abilities }: Props) => {
@@ -56,6 +56,8 @@ export const RddRoll = ({ attributeName, abilities }: Props) => {
   const handleRoll = useCallback(() => {
     window.electronAPI.rddCheckAttribute(attributeName, abilityName, modifier)
   }, [attributeName, abilityName, modifier])
+
+  const sortedAbilities = abilities.toSorted((aA, aB) => aA.name.localeCompare(aB.name))
 
   return (
     <Card>
@@ -84,7 +86,7 @@ export const RddRoll = ({ attributeName, abilities }: Props) => {
                     onChange={handleAbilitySelection}
                   >
                     <MenuItem value=''>None</MenuItem>
-                    {abilities.sort((aA, aB) => aA.name.localeCompare(aB.name)).map((ability) =>
+                    {sortedAbilities.map((ability) =>
                       <MenuItem key={ability.name} value={ability.name}>
                         <AbilityItem ability={ability} />
                       </MenuItem>

@@ -11,15 +11,17 @@ import { AriaRoll } from './aria-roll'
 import { Attribute } from '../../domain/character/characterSheet'
 
 type Props = {
-  attributes: Array<Attribute>
+  attributes: Readonly<Array<Attribute>>
 }
 
 export const AriaAttributes = ({ attributes }: Props) => {
+  const sortedAttributes = attributes.toSorted((aA, aB) => aA.name.localeCompare(aB.name))
+
   return (
     <Stack padding={2}>
       <Typography variant='h5'>Attributes</Typography>
       <List dense>
-        {attributes.sort((aA, aB) => aA.name.localeCompare(aB.name)).map((attribute) =>
+        {sortedAttributes.map((attribute) =>
           <ListItem key={attribute.name}
             secondaryAction={
               <BasicPopover triggerContent={<CasinoIcon />} popoverContent={<AriaRoll rollStat='Attribute' statName={attribute.name} />} />

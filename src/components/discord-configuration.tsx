@@ -1,24 +1,16 @@
-import { useState, useEffect } from 'react'
+import { useSelector } from 'react-redux'
+import { RootState } from '../store/store'
+
 import Fab from '@mui/material/Fab'
 import Typography from '@mui/material/Typography'
 import { DiscordIcon } from './common/discord-icon'
 
 export const DiscordConfiguration = () => {
-  // TODO: doesn't work in some scenarios, e.g. when the component is unmounted / remounted, it might be desynchronized with the domain state
-  // we could "fetch" the current domain state to initialize the component on mount (like we were doin previously)
-  // or we could update a redux store from electronAPI.onMessage, and use the store state to initialize the component local state
-  const [isEnabled, setIsEnabled] = useState(false)
+  const isEnabled = useSelector((state: RootState) => state.discord.isEnabled)
 
   const handleEnableChange = () => {
     window.electronAPI.toggleDiscordNotification(!isEnabled)
   }
-
-  useEffect(() => {
-    window.electronAPI.onMessage('Domain.Discord.update', (data: string) => {
-      const states = JSON.parse(data)
-      setIsEnabled(states.current.isEnabled)
-    })
-  }, [])
 
   return (
     <Fab variant='extended' size='medium' onClick={handleEnableChange}

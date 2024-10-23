@@ -7,8 +7,6 @@ import ListItem from '@mui/material/ListItem'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
-import Grid from '@mui/material/Grid'
-import IconButton from '@mui/material/IconButton'
 import ContactPageIcon from '@mui/icons-material/ContactPage'
 
 import { CharacterSheet } from '../domain/character/characterSheet'
