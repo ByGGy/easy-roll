@@ -1,8 +1,6 @@
 import { messageBus } from '../events/messageBus'
 import { sendMessage } from '../../api/discordAPI'
-import { DiceTrayRoll } from '../dicetray/engine'
-import { RollCheck as AriaRollCheck } from '../aria/engine'
-import { RollCheck as RddRollCheck } from '../rdd/engine'
+import { RollResult } from '../common/types'
 import { Repository } from '../character/repository'
 import { CharacterSheet } from '../character/characterSheet'
 import { SessionState } from '../session/session'
@@ -60,62 +58,43 @@ export const createRelay = (repository: Repository<CharacterSheet>): Relay => {
     }
   }
 
-  const handleDiceTrayRoll = (roll: DiceTrayRoll) => {
+  const handleRollResult = (roll: RollResult) => {
     const relevantCharacter = repository.getById(roll.characterId)
     if (relevantCharacter) {
-      const rollResult = `<${relevantCharacter.name}> got \`${roll.total}\` on his roll.`
-      
-      const details = []
-      details.push(`${roll.diceQty}d${roll.diceFaceQty} = ${roll.rolls.join(', ')}`)
-      details.push(`mod: ${roll.modifier > 0 ? '+' :''}${roll.modifier}`)
-
-      sendMessage({
-        channelId: relevantCharacter.discordConfiguration.channelId,
-        content: rollResult,
-        detail: details.join(' | ')
-      })
-    }
-  }
-
-  const handleAriaCheck = (roll: AriaRollCheck) => {
-    const relevantCharacter = repository.getById(roll.characterId)
-    if (relevantCharacter) {
-      const rollResult = `\`\`\`diff\n${roll.isSuccess ? '+' : '-'} <${relevantCharacter.name}> ${roll.statName} : ${roll.isSuccess ? 'success' : 'failure'} (${roll.value})\n\`\`\``
-      
-      const details = []
-      details.push(`1d100 = ${roll.value}`)
-      details.push(`${roll.statName}: ${roll.statValue}`)
-      if (roll.difficulty) {
-        details.push(`difficulty: x${roll.difficulty}`)
+      let content = ''
+      if (roll.checkDetails !== null) {
+        const isSuccess = roll.diceDetails.total <= roll.checkDetails.successThreshold
+        const baseFactors = roll.checkDetails.factors.filter(f => f.type === 'base').map(f => f.name).join(' + ')
+        content = `\`\`\`diff\n${isSuccess ? '+' : '-'} <${relevantCharacter.name}> ${baseFactors} : ${isSuccess ? 'success' : 'failure'} (${roll.diceDetails.total})\n\`\`\``
+      } else {
+        content = `<${relevantCharacter.name}> got \`${roll.diceDetails.total}\` on his roll.`
       }
-      details.push(`mod: ${roll.modifier > 0 ? '+' :''}${roll.modifier}`)
-      details.push(`threshold: ${roll.threshold}`)
-
-      sendMessage({
-        channelId: relevantCharacter.discordConfiguration.channelId,
-        content: rollResult,
-        detail: details.join(' | ')
-      })
-    }
-  }
-
-  const handleRddCheck = (roll: RddRollCheck) => {
-    const relevantCharacter = repository.getById(roll.characterId)
-    if (relevantCharacter) {
-      const rollResult = `\`\`\`diff\n${roll.isSuccess ? '+' : '-'} <${relevantCharacter.name}> ${roll.attributeName}${roll.abilityName ? ` + ${roll.abilityName}`: ''} : ${roll.isSuccess ? 'success' : 'failure'} (${roll.value})\n\`\`\``
       
       const details = []
-      details.push(`1d100 = ${roll.value}`)
-      details.push(`${roll.attributeName}: ${roll.attributeValue}`)
-      if (roll.abilityName) {
-        details.push(`${roll.abilityName}: ${roll.abilityValue}`)
+      details.push(`${roll.diceDetails.diceQty}d${roll.diceDetails.diceFaceQty} = ${roll.diceDetails.rolls.join(', ')}`)
+      if (roll.checkDetails !== null) {
+        roll.checkDetails.factors.forEach(f => {
+          switch (f.type) {
+            case 'base':
+              details.push(`${f.name}: ${f.value}`)
+              break
+
+            case 'multiplier':
+              details.push(`${f.name}: x${f.value}`)
+              break
+
+            case 'offset':
+              details.push(`${f.name}: ${f.value > 0 ? '+' :''}${f.value}`)
+              break
+          }
+        })
+
+        details.push(`threshold: ${roll.checkDetails.successThreshold}`)
       }
-      details.push(`mod: ${roll.modifier > 0 ? '+' :''}${roll.modifier}`)
-      details.push(`threshold: ${roll.threshold}`)
 
       sendMessage({
         channelId: relevantCharacter.discordConfiguration.channelId,
-        content: rollResult,
+        content,
         detail: details.join(' | ')
       })
     }
@@ -123,9 +102,9 @@ export const createRelay = (repository: Repository<CharacterSheet>): Relay => {
 
   messageBus.on('Domain.Session.update', maybeHandle(handleSessionUpdate))
 
-  messageBus.on('Domain.DiceTray.roll', maybeHandle(handleDiceTrayRoll))
-  messageBus.on('Domain.Aria.check', maybeHandle(handleAriaCheck))
-  messageBus.on('Domain.Rdd.check', maybeHandle(handleRddCheck))
+  messageBus.on('Domain.DiceTray.roll', maybeHandle(handleRollResult))
+  messageBus.on('Domain.Aria.check', maybeHandle(handleRollResult))
+  messageBus.on('Domain.Rdd.check', maybeHandle(handleRollResult))
 
   return {
     state,

@@ -1,23 +1,14 @@
 import { messageBus } from '../events/messageBus'
 
-import { EntityId } from '../common/types'
+import { RollDiceDetails, RollResult } from '../common/types'
 import { CharacterSheet } from '../character/characterSheet'
 import { rollDice } from './roll'
 
-export type DiceTrayRoll = Readonly<{
-  characterId: EntityId
-  diceFaceQty: number
-  diceQty: number
-  modifier: number
-  rolls: Array<number>
-  total: number
-}>
-
-const rollDices = (character: CharacterSheet, diceFaceQty: number, diceQty: number, modifier: number): DiceTrayRoll => {
+const rollDices = (character: CharacterSheet, diceFaceQty: number, diceQty: number, modifier: number): RollResult => {
   const rolls = [...Array(diceQty)].map(_ => rollDice(diceFaceQty))
   const total = rolls.reduce((acc, value) => acc + value, modifier)
-  const roll = {
-    characterId: character.id,
+
+  const diceDetails: RollDiceDetails = {
     diceFaceQty,
     diceQty,
     modifier,
@@ -25,8 +16,14 @@ const rollDices = (character: CharacterSheet, diceFaceQty: number, diceQty: numb
     total,
   }
 
-  messageBus.emit('Domain.DiceTray.roll', roll)
-  return roll
+  const result: RollResult = {
+    characterId: character.id,
+    checkDetails: null,
+    diceDetails
+  }
+
+  messageBus.emit('Domain.DiceTray.roll', result)
+  return result
 }
 
 export const engine = {

@@ -1,6 +1,6 @@
 import { messageBus } from '../events/messageBus'
 
-import { EntityId } from '../common/types'
+import { RollCheckDetails, RollDiceDetails, RollResult } from '../common/types'
 import { CharacterSheet } from '../character/characterSheet'
 import { rollDice } from '../dicetray/roll'
 
@@ -23,7 +23,7 @@ const thresholdLUT: Record<number, Array<number>> = {
   '20': [5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170]
 }
 
-const findThreshold = (attributeValue: number, modifier: number): number | null => {
+const findThreshold = (attributeValue: number, modifier: number): number => {
   const line = thresholdLUT[attributeValue]
   if (line !== undefined) {
     const value = line[modifier +10]
@@ -32,42 +32,53 @@ const findThreshold = (attributeValue: number, modifier: number): number | null 
     }
   }
 
-  return null
+  return 0
 }
 
-export type RollCheck = Readonly<{
-  characterId: EntityId
-  attributeName: string
-  attributeValue: number
-  abilityName?: string
-  abilityValue?: number
-  modifier: number
-  threshold: number | null
-  value: number
-  isSuccess: boolean
-}>
-
-const checkAttribute = (character: CharacterSheet, attributeName: string, abilityName: string, modifier: number): RollCheck | null => {
+const checkAttribute = (character: CharacterSheet, attributeName: string, abilityName: string, modifier: number): RollResult | null => {
   const attribute = character.attributes.find((a) => a.name === attributeName)
   if (attribute !== undefined) {
     const ability = character.abilities.find((a) => a.name === abilityName)
-    const threshold = findThreshold(attribute.value, (ability !== undefined ? ability.value : 0) + modifier)
+    const successThreshold = findThreshold(attribute.value, (ability !== undefined ? ability.value : 0) + modifier)
     const diceValue = rollDice(100)
-    const isSuccess = threshold !== null && diceValue <= threshold
-    const rollCheck = {
-      characterId: character.id,
-      attributeName: attribute.name,
-      attributeValue: attribute.value,
-      abilityName: ability?.name,
-      abilityValue: ability?.value,
-      modifier,
-      threshold,
-      value: diceValue,
-      isSuccess
+
+    const checkDetails: RollCheckDetails = {
+      factors: [
+        {
+          type: 'base',
+          name: attribute.name,
+          value: attribute.value
+        },
+        ...(ability !== undefined ? [{
+          type: 'base' as const, // TODO: should be an offset ?
+          name: ability.name,
+          value: ability.value
+        }] : []),
+        {
+          type: 'offset',
+          name: 'difficulty',
+          value: modifier
+        },
+      ],
+      successThreshold
+    }
+
+    const diceDetails: RollDiceDetails = {
+      diceFaceQty: 100,
+      diceQty: 1,
+      modifier: 0,
+      rolls: [diceValue],
+      total: diceValue
     }
   
-    messageBus.emit('Domain.Rdd.check', rollCheck)
-    return rollCheck
+    const result: RollResult = {
+      characterId: character.id,
+      checkDetails: checkDetails,
+      diceDetails
+    }
+  
+    messageBus.emit('Domain.Rdd.check', result)
+    return result
   }
 
   return null

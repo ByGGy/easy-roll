@@ -1,63 +1,95 @@
 import { messageBus } from '../events/messageBus'
 
-import { EntityId } from '../common/types'
+import { RollCheckDetails, RollDiceDetails, RollResult } from '../common/types'
 import { CharacterSheet } from '../character/characterSheet'
 import { rollDice } from '../dicetray/roll'
 
-// NB: there is always a difficulty multiplier and a difficulty offset
-export type RollCheck = Readonly<{
-  characterId: EntityId
-  statName: string
-  statValue: number
-  difficulty?: number
-  modifier: number
-  threshold: number
-  value: number
-  isSuccess: boolean
-}>
-
-const checkAttribute = (character: CharacterSheet, attributeName: string, difficulty: number, modifier: number): RollCheck | null => {
+const checkAttribute = (character: CharacterSheet, attributeName: string, difficulty: number, modifier: number): RollResult | null => {
   const attribute = character.attributes.find((a) => a.name === attributeName)
   if (attribute !== undefined) {
-    const threshold = attribute.value * difficulty + modifier
+    const successThreshold = attribute.value * difficulty + modifier
     const diceValue = rollDice(100)
-    const isSuccess = diceValue <= threshold
-    const rollCheck = {
-      characterId: character.id,
-      statName: attribute.name,
-      statValue: attribute.value,
-      difficulty,
-      modifier,
-      threshold,
-      value: diceValue,
-      isSuccess
+
+    const checkDetails: RollCheckDetails = {
+      factors: [
+        {
+          type: 'base',
+          name: attribute.name,
+          value: attribute.value
+        },
+        {
+          type: 'multiplier',
+          name: 'difficulty',
+          value: difficulty
+        },
+        {
+          type: 'offset',
+          name: 'modifier',
+          value: modifier
+        }
+      ],
+      successThreshold
+    }
+
+    const diceDetails: RollDiceDetails = {
+      diceFaceQty: 100,
+      diceQty: 1,
+      modifier: 0,
+      rolls: [diceValue],
+      total: diceValue
     }
   
-    messageBus.emit('Domain.Aria.check', rollCheck)
-    return rollCheck
+    const result: RollResult = {
+      characterId: character.id,
+      checkDetails: checkDetails,
+      diceDetails
+    }
+  
+    messageBus.emit('Domain.Aria.check', result)
+    return result
   }
 
   return null
 }
 
-const checkAbility = (character: CharacterSheet, abilityName: string, modifier: number): RollCheck | null => {
+const checkAbility = (character: CharacterSheet, abilityName: string, modifier: number): RollResult | null => {
   const ability = character.abilities.find((a) => a.name === abilityName)
   if (ability !== undefined) {
-    const threshold = ability.value + modifier
+    const successThreshold = ability.value + modifier
     const diceValue = rollDice(100)
-    const isSuccess = diceValue <= threshold
-    const rollCheck = {
-      characterId: character.id,
-      statName: ability.name,
-      statValue: ability.value,
-      modifier,
-      threshold,
-      value: diceValue,
-      isSuccess
+
+    const checkDetails: RollCheckDetails = {
+      factors: [
+        {
+          type: 'base',
+          name: ability.name,
+          value: ability.value
+        },
+        {
+          type: 'offset',
+          name: 'modifier',
+          value: modifier
+        }
+      ],
+      successThreshold
+    }
+
+    const diceDetails: RollDiceDetails = {
+      diceFaceQty: 100,
+      diceQty: 1,
+      modifier: 0,
+      rolls: [diceValue],
+      total: diceValue
     }
   
-    messageBus.emit('Domain.Aria.check', rollCheck)
-    return rollCheck
+    const result: RollResult = {
+      characterId: character.id,
+      checkDetails: checkDetails,
+      diceDetails
+    }
+  
+    messageBus.emit('Domain.Aria.check', result)
+    return result
   }
 
   return null
