@@ -72,6 +72,9 @@ export const createRelay = (repository: Repository<CharacterSheet>): Relay => {
       
       const details = []
       details.push(`${roll.diceDetails.diceQty}d${roll.diceDetails.diceFaceQty} = ${roll.diceDetails.rolls.join(', ')}`)
+      if (roll.diceDetails.modifier !== 0) {
+        details.push(`modifier: ${roll.diceDetails.modifier > 0 ? '+' :''}${roll.diceDetails.modifier}`)
+      }
       if (roll.checkDetails !== null) {
         roll.checkDetails.factors.forEach(f => {
           switch (f.type) {

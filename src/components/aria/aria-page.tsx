@@ -5,6 +5,7 @@ import { CharacterHeader } from '../character-header'
 import { AriaAttributes } from './aria-attributes'
 import { AriaAbilities } from './aria-abilities'
 import { DiceTray } from '../dice-tray'
+import { RollHistory } from '../roll-history'
 
 import { CharacterSheet } from '../../domain/character/characterSheet'
 
@@ -26,8 +27,11 @@ export const AriaPage = ({ character }: Props) => {
               <AriaAbilities abilities={character.abilities} />
             </Paper>
             <Paper elevation={4}>
-                <DiceTray />
-              </Paper>
+              <DiceTray />
+            </Paper>
+            <Paper elevation={4}>
+              <RollHistory />
+            </Paper>            
           </Stack>
         </Paper>
       </Stack>

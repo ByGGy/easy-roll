@@ -4,6 +4,7 @@ import Paper from '@mui/material/Paper'
 import { CharacterHeader } from '../character-header'
 import { RddAttributes } from './rdd-attributes'
 import { DiceTray } from '../dice-tray'
+import { RollHistory } from '../roll-history'
 
 import { CharacterSheet } from '../../domain/character/characterSheet'
 
@@ -23,6 +24,9 @@ export const RddPage = ({ character }: Props) => {
               </Paper>
               <Paper elevation={4}>
                 <DiceTray />
+              </Paper>
+              <Paper elevation={4}>
+                <RollHistory />
               </Paper>
             </Stack>
         </Paper>
