@@ -63,7 +63,7 @@ NB: atm, the exact values expected for the `game` property are: `Aria` or `Rêve
 ---
 
 Below is a screenshot using the `.json` from the example:  
-<img src='./EasyRoll_Example.png' width=400>
+<img src='./easyRoll_ui.png' width=600>
 
 
 ### For Devs
