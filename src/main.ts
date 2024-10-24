@@ -36,7 +36,7 @@ const createWindow = () => {
   });
 
   // Hide the menu bad (needed in DEV mode)
-  mainWindow.setMenuBarVisibility(true)
+  mainWindow.setMenuBarVisibility(false)
 
   // and load the index.html of the app.
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
