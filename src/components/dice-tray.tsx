@@ -4,6 +4,7 @@ import Stack from '@mui/material/Stack'
 import Grid from '@mui/material/Grid'
 import Slider from '@mui/material/Slider'
 import Typography from '@mui/material/Typography'
+import IconButton from '@mui/material/IconButton'
 import Button from '@mui/material/Button'
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore'
 import { evaluateModifierColor } from './common/style-helpers'
@@ -52,20 +53,23 @@ export const DiceTray = () => {
 
   return (
     <Box sx={{ minWidth: 400 }}>
-      <Stack padding={2}>
+      <Stack padding={2} gap={2}>
         <Grid container alignItems='center'>
           <Grid item xs>
             <Typography variant='h6' color='primary'>Dice Tray</Typography>
           </Grid>
           <Grid item xs='auto'>
-            <Button onClick={handleReset}>
+            <IconButton color='secondary' onClick={handleReset}>
               <SettingsBackupRestoreIcon />
-            </Button>
+            </IconButton>
           </Grid>
         </Grid>
-        <Stack padding='3rem 0 2rem 0' spacing={6}>
-          <Stack direction='row' spacing={4}>
-            <Typography variant='button'>Dice</Typography>
+        <Stack gap={1}>
+          <Box>
+            <Stack direction='row' spacing={2} sx={{ mb: 1 }} alignItems='baseline'>
+              <Typography color='text.secondary'>Dice</Typography>
+              <Typography variant='body2'>{`d${diceFaceQty}`}</Typography>
+            </Stack>
             <Slider
               value={diceFaceQty}
               onChange={handleDiceFaceChange}
@@ -73,7 +77,6 @@ export const DiceTray = () => {
               max={100}
               step={1}
               marks={diceFaceQtyMarks}
-              valueLabelDisplay='on'
               sx={{
                 '& .MuiSlider-markLabel': {
                   color: 'primary.light',
@@ -81,9 +84,12 @@ export const DiceTray = () => {
                 },
               }}
             />
-          </Stack>
-          <Stack direction='row' spacing={4}>
-            <Typography variant='button'>Qty</Typography>
+          </Box>
+          <Box>
+            <Stack direction='row' spacing={2} sx={{ mb: 1 }} alignItems='baseline'>
+              <Typography color='text.secondary'>Quantity</Typography>
+              <Typography variant='body2'>{`x${diceQty}`}</Typography>
+            </Stack>
             <Slider
               value={diceQty}
               onChange={handleDiceQtyChange}
@@ -91,11 +97,13 @@ export const DiceTray = () => {
               max={10}
               step={1}
               marks
-              valueLabelDisplay='on'
             />
-          </Stack>
-          <Stack direction='row' spacing={4}>
-            <Typography variant='button'>Modifier</Typography>
+          </Box>
+          <Box>
+            <Stack direction='row' spacing={2} sx={{ mb: 1 }} alignItems='baseline'>
+              <Typography color='text.secondary'>Modifier</Typography>
+              <Typography variant='body2'>{`${modifier > 0 ? '+' :''}${modifier}`}</Typography>
+            </Stack>
             <Slider
               value={modifier}
               onChange={handleModifierChange}
@@ -103,12 +111,11 @@ export const DiceTray = () => {
               max={+10}
               step={1}
               marks
-              valueLabelDisplay='on'
               sx={{
                 color: evaluateModifierColor(modifier)
               }}
             />
-          </Stack>
+          </Box>
         </Stack>
         <Button variant='outlined' color='primary' onClick={handleRoll} fullWidth>
           Roll

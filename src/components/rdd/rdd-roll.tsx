@@ -5,6 +5,7 @@ import Card from '@mui/material/Card'
 import Stack from '@mui/material/Stack'
 import Slider from '@mui/material/Slider'
 import Typography from '@mui/material/Typography'
+import IconButton from '@mui/material/IconButton'
 import Button from '@mui/material/Button'
 import { CardContent, CardActions, FormControl, InputLabel } from '@mui/material'
 import MenuItem from '@mui/material/MenuItem'
@@ -65,48 +66,45 @@ export const RddRoll = ({ attributeName, abilities }: Props) => {
             <Typography variant='h6' color='primary'>{attributeName}</Typography>
           </Grid>
           <Grid item xs='auto'>
-            <Button onClick={handleReset}>
+            <IconButton color='secondary' onClick={handleReset}>
               <SettingsBackupRestoreIcon />
-            </Button>
+            </IconButton>
           </Grid>
         </Grid>
         <CardContent>
-          <Stack direction='column' spacing={2}>
-              <Stack direction='row' spacing={4} alignItems='center'>
-                <Typography variant='button'>Ability</Typography>
-                <FormControl fullWidth>
-                  <InputLabel>Pick one</InputLabel>
-                  <Select
-                    value={abilityName}
-                    label='Pick one'
-                    onChange={handleAbilitySelection}
-                  >
-                    <MenuItem value=''>None</MenuItem>
-                    {sortedAbilities.map((ability) =>
-                      <MenuItem key={ability.name} value={ability.name}>
-                        <AbilityItem ability={ability} />
-                      </MenuItem>
-                    )}
-                  </Select>
-                </FormControl>
+          <Stack gap={4}>
+            <FormControl fullWidth>
+              <InputLabel>Pick an ability</InputLabel>
+              <Select
+                value={abilityName}
+                label='Pick an ability'
+                onChange={handleAbilitySelection}
+              >
+                <MenuItem value=''>None</MenuItem>
+                {sortedAbilities.map((ability) =>
+                  <MenuItem key={ability.name} value={ability.name}>
+                    <AbilityItem ability={ability} />
+                  </MenuItem>
+                )}
+              </Select>
+            </FormControl>
+            <Box>
+              <Stack direction='row' spacing={2} sx={{ mb: 1 }} alignItems='baseline'>
+                <Typography color='text.secondary'>Modifier</Typography>
+                <Typography variant='body2'>{`${modifier > 0 ? '+' :''}${modifier}`}</Typography>
               </Stack>
-            <Stack />
-            <Stack />
-            <Stack direction='row' spacing={4}>
-                <Typography variant='button'>Modifier</Typography>
-                <Slider
-                  value={modifier}
-                  onChange={handleModifierChange}
-                  min={-20}
-                  max={+20}
-                  step={1}
-                  marks
-                  valueLabelDisplay='on'
-                  sx={{
-                    color: evaluateModifierColor(modifier)
-                  }}
-                />
-            </Stack>
+              <Slider
+                value={modifier}
+                onChange={handleModifierChange}
+                min={-20}
+                max={+20}
+                step={1}
+                marks
+                sx={{
+                  color: evaluateModifierColor(modifier)
+                }}
+              />
+            </Box>
           </Stack>
         </CardContent>
         <CardActions>

@@ -7,6 +7,7 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
 import ToggleButton from '@mui/material/ToggleButton'
 import Slider from '@mui/material/Slider'
 import Typography from '@mui/material/Typography'
+import IconButton from '@mui/material/IconButton'
 import Button from '@mui/material/Button'
 import { CardContent, CardActions } from '@mui/material'
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore'
@@ -69,16 +70,19 @@ export const AriaRoll = ({ rollStat, statName }: Props) => {
             <Typography variant='h6' color='primary'>{statName}</Typography>
           </Grid>
           <Grid item xs='auto'>
-            <Button onClick={handleReset}>
+            <IconButton color='secondary' onClick={handleReset}>
               <SettingsBackupRestoreIcon />
-            </Button>
+            </IconButton>
           </Grid>
         </Grid>
         <CardContent>
-          <Stack direction='column' spacing={2}>
+          <Stack gap={4}>
             { rollStat === 'Attribute' &&
-              <Stack direction='row' spacing={4} alignItems='center'>
-                <Typography variant='button'>Multiplier</Typography>
+              <Box>
+                <Stack direction='row' spacing={2} sx={{ mb: 1 }} alignItems='baseline'>
+                  <Typography color='text.secondary'>Multiplier</Typography>
+                  <Typography variant='body2'>{`x${difficulty}`}</Typography>
+                </Stack>
                 <ToggleButtonGroup
                   value={difficulty.toString()}
                   exclusive
@@ -91,25 +95,25 @@ export const AriaRoll = ({ rollStat, statName }: Props) => {
                   <PrimaryToggleButton value='4'>x4</PrimaryToggleButton>
                   <PrimaryToggleButton value='5'>x5</PrimaryToggleButton>
                 </ToggleButtonGroup>
-              </Stack>
+              </Box>
             }
-            <Stack />
-            <Stack />
-            <Stack direction='row' spacing={4}>
-                <Typography variant='button'>Modifier</Typography>
-                <Slider
-                  value={modifier}
-                  onChange={handleModifierChange}
-                  min={-30}
-                  max={+30}
-                  step={10}
-                  marks
-                  valueLabelDisplay='on'
-                  sx={{
-                    color: evaluateModifierColor(modifier)
-                  }}
-                />
-            </Stack>
+            <Box>
+              <Stack direction='row' spacing={2} sx={{ mb: 1 }} alignItems='baseline'>
+                <Typography color='text.secondary'>Modifier</Typography>
+                <Typography variant='body2'>{`${modifier > 0 ? '+' :''}${modifier}`}</Typography>
+              </Stack>
+              <Slider
+                value={modifier}
+                onChange={handleModifierChange}
+                min={-30}
+                max={+30}
+                step={10}
+                marks
+                sx={{
+                  color: evaluateModifierColor(modifier)
+                }}
+              />
+            </Box>
           </Stack>
         </CardContent>
         <CardActions>
