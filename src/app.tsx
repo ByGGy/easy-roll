@@ -4,6 +4,7 @@ import { createRoot } from 'react-dom/client'
 import { store } from './store/store'
 import { Provider } from 'react-redux'
 
+import { VersionInfo } from './components/version-info'
 import { CheapRouter } from './components/cheap-router'
 
 export const themeOptions: ThemeOptions = {
@@ -29,6 +30,7 @@ const App = () => {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <CheapRouter />
+        <VersionInfo />
       </ThemeProvider>
     </Provider>
   )

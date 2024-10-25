@@ -83,6 +83,10 @@ app.on('activate', () => {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
 
+const handleGetAppVersion = (event: unknown) => {
+  return app.getVersion()
+}
+
 const handleToggleDiscordNotification = (event: unknown, enable: boolean) => {
   enable ? discordRelay.enable() : discordRelay.disable()
 }
@@ -128,8 +132,10 @@ const handleRddCheckAttribute = (event: unknown, attributeName: string, abilityN
 }
 
 app.whenReady().then(() => {
-  ipcMain.handle('toggleDiscordNotification', handleToggleDiscordNotification)
+  ipcMain.handle('getAppVersion', handleGetAppVersion)
 
+  ipcMain.handle('toggleDiscordNotification', handleToggleDiscordNotification)
+  
   ipcMain.handle('getAllCharacterSheets', handleGetAllCharacterSheets)
   ipcMain.handle('openSession', handleOpenSession)
   ipcMain.handle('closeSession', handleCloseSession)

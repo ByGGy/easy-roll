@@ -35,7 +35,7 @@ export const CharacterHeader = ({ character }: Props) => {
           </Grid>
         </Box>
       </Grid>
-      <Grid item xs='auto' padding={2}>
+      <Grid item xs='auto'>
         <DiscordConfiguration />
       </Grid>
     </Grid>

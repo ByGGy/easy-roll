@@ -14,6 +14,8 @@ declare global {
 contextBridge.exposeInMainWorld('electronAPI', {
   onMessage: (channel: string, callback: (data: string) => void) => ipcRenderer.on(channel, (event, data) => callback(data)),
 
+  getAppVersion: () => ipcRenderer.invoke('getAppVersion'),
+
   toggleDiscordNotification: (enable: boolean) => ipcRenderer.invoke('toggleDiscordNotification', enable),
 
   getAllCharacterSheets: () => ipcRenderer.invoke('getAllCharacterSheets'),
