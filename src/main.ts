@@ -10,7 +10,7 @@ import { createRelay as createDiscordRelay } from './domain/discord/relay'
 import { createRelay as createFrontRelay } from './domain/front/relay'
 import { EntityId } from './domain/common/types'
 
-// import { runTest } from './domain/dice/roll'
+// import { runTest } from './domain/dicetray/roll'
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
