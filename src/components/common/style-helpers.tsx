@@ -1,1 +1,1 @@
-export const evaluateModifierColor = (value: number) => value < 0 ? 'orange' : value > 0 ? 'lime' : ''
+export const evaluateModifierColor = (value: number) => value < 0 ? 'warning.main' : value > 0 ? 'success.main' : ''

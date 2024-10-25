@@ -20,7 +20,7 @@ export const RddAttributes = ({ attributes, abilities }: Props) => {
 
   return (
     <Stack padding={2}>
-      <Typography variant='h5'>Attributes</Typography>
+      <Typography variant='h6' color='primary'>Attributes</Typography>
       <List dense>
         {sortedAttributes.map((attribute) =>
           <ListItem key={attribute.name}
@@ -30,14 +30,10 @@ export const RddAttributes = ({ attributes, abilities }: Props) => {
           >
           <Grid container alignItems='center' spacing={4}>
             <Grid item xs>
-              <Typography variant='body1' color='primary'>
-                {attribute.name}
-              </Typography>
+              <Typography variant='body1' color='text.secondary'>{attribute.name}</Typography>
             </Grid>
             <Grid item xs='auto' paddingRight={2}>
-              <Typography variant='body1' >
-                {attribute.value}
-              </Typography>
+              <Typography variant='body1'>{attribute.value}</Typography>
             </Grid>
           </Grid>
           </ListItem>

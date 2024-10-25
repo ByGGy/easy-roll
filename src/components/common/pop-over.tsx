@@ -23,7 +23,7 @@ export const BasicPopover = ({ triggerContent, popoverContent }: Props) => {
 
   return (
     <div>
-      <IconButton aria-describedby={id} onClick={handleClick} color='secondary'>
+      <IconButton aria-describedby={id} onClick={handleClick} color='primary'>
         {triggerContent}
       </IconButton>
       <Popover

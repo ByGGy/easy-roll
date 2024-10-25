@@ -66,7 +66,7 @@ export const AriaRoll = ({ rollStat, statName }: Props) => {
       <Box padding={2} sx={{ minWidth: 300 }}>
         <Grid container alignItems='center'>
           <Grid item xs>
-            <Typography variant='h5'>{statName}</Typography>
+            <Typography variant='h6' color='primary'>{statName}</Typography>
           </Grid>
           <Grid item xs='auto'>
             <Button onClick={handleReset}>
@@ -78,39 +78,25 @@ export const AriaRoll = ({ rollStat, statName }: Props) => {
           <Stack direction='column' spacing={2}>
             { rollStat === 'Attribute' &&
               <Stack direction='row' spacing={4} alignItems='center'>
-                <Typography variant='button' color='primary'>
-                  Multiplier
-                </Typography>
+                <Typography variant='button'>Multiplier</Typography>
                 <ToggleButtonGroup
                   value={difficulty.toString()}
                   exclusive
                   onChange={handleDifficultyChange}
                   size='small'
                 >
-                  <PrimaryToggleButton value='1'>
-                    <Typography>x1</Typography>
-                  </PrimaryToggleButton>
-                  <PrimaryToggleButton value='2'>
-                    <Typography>x2</Typography>
-                  </PrimaryToggleButton>
-                  <PrimaryToggleButton value='3'>
-                    <Typography>x3</Typography>
-                  </PrimaryToggleButton>
-                  <PrimaryToggleButton value='4'>
-                    <Typography>x4</Typography>
-                  </PrimaryToggleButton>
-                  <PrimaryToggleButton value='5'>
-                    <Typography>x5</Typography>
-                  </PrimaryToggleButton>
+                  <PrimaryToggleButton value='1'>x1</PrimaryToggleButton>
+                  <PrimaryToggleButton value='2'>x2</PrimaryToggleButton>
+                  <PrimaryToggleButton value='3'>x3</PrimaryToggleButton>
+                  <PrimaryToggleButton value='4'>x4</PrimaryToggleButton>
+                  <PrimaryToggleButton value='5'>x5</PrimaryToggleButton>
                 </ToggleButtonGroup>
               </Stack>
             }
             <Stack />
             <Stack />
             <Stack direction='row' spacing={4}>
-                <Typography variant='button' color='primary'>
-                  Modifier
-                </Typography>
+                <Typography variant='button'>Modifier</Typography>
                 <Slider
                   value={modifier}
                   onChange={handleModifierChange}
@@ -127,7 +113,7 @@ export const AriaRoll = ({ rollStat, statName }: Props) => {
           </Stack>
         </CardContent>
         <CardActions>
-          <Button variant='contained' color='secondary' onClick={handleRoll} fullWidth>
+          <Button variant='contained' color='primary' onClick={handleRoll} fullWidth>
             Roll
           </Button>
         </CardActions>

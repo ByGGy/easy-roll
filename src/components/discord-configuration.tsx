@@ -19,13 +19,14 @@ export const DiscordConfiguration = () => {
         }}
     >
       <DiscordIcon sx={{ mr: 1 }}/>
-      <Typography variant='button' fontWeight='bold' 
+      <Typography variant='button'
         sx={{
-          color: isEnabled ? 'error.main' : 'grey.800',
+          fontWeight: isEnabled ? 'bold' : '',
+          color: isEnabled ? 'error.main' : 'text.disabled',
           textShadow: isEnabled ? '0 0 10px rgba(255, 0, 0, 0.9)' : '',  // Glow effect
         }}
         >
-        ON AIR !
+        ON AIR
       </Typography>
     </Fab>
   )

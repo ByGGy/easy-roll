@@ -56,18 +56,17 @@ const RollItem = ({ roll, opacity }: RollItemProps) => {
   return (
     <ListItem sx={{ opacity }} alignItems='flex-start'>
       <ListItemAvatar>
-        <Avatar variant='rounded' sx={{ bgcolor: isSuccess !== null ? isSuccess ? 'lime' : 'red' : 'info.main' }}>
+        <Avatar variant='rounded' sx={{ bgcolor: isSuccess !== null ? isSuccess ? 'success.main' : 'error.main' : 'info.light' }}>
           <Typography variant='h5' fontWeight='bold'>{roll.diceDetails.total}</Typography>
         </Avatar>
       </ListItemAvatar>
-      <ListItemText primary={
-        <Typography variant='h5' color='primary'>
-          {title}
-        </Typography>
-      } secondary={
-        <Typography variant='subtitle1' color='primary.dark' >
-          {details.join(' | ')}
-        </Typography>}>
+      <ListItemText
+        primary={<Typography variant='body1'>{title}</Typography>}
+        secondary={
+          <Typography variant='caption' color='text.secondary' >
+            {details.join(' | ')}
+          </Typography>
+        }>
       </ListItemText>
     </ListItem>
   )
@@ -84,7 +83,7 @@ export const RollHistory = () => {
     <Stack padding={2} sx={{ display: 'flex', flexDirection: 'column'}}>
       <Grid container alignItems='center'>
         <Grid item xs>
-          <Typography variant='h5'>{`${maxVisibleQty} Most Recent Rolls`}</Typography>
+          <Typography variant='h6' color='primary'>{`${maxVisibleQty} Most Recent Rolls`}</Typography>
         </Grid>
       </Grid>
       <List dense sx={{ flexGrow: 1, overflowY: 'auto' }}>

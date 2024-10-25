@@ -5,9 +5,10 @@ import Typography from '@mui/material/Typography'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import ListItemButton from '@mui/material/ListItemButton'
-import ListItemIcon from '@mui/material/ListItemIcon'
+import ListItemAvatar from '@mui/material/ListItemAvatar'
+import Avatar from '@mui/material/Avatar'
+import PersonIcon from '@mui/icons-material/Person'
 import ListItemText from '@mui/material/ListItemText'
-import ContactPageIcon from '@mui/icons-material/ContactPage'
 
 import { CharacterSheet } from '../domain/character/characterSheet'
 import { EntityId } from '../domain/common/types'
@@ -32,31 +33,28 @@ export const CharacterSelection = () => {
   return (
     <Paper elevation={1}>
       <Box padding={2}>
-        <Paper elevation={2}>
-          <Typography padding={2} variant='h4'>
-            <Box sx={{ fontWeight: 'bold' }}>Pick a character</Box>
-          </Typography>
-          <List dense>
-            {characterSheets.sort((sA, sB) => sA.name.localeCompare(sB.name)).map((sheet) =>
-              <ListItem key={sheet.id}>
-                <ListItemButton onClick={() => handleSelection(sheet.id)} alignItems='flex-start'>
-                  <ListItemIcon sx={{ color: 'secondary.main' }}>
-                    <ContactPageIcon fontSize='large'/>
-                  </ListItemIcon>
-                  <ListItemText primary={
-                    <Typography variant='h5' color='primary'>
-                      {sheet.name}
-                    </Typography>
-                  } secondary={
-                    <Typography variant='subtitle1' color='primary.dark' >
-                      {sheet.game}
-                    </Typography>}>
-                  </ListItemText>
-                </ListItemButton>
-              </ListItem>
-            )}
-          </List>
-        </Paper>
+        <Typography padding={2} variant='h5' color='primary'>Pick a character</Typography>
+        <List dense>
+          {characterSheets.sort((sA, sB) => sA.name.localeCompare(sB.name)).map((sheet) =>
+            <ListItem key={sheet.id} alignItems='flex-start'>
+              <ListItemButton onClick={() => handleSelection(sheet.id)} alignItems='flex-start'>
+                <ListItemAvatar>
+                  <Avatar>
+                    <PersonIcon />
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText
+                  primary={
+                    <Typography variant='body1'>{sheet.name}</Typography>
+                  }
+                  secondary={
+                    <Typography variant='caption' color='text.secondary'>{sheet.game}</Typography>
+                  }>
+                </ListItemText>
+              </ListItemButton>
+            </ListItem>
+          )}
+        </List>
       </Box>
     </Paper>
   )

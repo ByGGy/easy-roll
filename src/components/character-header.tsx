@@ -1,9 +1,8 @@
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
-import IconButton from '@mui/material/IconButton'
+import Button from '@mui/material/Button'
 import LogoutIcon from '@mui/icons-material/Logout'
-
 import { DiscordConfiguration } from './discord-configuration'
 
 import { CharacterSheet } from '../domain/character/characterSheet'
@@ -20,22 +19,18 @@ export const CharacterHeader = ({ character }: Props) => {
   return (
     <Grid container alignItems='center'>
       <Grid item xs='auto'>
-        <IconButton onClick={handleCloseSession} color='secondary'>
-          <LogoutIcon fontSize='large' />
-        </IconButton>
+        <Button variant="outlined" startIcon={<LogoutIcon />} onClick={handleCloseSession}>
+          Back
+        </Button>
       </Grid>
       <Grid item xs>
         <Box>
           <Grid container alignItems='flex-end'>
             <Grid item xs='auto'>
-              <Typography padding={2} variant='h5' color='primary'>
-                <Box sx={{ fontWeight: 'bold' }}>{character.name}</Box>
-              </Typography>
+              <Typography padding={2} variant='h5'>{character.name}</Typography>
             </Grid>
             <Grid item xs>
-              <Typography padding={2} variant='subtitle1' color='primary.dark'>
-                <Box>{character.game}</Box>
-              </Typography>
+              <Typography padding={2} variant='subtitle1' color='text.secondary'>{character.game}</Typography>
             </Grid>
           </Grid>
         </Box>

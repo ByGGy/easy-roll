@@ -20,11 +20,9 @@ type AbilityItemProps = {
 
 const AbilityItem = ({ ability }: AbilityItemProps) => {
   return (
-    <Box display='flex' alignItems='center' gap={2}>
-      <Typography variant='body1'>
-        {ability.name}
-      </Typography>
-      <Typography variant='caption' color={evaluateModifierColor(ability.value)}>
+    <Box display='flex' alignItems='center' gap={1}>
+      <Typography variant='body1'>{ability.name}</Typography>
+      <Typography variant='overline' color={evaluateModifierColor(ability.value)}>
         {ability.value > 0 ? `+${ability.value}`: ability.value}
       </Typography>
     </Box>
@@ -64,7 +62,7 @@ export const RddRoll = ({ attributeName, abilities }: Props) => {
       <Box padding={2} sx={{ minWidth: 400 }}>
         <Grid container alignItems='center'>
           <Grid item xs>
-            <Typography variant='h5'>{attributeName}</Typography>
+            <Typography variant='h6' color='primary'>{attributeName}</Typography>
           </Grid>
           <Grid item xs='auto'>
             <Button onClick={handleReset}>
@@ -75,9 +73,7 @@ export const RddRoll = ({ attributeName, abilities }: Props) => {
         <CardContent>
           <Stack direction='column' spacing={2}>
               <Stack direction='row' spacing={4} alignItems='center'>
-                <Typography variant='button' color='primary'>
-                  Ability
-                </Typography>
+                <Typography variant='button'>Ability</Typography>
                 <FormControl fullWidth>
                   <InputLabel>Pick one</InputLabel>
                   <Select
@@ -97,9 +93,7 @@ export const RddRoll = ({ attributeName, abilities }: Props) => {
             <Stack />
             <Stack />
             <Stack direction='row' spacing={4}>
-                <Typography variant='button' color='primary'>
-                  Modifier
-                </Typography>
+                <Typography variant='button'>Modifier</Typography>
                 <Slider
                   value={modifier}
                   onChange={handleModifierChange}
@@ -116,7 +110,7 @@ export const RddRoll = ({ attributeName, abilities }: Props) => {
           </Stack>
         </CardContent>
         <CardActions>
-          <Button variant='contained' color='secondary' onClick={handleRoll} fullWidth>
+          <Button variant='contained' color='primary' onClick={handleRoll} fullWidth>
             Roll
           </Button>
         </CardActions>

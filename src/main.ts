@@ -27,8 +27,8 @@ let frontRelay
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 1600,
-    height: 1100,
+    width: 1650,
+    height: 950,
     backgroundColor: '#0e100b',
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),

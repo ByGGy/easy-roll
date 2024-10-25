@@ -55,7 +55,7 @@ export const DiceTray = () => {
       <Stack padding={2}>
         <Grid container alignItems='center'>
           <Grid item xs>
-            <Typography variant='h5'>Dice Tray</Typography>
+            <Typography variant='h6' color='primary'>Dice Tray</Typography>
           </Grid>
           <Grid item xs='auto'>
             <Button onClick={handleReset}>
@@ -65,9 +65,7 @@ export const DiceTray = () => {
         </Grid>
         <Stack padding='3rem 0 2rem 0' spacing={6}>
           <Stack direction='row' spacing={4}>
-            <Typography variant='button' color='primary'>
-              Dice
-            </Typography>
+            <Typography variant='button'>Dice</Typography>
             <Slider
               value={diceFaceQty}
               onChange={handleDiceFaceChange}
@@ -85,9 +83,7 @@ export const DiceTray = () => {
             />
           </Stack>
           <Stack direction='row' spacing={4}>
-            <Typography variant='button' color='primary'>
-              Qty
-            </Typography>
+            <Typography variant='button'>Qty</Typography>
             <Slider
               value={diceQty}
               onChange={handleDiceQtyChange}
@@ -99,9 +95,7 @@ export const DiceTray = () => {
             />
           </Stack>
           <Stack direction='row' spacing={4}>
-            <Typography variant='button' color='primary'>
-              Modifier
-            </Typography>
+            <Typography variant='button'>Modifier</Typography>
             <Slider
               value={modifier}
               onChange={handleModifierChange}
@@ -116,7 +110,7 @@ export const DiceTray = () => {
             />
           </Stack>
         </Stack>
-        <Button variant='contained' color='secondary' onClick={handleRoll} fullWidth>
+        <Button variant='outlined' color='primary' onClick={handleRoll} fullWidth>
           Roll
         </Button>
       </Stack>

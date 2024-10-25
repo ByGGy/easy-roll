@@ -19,7 +19,7 @@ export const AriaAbilities = ({ abilities }: Props) => {
 
   return (
     <Stack padding={2}>
-      <Typography variant='h5'>Abilities</Typography>
+      <Typography variant='h6' color='primary'>Abilities</Typography>
       <List dense>
         {sortedAbilities.map((ability) =>
           <ListItem key={ability.name}
@@ -29,14 +29,10 @@ export const AriaAbilities = ({ abilities }: Props) => {
           >
           <Grid container alignItems='center' spacing={4}>
             <Grid item xs>
-              <Typography variant='body1' color='primary'>
-                {ability.name}
-              </Typography>
+              <Typography variant='body1' color='text.secondary'>{ability.name}</Typography>
             </Grid>
             <Grid item xs='auto' paddingRight={2}>
-              <Typography variant='body1' >
-                {`${ability.value}%`}
-              </Typography>
+              <Typography variant='body1'>{`${ability.value}%`}</Typography>
             </Grid>
           </Grid>
           </ListItem>
