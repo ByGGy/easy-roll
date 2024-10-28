@@ -107,8 +107,8 @@ export const DiceTray = () => {
             <Slider
               value={modifier}
               onChange={handleModifierChange}
-              min={-10}
-              max={+10}
+              min={-20}
+              max={+20}
               step={1}
               marks
               sx={{
