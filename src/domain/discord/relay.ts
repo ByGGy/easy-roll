@@ -34,8 +34,8 @@ export const createRelay = (repository: Repository<CharacterSheet>): Relay => {
   }
 
   const handleSessionUpdate = (previousState: SessionState, currentState: SessionState) => {
-    if (currentState.character !== null) {
-      const relevantCharacter = repository.getById(currentState.character.id)
+    if (currentState.characterId !== null) {
+      const relevantCharacter = repository.getById(currentState.characterId)
       if (relevantCharacter) {
         const content = `<${relevantCharacter.name}> has entered the realm.`
         sendMessage({
@@ -44,8 +44,8 @@ export const createRelay = (repository: Repository<CharacterSheet>): Relay => {
         })
       }
     } else {
-      if (previousState.character !== null) {
-        const relevantCharacter = repository.getById(previousState.character.id)
+      if (previousState.characterId !== null) {
+        const relevantCharacter = repository.getById(previousState.characterId)
         if (relevantCharacter) {
           const content = `<${relevantCharacter.name}> has left the realm.`
           sendMessage({

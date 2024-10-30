@@ -1,9 +1,8 @@
-import { EntityId, CharacterSheet } from '../common/types'
-import { Repository } from '../../persistence/character/repository'
+import { EntityId } from '../common/types'
 import { StateEmitter, createState } from '../events/stateEmitter'
 
 export type SessionState = {
-  character: CharacterSheet | null
+  characterId: EntityId | null
 }
 
 type Session = {
@@ -12,20 +11,15 @@ type Session = {
   end: () => void
 }
 
-export const createSession = (repository: Repository<CharacterSheet>): Session => {
-  const state = createState<SessionState>({ character: null }, 'Domain.Session')
+export const createSession = (): Session => {
+  const state = createState<SessionState>({ characterId: null }, 'Domain.Session')
 
   const start = (characterId: EntityId) => {
-    const relevantCharacter = repository.getById(characterId)
-    if (relevantCharacter) {
-      state.update('character', relevantCharacter)
-    }
+    state.update('characterId', characterId)
   }
 
   const end = () => {
-    if (state.character !== null) {
-      state.update('character', null)
-    }
+    state.update('characterId', null)
   }
 
   return {

@@ -12,6 +12,7 @@ type CharacterCollection = {
   state: StateEmitter<CharacterCollectionState>
   initialize: () => void
   createCharacter: (game: Game) => void
+  renameCharacter: (id: EntityId, newName: string) => void
 }
 
 export const createCharacterCollection = (repository: Repository<CharacterSheet>): CharacterCollection=> {
@@ -38,9 +39,21 @@ export const createCharacterCollection = (repository: Repository<CharacterSheet>
     state.update('characters', [...state.characters, newCharacterSheet])
   }
 
+  const renameCharacter = (id: EntityId, newName: string) => {
+    const targetCharacter = state.characters.find(c => c.id === id)
+    if (targetCharacter) {
+      // TODO: find a solution to mutate object instead ?
+      const updatedCharacter = {...targetCharacter}
+      updatedCharacter.name = newName
+      repository.update(updatedCharacter)
+      state.update('characters', [...state.characters.filter(c => c.id !== id), updatedCharacter])
+    }
+  }
+
   return {
     state,
     initialize,
-    createCharacter
+    createCharacter,
+    renameCharacter
   }
 }

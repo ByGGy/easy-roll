@@ -22,7 +22,7 @@ if (require('electron-squirrel-startup')) {
 const characterRepository = createRepository()
 const characterCollection = createCharacterCollection(characterRepository)
 const discordRelay = createDiscordRelay(characterRepository)
-const session = createSession(characterRepository)
+const session = createSession()
 let frontRelay
 
 const createWindow = () => {
@@ -100,6 +100,10 @@ const handleCreateDefaultCharacterSheet = (event: unknown, game: Game) => {
   characterCollection.createCharacter(game)
 }
 
+const handleRenameCharacter = (event: unknown, id: EntityId, newName: string) => {
+  characterCollection.renameCharacter(id, newName)
+}
+
 const handleOpenSession = (event: unknown, id: EntityId) => {
   session.start(id)
 }
@@ -109,30 +113,38 @@ const handleCloseSession = (event: unknown) => {
 }
 
 const handleDiceTrayRoll = (event: unknown, diceFaceQty: number, diceQty: number, modifier: number) => {
-  const currentCharacter = session.state.character
-  if (currentCharacter !== null) {
-    diceTrayEngine.rollDices(currentCharacter, diceFaceQty, diceQty, modifier)
+  if (session.state.characterId !== null) {
+    const currentCharacter = characterRepository.getById(session.state.characterId)
+    if (currentCharacter) {
+      diceTrayEngine.rollDices(currentCharacter, diceFaceQty, diceQty, modifier)
+    }
   }
 }
 
 const handleAriaCheckAttribute = (event: unknown, attributeName: string, difficulty: number, modifier: number) => {
-  const currentCharacter = session.state.character
-  if (currentCharacter !== null) {
-    ariaEngine.checkAttribute(currentCharacter, attributeName, difficulty, modifier)
+  if (session.state.characterId !== null) {
+    const currentCharacter = characterRepository.getById(session.state.characterId)
+    if (currentCharacter) {
+      ariaEngine.checkAttribute(currentCharacter, attributeName, difficulty, modifier)
+    }
   }
 }
 
 const handleAriaCheckAbility = (event: unknown, abilityName: string, modifier: number) => {
-  const currentCharacter = session.state.character
-  if (currentCharacter !== null) {
-    ariaEngine.checkAbility(currentCharacter, abilityName, modifier)
+  if (session.state.characterId !== null) {
+    const currentCharacter = characterRepository.getById(session.state.characterId)
+    if (currentCharacter) {
+      ariaEngine.checkAbility(currentCharacter, abilityName, modifier)
+    }
   }
 }
 
 const handleRddCheckAttribute = (event: unknown, attributeName: string, abilityName: string, modifier: number) => {
-  const currentCharacter = session.state.character
-  if (currentCharacter !== null) {
-    rddEngine.checkAttribute(currentCharacter, attributeName, abilityName, modifier)
+  if (session.state.characterId !== null) {
+    const currentCharacter = characterRepository.getById(session.state.characterId)
+    if (currentCharacter) {
+      rddEngine.checkAttribute(currentCharacter, attributeName, abilityName, modifier)
+    }
   }
 }
 
@@ -142,6 +154,7 @@ app.whenReady().then(() => {
   ipcMain.handle('toggleDiscordNotification', handleToggleDiscordNotification)
 
   ipcMain.handle('createDefaultCharacterSheet', handleCreateDefaultCharacterSheet)
+  ipcMain.handle('renameCharacter', handleRenameCharacter)
   
   ipcMain.handle('openSession', handleOpenSession)
   ipcMain.handle('closeSession', handleCloseSession)

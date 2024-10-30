@@ -19,6 +19,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   toggleDiscordNotification: (enable: boolean) => ipcRenderer.invoke('toggleDiscordNotification', enable),
 
   createDefaultCharacterSheet: (game: Game)  => ipcRenderer.invoke('createDefaultCharacterSheet', game),
+  renameCharacter: (id: EntityId, newName: string) => ipcRenderer.invoke('renameCharacter', id, newName),
 
   openSession: (id: EntityId) => ipcRenderer.invoke('openSession', id),
   closeSession: () => ipcRenderer.invoke('closeSession'),

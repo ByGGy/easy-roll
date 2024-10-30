@@ -13,7 +13,7 @@ export const ipcMiddleware: Middleware = (store) => {
 
   window.electronAPI.onMessage('Domain.Session.update', (data: string) => {
     const states = JSON.parse(data)
-    store.dispatch(sessionUpdate(states.current.character))
+    store.dispatch(sessionUpdate(states.current.characterId))
   })
 
   window.electronAPI.onMessage('Domain.Discord.update', (data: string) => {
