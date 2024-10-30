@@ -13,7 +13,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select'
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore'
 import { evaluateModifierColor } from '../common/style-helpers'
 
-import { Ability } from '../../domain/character/characterSheet'
+import { Ability } from '../../../domain/common/types'
 
 type AbilityItemProps = {
   ability: Ability

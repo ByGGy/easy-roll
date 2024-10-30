@@ -1,8 +1,7 @@
 import { messageBus } from '../events/messageBus'
 import { sendMessage } from '../../api/discordAPI'
-import { RollResult } from '../common/types'
-import { Repository } from '../character/repository'
-import { CharacterSheet } from '../character/characterSheet'
+import { CharacterSheet, RollResult } from '../common/types'
+import { Repository } from '../../persistence/character/repository'
 import { SessionState } from '../session/session'
 import { StateEmitter, createState } from '../events/stateEmitter'
 

@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
-import { CharacterSheet } from '../domain/character/characterSheet'
+import { CharacterSheet } from '../../domain/common/types'
 
 export interface SessionState {
   character: CharacterSheet | null

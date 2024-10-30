@@ -10,8 +10,7 @@ import Avatar from '@mui/material/Avatar'
 import PersonIcon from '@mui/icons-material/Person'
 import ListItemText from '@mui/material/ListItemText'
 
-import { CharacterSheet } from '../domain/character/characterSheet'
-import { EntityId } from '../domain/common/types'
+import { EntityId, CharacterSheet } from '../../domain/common/types'
 
 export const CharacterSelection = () => {
   const [characterSheets, setCharacterSheets] = useState<Array<CharacterSheet>>([])

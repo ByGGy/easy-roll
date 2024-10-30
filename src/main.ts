@@ -1,7 +1,7 @@
 import { app, BrowserWindow, ipcMain } from 'electron'
 import path from 'path';
 
-import { createRepository } from './domain/character/repository'
+import { createRepository } from './persistence/character/repository'
 import { createSession } from './domain/session/session'
 import { engine as diceTrayEngine } from './domain/dicetray/engine'
 import { engine as ariaEngine } from './domain/aria/engine'
@@ -11,6 +11,7 @@ import { createRelay as createFrontRelay } from './domain/front/relay'
 import { EntityId } from './domain/common/types'
 
 // import { runTest } from './domain/dicetray/roll'
+// runTest()
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -21,8 +22,6 @@ const characterRepository = createRepository()
 const discordRelay = createDiscordRelay(characterRepository)
 const session = createSession(characterRepository)
 let frontRelay
-
-// runTest()
 
 const createWindow = () => {
   // Create the browser window.

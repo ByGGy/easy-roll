@@ -8,7 +8,7 @@ import CasinoIcon from '@mui/icons-material/Casino'
 import { BasicPopover } from '../common/pop-over'
 import { RddRoll } from './rdd-roll'
 
-import { Ability, Attribute } from '../../domain/character/characterSheet'
+import { Ability, Attribute } from '../../../domain/common/types'
 
 type Props = {
   attributes: Readonly<Array<Attribute>>

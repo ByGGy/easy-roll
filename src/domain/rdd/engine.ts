@@ -1,7 +1,6 @@
 import { messageBus } from '../events/messageBus'
 
-import { RollCheckDetails, RollDiceDetails, RollResult } from '../common/types'
-import { CharacterSheet } from '../character/characterSheet'
+import { CharacterSheet, RollCheckDetails, RollDiceDetails, RollResult } from '../common/types'
 import { rollDice } from '../dicetray/roll'
 
 const findThreshold = (attributeValue: number, modifier: number): number => {

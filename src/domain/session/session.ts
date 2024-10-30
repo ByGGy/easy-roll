@@ -1,6 +1,5 @@
-import { EntityId } from '../common/types'
-import { CharacterSheet } from '../character/characterSheet'
-import { Repository } from '../character/repository'
+import { EntityId, CharacterSheet } from '../common/types'
+import { Repository } from '../../persistence/character/repository'
 import { StateEmitter, createState } from '../events/stateEmitter'
 
 export type SessionState = {

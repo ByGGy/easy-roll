@@ -11,7 +11,7 @@ import Avatar from '@mui/material/Avatar'
 import ListItemText from '@mui/material/ListItemText'
 import Divider from '@mui/material/Divider'
 
-import { RollResult } from '../domain/common/types'
+import { RollResult } from '../../domain/common/types'
 
 type RollItemProps = {
   roll: RollResult

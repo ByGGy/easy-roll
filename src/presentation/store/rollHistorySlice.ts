@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
-import { RollResult } from '../domain/common/types'
+import { RollResult } from '../../domain/common/types'
 
 export interface RollHistoryState {
   rolls: Array<RollResult>

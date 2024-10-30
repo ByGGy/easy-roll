@@ -7,6 +7,32 @@ export type Entity = {
   id: Readonly<EntityId>
 }
 
+//--
+
+export type Attribute = Nominal<'Attribute', Readonly<{
+  name: string,
+  value: number
+}>>
+
+export type Ability = Nominal<'Ability', Readonly<{
+  name: string,
+  value: number
+}>>
+
+export type DiscordConfiguration = {
+  channelId: string
+}
+
+export type CharacterSheet = Entity & Readonly<{
+  game: string
+  name: string
+  attributes: Array<Attribute>
+  abilities: Array<Ability>
+  discordConfiguration: DiscordConfiguration
+}>
+
+//--
+
 export type RollCheckFactor = {
   type: 'base' | 'offset' | 'multiplier'
   name: string

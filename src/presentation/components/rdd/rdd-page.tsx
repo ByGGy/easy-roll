@@ -7,7 +7,7 @@ import { RddAttributes } from './rdd-attributes'
 import { DiceTray } from '../dice-tray'
 import { RollHistory } from '../roll-history'
 
-import { CharacterSheet } from '../../domain/character/characterSheet'
+import { CharacterSheet } from '../../../domain/common/types'
 
 type Props = {
   character: CharacterSheet

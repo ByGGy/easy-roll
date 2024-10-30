@@ -1,7 +1,6 @@
 import { messageBus } from '../events/messageBus'
 
-import { RollDiceDetails, RollResult } from '../common/types'
-import { CharacterSheet } from '../character/characterSheet'
+import { CharacterSheet, RollDiceDetails, RollResult } from '../common/types'
 import { rollDice } from './roll'
 
 const rollDices = (character: CharacterSheet, diceFaceQty: number, diceQty: number, modifier: number): RollResult => {

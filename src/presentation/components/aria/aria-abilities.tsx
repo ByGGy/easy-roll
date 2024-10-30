@@ -8,7 +8,7 @@ import CasinoIcon from '@mui/icons-material/Casino'
 import { BasicPopover } from '../common/pop-over'
 import { AriaRoll } from './aria-roll'
 
-import { Ability } from '../../domain/character/characterSheet'
+import { Ability } from '../../../domain/common/types'
 
 type Props = {
   abilities: Readonly<Array<Ability>>

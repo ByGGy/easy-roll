@@ -5,7 +5,7 @@ import Button from '@mui/material/Button'
 import LogoutIcon from '@mui/icons-material/Logout'
 import { DiscordConfiguration } from './discord-configuration'
 
-import { CharacterSheet } from '../domain/character/characterSheet'
+import { CharacterSheet } from '../../domain/common/types'
 
 type Props = {
   character: CharacterSheet
