@@ -1,5 +1,6 @@
 import { app, BrowserWindow, ipcMain } from 'electron'
 import path from 'path';
+import { randomUUID } from 'crypto'
 
 import { createRepository } from './persistence/character/repository'
 import { createSession } from './domain/session/session'
@@ -19,6 +20,11 @@ if (require('electron-squirrel-startup')) {
 }
 
 const characterRepository = createRepository()
+const characters = characterRepository.getAll()
+if (characters.length === 0) {
+  characterRepository.insert({ id: randomUUID(), name: 'Test', game: 'Aria', attributes: [], abilities: [], discordConfiguration: { channelId: '' } })
+}
+
 const discordRelay = createDiscordRelay(characterRepository)
 const session = createSession(characterRepository)
 let frontRelay
