@@ -19,7 +19,7 @@ export const CharacterHeader = ({ character }: Props) => {
   return (
     <Grid container alignItems='center'>
       <Grid item xs='auto'>
-        <Button variant="outlined" startIcon={<LogoutIcon />} onClick={handleCloseSession}>
+        <Button variant='outlined' startIcon={<LogoutIcon />} onClick={handleCloseSession}>
           Back
         </Button>
       </Grid>

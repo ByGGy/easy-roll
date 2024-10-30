@@ -2,15 +2,14 @@ import { app, BrowserWindow, ipcMain } from 'electron'
 import path from 'path';
 
 import { createRepository } from './persistence/character/repository'
+import { createCharacterCollection } from './domain/character/characterCollection'
 import { createSession } from './domain/session/session'
 import { engine as diceTrayEngine } from './domain/dicetray/engine'
 import { engine as ariaEngine } from './domain/aria/engine'
-import { createDefault as createAriaDefaultCharacter } from './domain/aria/characterTemplate'
 import { engine as rddEngine } from './domain/rdd/engine'
-import { createDefault as createRddDefaultCharacter } from './domain/rdd/characterTemplate'
 import { createRelay as createDiscordRelay } from './domain/discord/relay'
 import { createRelay as createFrontRelay } from './domain/front/relay'
-import { EntityId } from './domain/common/types'
+import { EntityId, Game } from './domain/common/types'
 
 // import { runTest } from './domain/dicetray/roll'
 // runTest()
@@ -21,12 +20,7 @@ if (require('electron-squirrel-startup')) {
 }
 
 const characterRepository = createRepository()
-const characters = characterRepository.getAll()
-if (characters.length === 0) {
-  characterRepository.insert(createAriaDefaultCharacter())
-  characterRepository.insert(createRddDefaultCharacter())
-}
-
+const characterCollection = createCharacterCollection(characterRepository)
 const discordRelay = createDiscordRelay(characterRepository)
 const session = createSession(characterRepository)
 let frontRelay
@@ -56,6 +50,10 @@ const createWindow = () => {
   // mainWindow.webContents.openDevTools();
 
   frontRelay = createFrontRelay(mainWindow)
+
+  mainWindow.webContents.once('did-finish-load', () => {
+    characterCollection.initialize()
+  })
 };
 
 // This method will be called when Electron has finished
@@ -98,8 +96,8 @@ const handleToggleDiscordNotification = (event: unknown, enable: boolean) => {
   enable ? discordRelay.enable() : discordRelay.disable()
 }
 
-const handleGetAllCharacterSheets = (event: unknown) => {
-  return JSON.stringify(characterRepository.getAll())
+const handleCreateDefaultCharacterSheet = (event: unknown, game: Game) => {
+  characterCollection.createCharacter(game)
 }
 
 const handleOpenSession = (event: unknown, id: EntityId) => {
@@ -142,8 +140,9 @@ app.whenReady().then(() => {
   ipcMain.handle('getAppVersion', handleGetAppVersion)
 
   ipcMain.handle('toggleDiscordNotification', handleToggleDiscordNotification)
+
+  ipcMain.handle('createDefaultCharacterSheet', handleCreateDefaultCharacterSheet)
   
-  ipcMain.handle('getAllCharacterSheets', handleGetAllCharacterSheets)
   ipcMain.handle('openSession', handleOpenSession)
   ipcMain.handle('closeSession', handleCloseSession)
 

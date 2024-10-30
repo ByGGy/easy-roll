@@ -3,7 +3,7 @@
 
 import { contextBridge, ipcRenderer } from 'electron'
 
-import { EntityId } from './domain/common/types'
+import { EntityId, Game } from './domain/common/types'
 
 declare global {
   interface Window {
@@ -18,7 +18,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
 
   toggleDiscordNotification: (enable: boolean) => ipcRenderer.invoke('toggleDiscordNotification', enable),
 
-  getAllCharacterSheets: () => ipcRenderer.invoke('getAllCharacterSheets'),
+  createDefaultCharacterSheet: (game: Game)  => ipcRenderer.invoke('createDefaultCharacterSheet', game),
+
   openSession: (id: EntityId) => ipcRenderer.invoke('openSession', id),
   closeSession: () => ipcRenderer.invoke('closeSession'),
 

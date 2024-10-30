@@ -1,10 +1,16 @@
 import { Middleware, UnknownAction } from 'redux'
 
+import { update as characterCollectionUpdate } from './characterCollectionSlice'
 import { update as sessionUpdate } from './sessionSlice'
 import { update as discordUpdate } from './discordSlice'
-import { add } from './rollHistorySlice'
+import { add as addToHistory } from './rollHistorySlice'
 
 export const ipcMiddleware: Middleware = (store) => {
+  window.electronAPI.onMessage('Domain.CharacterCollection.update', (data: string) => {
+    const states = JSON.parse(data)
+    store.dispatch(characterCollectionUpdate(states.current.characters))
+  })
+
   window.electronAPI.onMessage('Domain.Session.update', (data: string) => {
     const states = JSON.parse(data)
     store.dispatch(sessionUpdate(states.current.character))
@@ -17,7 +23,7 @@ export const ipcMiddleware: Middleware = (store) => {
 
   window.electronAPI.onMessage('Domain.Roll.new', (data: string) => {
     const rollResult = JSON.parse(data)
-    store.dispatch(add(rollResult))
+    store.dispatch(addToHistory(rollResult))
   })
 
   return (next) => (action: UnknownAction) => {
