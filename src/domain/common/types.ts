@@ -9,6 +9,8 @@ export type Entity = {
 
 //--
 
+export type Game = 'Aria' | 'Rêve de Dragon'
+
 export type Attribute = Nominal<'Attribute', Readonly<{
   name: string,
   value: number
@@ -24,7 +26,7 @@ export type DiscordConfiguration = {
 }
 
 export type CharacterSheet = Entity & Readonly<{
-  game: string
+  game: Game
   name: string
   attributes: Array<Attribute>
   abilities: Array<Ability>

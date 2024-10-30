@@ -1,12 +1,13 @@
 import { app, BrowserWindow, ipcMain } from 'electron'
 import path from 'path';
-import { randomUUID } from 'crypto'
 
 import { createRepository } from './persistence/character/repository'
 import { createSession } from './domain/session/session'
 import { engine as diceTrayEngine } from './domain/dicetray/engine'
 import { engine as ariaEngine } from './domain/aria/engine'
+import { createDefault as createAriaDefaultCharacter } from './domain/aria/characterTemplate'
 import { engine as rddEngine } from './domain/rdd/engine'
+import { createDefault as createRddDefaultCharacter } from './domain/rdd/characterTemplate'
 import { createRelay as createDiscordRelay } from './domain/discord/relay'
 import { createRelay as createFrontRelay } from './domain/front/relay'
 import { EntityId } from './domain/common/types'
@@ -22,7 +23,8 @@ if (require('electron-squirrel-startup')) {
 const characterRepository = createRepository()
 const characters = characterRepository.getAll()
 if (characters.length === 0) {
-  characterRepository.insert({ id: randomUUID(), name: 'Test', game: 'Aria', attributes: [], abilities: [], discordConfiguration: { channelId: '' } })
+  characterRepository.insert(createAriaDefaultCharacter())
+  characterRepository.insert(createRddDefaultCharacter())
 }
 
 const discordRelay = createDiscordRelay(characterRepository)
