@@ -43,12 +43,12 @@ export const CharacterSelection = () => {
           </Grid>
           <Grid item xs>
             <Stack direction='row' spacing={2}>
-            <Button variant={characterSheets.length === 0 ? 'contained' : 'outlined'} startIcon={<AddIcon />} onClick={handleCreateAriaCharacter}>
-              Create Aria character
-            </Button>
-            <Button variant={characterSheets.length === 0 ? 'contained' : 'outlined'} startIcon={<AddIcon />} onClick={handleCreateRddCharacter}>
-              Create Rdd character
-            </Button>
+              <Button variant={characterSheets.length === 0 ? 'contained' : 'outlined'} startIcon={<AddIcon />} onClick={handleCreateAriaCharacter}>
+                Create Aria character
+              </Button>
+              <Button variant={characterSheets.length === 0 ? 'contained' : 'outlined'} startIcon={<AddIcon />} onClick={handleCreateRddCharacter}>
+                Create Rdd character
+              </Button>
             </Stack>
           </Grid>
         </Grid>

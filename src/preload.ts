@@ -3,7 +3,7 @@
 
 import { contextBridge, ipcRenderer } from 'electron'
 
-import { EntityId, Game } from './domain/common/types'
+import { EntityId, Game, Attribute } from './domain/common/types'
 
 declare global {
   interface Window {
@@ -20,6 +20,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
 
   createDefaultCharacterSheet: (game: Game)  => ipcRenderer.invoke('createDefaultCharacterSheet', game),
   renameCharacter: (id: EntityId, newName: string) => ipcRenderer.invoke('renameCharacter', id, newName),
+  changeCharacterAttributes: (id: EntityId, newAttributes: Array<Attribute>) => ipcRenderer.invoke('changeCharacterAttributes', id, newAttributes),
 
   openSession: (id: EntityId) => ipcRenderer.invoke('openSession', id),
   closeSession: () => ipcRenderer.invoke('closeSession'),

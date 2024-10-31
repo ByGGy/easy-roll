@@ -28,14 +28,14 @@ export const RddAttributes = ({ attributes, abilities }: Props) => {
               <BasicPopover triggerContent={<CasinoIcon />} popoverContent={<RddRoll attributeName={attribute.name} abilities={abilities} />} />
             }
           >
-          <Grid container alignItems='center' spacing={4}>
-            <Grid item xs>
-              <Typography variant='body1' color='text.secondary'>{attribute.name}</Typography>
+            <Grid container alignItems='center' spacing={4}>
+              <Grid item xs>
+                <Typography variant='body1' color='text.secondary'>{attribute.name}</Typography>
+              </Grid>
+              <Grid item xs='auto' paddingRight={2}>
+                <Typography variant='body1'>{attribute.value}</Typography>
+              </Grid>
             </Grid>
-            <Grid item xs='auto' paddingRight={2}>
-              <Typography variant='body1'>{attribute.value}</Typography>
-            </Grid>
-          </Grid>
           </ListItem>
         )}
       </List>

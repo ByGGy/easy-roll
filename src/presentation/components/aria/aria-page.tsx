@@ -8,6 +8,7 @@ import { AriaAbilities } from './aria-abilities'
 import { DiceTray } from '../dice-tray'
 import { RollHistory } from '../roll-history'
 
+import { CharacterEditAttributes } from '../character-edit-attributes'
 import { CharacterSheet } from '../../../domain/common/types'
 
 type Props = {
@@ -22,6 +23,9 @@ export const AriaPage = ({ character }: Props) => {
         <Stack spacing={1} direction={'row'}>
           <Paper elevation={4}>
             <AriaAttributes attributes={character.attributes} />
+          </Paper>
+          <Paper elevation={4}>
+            <CharacterEditAttributes character={character} />
           </Paper>
           <Paper elevation={4}>
             <AriaAbilities abilities={character.abilities} />

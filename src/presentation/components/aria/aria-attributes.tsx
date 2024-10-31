@@ -27,14 +27,14 @@ export const AriaAttributes = ({ attributes }: Props) => {
               <BasicPopover triggerContent={<CasinoIcon />} popoverContent={<AriaRoll rollStat='Attribute' statName={attribute.name} />} />
             }
           >
-          <Grid container alignItems='center' spacing={4}>
-            <Grid item xs>
-              <Typography variant='body1' color='text.secondary'>{attribute.name}</Typography>
+            <Grid container alignItems='center' spacing={4}>
+              <Grid item xs>
+                <Typography variant='body1' color='text.secondary'>{attribute.name}</Typography>
+              </Grid>
+              <Grid item xs='auto' paddingRight={2}>
+                <Typography variant='body1'>{attribute.value}</Typography>
+              </Grid>
             </Grid>
-            <Grid item xs='auto' paddingRight={2}>
-              <Typography variant='body1'>{attribute.value}</Typography>
-            </Grid>
-          </Grid>
           </ListItem>
         )}
       </List>

@@ -9,7 +9,7 @@ import { engine as ariaEngine } from './domain/aria/engine'
 import { engine as rddEngine } from './domain/rdd/engine'
 import { createRelay as createDiscordRelay } from './domain/discord/relay'
 import { createRelay as createFrontRelay } from './domain/front/relay'
-import { EntityId, Game } from './domain/common/types'
+import { EntityId, Game, Attribute } from './domain/common/types'
 
 // import { runTest } from './domain/dicetray/roll'
 // runTest()
@@ -104,6 +104,10 @@ const handleRenameCharacter = (event: unknown, id: EntityId, newName: string) =>
   characterCollection.renameCharacter(id, newName)
 }
 
+const handleChangeCharacterAttributes = (event: unknown, id: EntityId, newAttributes: Array<Attribute>) => {
+  characterCollection.changeCharacterAttributes(id, newAttributes)
+}
+
 const handleOpenSession = (event: unknown, id: EntityId) => {
   session.start(id)
 }
@@ -155,7 +159,8 @@ app.whenReady().then(() => {
 
   ipcMain.handle('createDefaultCharacterSheet', handleCreateDefaultCharacterSheet)
   ipcMain.handle('renameCharacter', handleRenameCharacter)
-  
+  ipcMain.handle('changeCharacterAttributes', handleChangeCharacterAttributes)
+
   ipcMain.handle('openSession', handleOpenSession)
   ipcMain.handle('closeSession', handleCloseSession)
 
