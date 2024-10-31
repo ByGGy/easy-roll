@@ -7,7 +7,7 @@ import { RddAttributes } from './rdd-attributes'
 import { DiceTray } from '../dice-tray'
 import { RollHistory } from '../roll-history'
 
-import { CharacterEditAttributes } from '../character-edit-attributes'
+import { CharacterEditAttributes, CharacterEditAbilities } from '../character-edit-records'
 import { CharacterSheet } from '../../../domain/common/types'
 
 type Props = {
@@ -25,6 +25,9 @@ export const RddPage = ({ character }: Props) => {
           </Paper>
           <Paper elevation={4}>
             <CharacterEditAttributes character={character} />
+          </Paper>
+          <Paper elevation={4}>
+            <CharacterEditAbilities character={character} />
           </Paper>
           <Paper elevation={4}>
             <DiceTray />

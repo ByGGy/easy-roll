@@ -1,4 +1,4 @@
-import { EntityId, Game, Attribute, CharacterSheet } from '../common/types'
+import { EntityId, Game, Attribute, Ability, CharacterSheet } from '../common/types'
 import { Repository } from '../../persistence/character/repository'
 import { StateEmitter, createState } from '../events/stateEmitter'
 import { createDefault as createAriaDefaultCharacter } from '../aria/characterTemplate'
@@ -14,6 +14,7 @@ type CharacterCollection = {
   createCharacter: (game: Game) => void
   renameCharacter: (id: EntityId, newName: string) => void
   changeCharacterAttributes: (id: EntityId, newAttributes: Array<Attribute>) => void
+  changeCharacterAbilities: (id: EntityId, newAbilities: Array<Ability>) => void
 }
 
 export const createCharacterCollection = (repository: Repository<CharacterSheet>): CharacterCollection=> {
@@ -62,11 +63,23 @@ export const createCharacterCollection = (repository: Repository<CharacterSheet>
     }
   }
 
+  const changeCharacterAbilities = (id: EntityId, newAbilities: Array<Ability>) => {
+    const targetCharacter = state.characters.find(c => c.id === id)
+    if (targetCharacter) {
+      // TODO: find a solution to mutate object instead ?
+      const updatedCharacter = {...targetCharacter}
+      updatedCharacter.abilities = newAbilities
+      repository.update(updatedCharacter)
+      state.update('characters', [...state.characters.filter(c => c.id !== id), updatedCharacter])
+    }
+  }
+
   return {
     state,
     initialize,
     createCharacter,
     renameCharacter,
-    changeCharacterAttributes
+    changeCharacterAttributes,
+    changeCharacterAbilities
   }
 }

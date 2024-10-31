@@ -4,6 +4,7 @@ import { Attribute, Ability, CharacterSheet } from '../common/types'
 const ATTRIBUTE_AVERAGE_VALUE = Math.floor(60 / 5)
 const ABILITY_AVERAGE_VALUE = ATTRIBUTE_AVERAGE_VALUE * 5
 
+// TODO: id generation and discordConfiguration should not be handled by game templates
 export const createDefault = (): CharacterSheet => {
   return {
     id: randomUUID(),

@@ -20,34 +20,40 @@ import {
   GridSlots,
 } from '@mui/x-data-grid'
 
-import { Attribute, CharacterSheet } from '../../domain/common/types'
+import { EntityId, Attribute, CharacterSheet } from '../../domain/common/types'
 
 //--
 
 type EditToolbarProps = {
-  addNewAttribute: () => void
+  title: string,
+  addNewRecord: () => void
 }
 
-const EditToolbar = ({ addNewAttribute }: EditToolbarProps) => {
+const EditToolbar = ({ title, addNewRecord }: EditToolbarProps) => {
   return (
     <GridToolbarContainer sx={{ padding: 0, mb: 1 }}>
-      <Typography variant='h6' color='primary' marginRight={1}>Edit Attributes</Typography>
-      <Button size='small' variant='outlined' color='primary' startIcon={<AddIcon />} onClick={addNewAttribute}>
+      <Typography variant='h6' color='primary' marginRight={1}>{title}</Typography>
+      <Button size='small' variant='outlined' color='primary' startIcon={<AddIcon />} onClick={addNewRecord}>
         Add
       </Button>
     </GridToolbarContainer>
   )
 }
 
-type GridRowData = {
-  id: string,
+//--
+
+type SimpleModel = {
   name: string,
-  value: number,
+  value: number
+}
+
+type GridRowData = SimpleModel & {
+  id: string,
   isNew: boolean
 }
 
-const createRows = (attributes: Readonly<Array<Attribute>>): Array<GridRowData> => {
-  return attributes.toSorted((aA, aB) => aA.name.localeCompare(aB.name)).map(a =>({
+const createRows = (data: Array<SimpleModel>): Array<GridRowData> => {
+  return data.toSorted((aA, aB) => aA.name.localeCompare(aB.name)).map(a =>({
     id: a.name,
     name: a.name,
     value: a.value,
@@ -57,24 +63,26 @@ const createRows = (attributes: Readonly<Array<Attribute>>): Array<GridRowData> 
 
 //--
 
-type Props = {
-  character: CharacterSheet
+type CharacterEditRecordsProps = {
+  title: string
+  onApply: (newRecords: Array<SimpleModel>) => void,
+  records: Array<SimpleModel>
 }
 
 // TODO: look at https://mui.com/x/react-data-grid/editing/
 // need some work on data validation, error reporting
-export const CharacterEditAttributes = ({ character }: Props) => {
-  const [lastCount, setLastCount] = useState(character.attributes.length +1)
-  const [rows, setRows] = useState(createRows(character.attributes))
+const CharacterEditRecords = ({ title, onApply, records }: CharacterEditRecordsProps) => {
+  const [lastCount, setLastCount] = useState(records.length +1)
+  const [rows, setRows] = useState(createRows(records))
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({})
 
   const handleApply= () => {
-    const newAttributes: Array<Attribute> = rows.map(r => ({ name: r.name, value: r.value }) as Attribute)
-    window.electronAPI.changeCharacterAttributes(character.id, newAttributes)
+    const newRecords: Array<SimpleModel> = rows.map(r => ({ name: r.name, value: r.value }))
+    onApply(newRecords)
   }
 
-  const handleAddNewAttribute = () => {
-    const newName = 'New attribute'
+  const handleAddNewRecord = () => {
+    const newName = 'New'
     const newId = `${newName}_${lastCount}`
     setRows((oldRows) => [
       ...oldRows,
@@ -210,12 +218,48 @@ export const CharacterEditAttributes = ({ character }: Props) => {
           toolbar: EditToolbar as GridSlots['toolbar'],
         }}
         slotProps={{
-          toolbar: { addNewAttribute: handleAddNewAttribute },
+          toolbar: { title, addNewRecord: handleAddNewRecord },
         }}
       />
       <Button variant='contained' color='primary' onClick={handleApply} fullWidth>
         Apply
       </Button>
     </Stack>
+  )
+}
+
+//--
+
+type CharacterEditProps = {
+  character: CharacterSheet
+}
+
+export const CharacterEditAttributes = ({ character }: CharacterEditProps) => {
+
+  const handleApply = (newRecords: Array<SimpleModel>) => {
+    window.electronAPI.changeCharacterAttributes(character.id, newRecords)
+  }
+
+  return (
+    <CharacterEditRecords
+      title='Edit Attributes'
+      onApply={handleApply}
+      records={character.attributes}
+    />
+  )
+}
+
+export const CharacterEditAbilities = ({ character }: CharacterEditProps) => {
+
+  const handleApply = (newRecords: Array<SimpleModel>) => {
+    window.electronAPI.changeCharacterAbilities(character.id, newRecords)
+  }
+
+  return (
+    <CharacterEditRecords
+      title='Edit Abilities'
+      onApply={handleApply}
+      records={character.abilities}
+    />
   )
 }
