@@ -40,8 +40,8 @@ export const createDefault = (): CharacterSheet => {
       { name: 'Voler', value: ABILITY_AVERAGE_VALUE } as Ability,
     ],
     discordNotification: {
-      enable: false,
-      level: 'Full',
+      enable: true,
+      level: 'Standard',
       channelId: ''
     }
   }

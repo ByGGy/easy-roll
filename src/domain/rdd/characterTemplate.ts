@@ -113,8 +113,8 @@ export const createDefault = (): CharacterSheet => {
       { name: 'Thanatos', value: ABILITY_DRACONIC_BASE_VALUE } as Ability,
     ],
     discordNotification: {
-      enable: false,
-      level: 'Full',
+      enable: true,
+      level: 'Standard',
       channelId: ''
     }
   }

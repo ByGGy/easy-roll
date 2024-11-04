@@ -34,37 +34,40 @@ export const createRelay = (repository: Repository<CharacterSheet>) => {
     const relevantCharacter = repository.getById(roll.characterId)
     if (relevantCharacter && relevantCharacter.discordNotification.enable) {
       let content = ''
+      const displayedRollValue = relevantCharacter.discordNotification.level === 'Strict' ? '**' : `${roll.diceDetails.total}`
       if (roll.checkDetails !== null) {
         const isSuccess = roll.diceDetails.total <= roll.checkDetails.successThreshold
         const baseFactors = roll.checkDetails.factors.filter(f => f.type === 'base').map(f => f.name).join(' + ')
-        content = `\`\`\`diff\n${isSuccess ? '+' : '-'} <${relevantCharacter.name}> ${baseFactors} : ${isSuccess ? 'success' : 'failure'} (${roll.diceDetails.total})\n\`\`\``
+        content = `\`\`\`diff\n${isSuccess ? '+' : '-'} <${relevantCharacter.name}> ${baseFactors} : ${isSuccess ? 'success' : 'failure'} (${displayedRollValue})\n\`\`\``
       } else {
-        content = `<${relevantCharacter.name}> got \`${roll.diceDetails.total}\` on his roll.`
+        content = `<${relevantCharacter.name}> got \`${displayedRollValue}\` on his roll.`
       }
       
       const details = []
-      details.push(`${roll.diceDetails.diceQty}d${roll.diceDetails.diceFaceQty} = ${roll.diceDetails.rolls.join(', ')}`)
-      if (roll.diceDetails.modifier !== 0) {
-        details.push(`modifier: ${roll.diceDetails.modifier > 0 ? '+' :''}${roll.diceDetails.modifier}`)
-      }
-      if (roll.checkDetails !== null) {
-        roll.checkDetails.factors.forEach(f => {
-          switch (f.type) {
-            case 'base':
-              details.push(`${f.name}: ${f.value}`)
-              break
-
-            case 'multiplier':
-              details.push(`${f.name}: x${f.value}`)
-              break
-
-            case 'offset':
-              details.push(`${f.name}: ${f.value > 0 ? '+' :''}${f.value}`)
-              break
-          }
-        })
-
-        details.push(`threshold: ${roll.checkDetails.successThreshold}`)
+      if (relevantCharacter.discordNotification.level === 'Verbose') {
+        details.push(`${roll.diceDetails.diceQty}d${roll.diceDetails.diceFaceQty} = ${roll.diceDetails.rolls.join(', ')}`)
+        if (roll.diceDetails.modifier !== 0) {
+          details.push(`modifier: ${roll.diceDetails.modifier > 0 ? '+' :''}${roll.diceDetails.modifier}`)
+        }
+        if (roll.checkDetails !== null) {
+          roll.checkDetails.factors.forEach(f => {
+            switch (f.type) {
+              case 'base':
+                details.push(`${f.name}: ${f.value}`)
+                break
+  
+              case 'multiplier':
+                details.push(`${f.name}: x${f.value}`)
+                break
+  
+              case 'offset':
+                details.push(`${f.name}: ${f.value > 0 ? '+' :''}${f.value}`)
+                break
+            }
+          })
+  
+          details.push(`threshold: ${roll.checkDetails.successThreshold}`)
+        }
       }
 
       sendMessage({

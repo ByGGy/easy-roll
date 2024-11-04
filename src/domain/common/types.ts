@@ -21,7 +21,7 @@ export type Ability = Nominal<'Ability', Readonly<{
   value: number
 }>>
 
-export type NotificationLevel = 'Strict' | 'Partial' | 'Full'
+export type NotificationLevel = 'Strict' | 'Standard' | 'Verbose'
 
 export type DiscordNotification = {
   enable: boolean

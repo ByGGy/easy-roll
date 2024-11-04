@@ -1,10 +1,11 @@
 import { useState } from 'react'
 
+import { get } from 'lodash'
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
-import { CardContent, CardActions } from '@mui/material'
+import { CardContent, CardActions, useTheme, alpha } from '@mui/material'
 import FormGroup from '@mui/material/FormGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
@@ -19,6 +20,7 @@ import { PrimaryToggleButton } from './common/style-helpers'
 import { DiscordIcon } from './common/discord-icon'
 
 import { CharacterSheet, NotificationLevel } from '../../domain/common/types'
+import { unreachable } from '../../domain/common/tools'
 
 type DiscordEditProps = {
   character: CharacterSheet
@@ -70,8 +72,8 @@ const DiscordEdit = ({ character }: DiscordEditProps) => {
                 size='small'
               >
                 <PrimaryToggleButton value='Strict'>Strict</PrimaryToggleButton>
-                <PrimaryToggleButton value='Partial'>Partial</PrimaryToggleButton>
-                <PrimaryToggleButton value='Full'>Full</PrimaryToggleButton>
+                <PrimaryToggleButton value='Standard'>Standard</PrimaryToggleButton>
+                <PrimaryToggleButton value='Verbose'>Verbose</PrimaryToggleButton>
               </ToggleButtonGroup>
             </Box>
             <TextField label='Channel ID' variant='standard' value={channelId} onChange={handleChannelIdChange}/>
@@ -94,6 +96,22 @@ type Props = {
 export const DiscordConfiguration = ({ character }: Props) => {
   const isEnabled = character.discordNotification.enable
 
+  const getTallyColorPath = () => {
+    if (isEnabled) {
+      switch (character.discordNotification.level) {
+        default: return unreachable(character.discordNotification.level)
+        case 'Strict': return 'warning.main'
+        case 'Standard': return 'success.main'
+        case 'Verbose': return 'error.main'
+      }
+    }
+
+    return 'text.disabled'
+  }
+
+  const theme = useTheme()
+  const tallyColor = get(theme.palette, getTallyColorPath())
+
   const handleEnableChange = () => {
     window.electronAPI.toggleCharacterDiscordNotification(character.id, !isEnabled)
   }
@@ -109,8 +127,8 @@ export const DiscordConfiguration = ({ character }: Props) => {
         <Typography variant='button'
           sx={{
             fontWeight: isEnabled ? 'bold' : '',
-            color: isEnabled ? 'error.main' : 'text.disabled',
-            textShadow: isEnabled ? '0 0 10px rgba(255, 0, 0, 0.9)' : '',  // Glow effect
+            color: tallyColor,
+            textShadow: isEnabled ? `0 0 10px ${alpha(tallyColor, 0.9)}` : '',  // Glow effect
           }}
           >
           ON AIR
