@@ -1,10 +1,6 @@
 # easy-roll
 
-### For End Users
-
-Setting up the app is a bit clunky atm.
-
----
+### Installation
 
 Download the latest release at https://github.com/ByGGy/easy-roll/releases/latest  
 _(the installer is minimalist, you will not get a progression feedback nor be asked where you want to install the app..)_
@@ -20,58 +16,25 @@ To do this, open a console and type:
 $ xattr -c <path/to/application.app>
 ```
 
----
+### @ New Users
 
-Once the app is installed, you will have to create a `.json` file per character, in a specific folder (`userData`), e.g.:
-* on Windows: `C:\Users\<User>\AppData\Roaming\easy-roll\characters\myCharacter.json`
-* on macOS: `/Users/<User>/Library/Application Support/easy-roll/characters/myCharacter.json`
-* on Linux: `/home/<User>/.config/easy-roll/characters/myCharacter.json`
+<img src='./easyRoll_ui_Start.png' width=600>
 
-The character `.json` file should follow the following "schema":
-```
-{
-  "game": "RPG game name",
-  "name": "My character name",
-  "attributes": [
-    {
-      "name": "Attribute A",
-      "value": 8
-    },
-    {
-      "name": "Attribute B",
-      "value": 12
-    }
-  ],
-  "abilities": [
-    {
-      "name": "Ability A",
-      "value": 4
-    },
-    {
-      "name": "Ability B",
-      "value": 2
-    }
-  ],
-  "discordConfiguration": {
-    "channelId": "In Discord, you can activate Dev mode, then right click a channel to copy/paste its id here"
-  }
-}
-```
+At the moment, two games are "supported":
+* Aria
+* Rêve de Dragon
 
-NB: atm, the exact values expected for the `game` property are: `Aria` or `Rêve de Dragon`
+You should first create a new Character for the game relevant to you.  
+This new character will have a default name, and a default list of attributes and abilities based on the chosen game.  
 
----
+Then you can customize your character, by selecting it and clicking one of the `pen` icons:  
+<img src='./easyRoll_ui_EditCharacter.png' width=600>
 
-Below is a screenshot using the `.json` from the example:  
-<img src='./easyRoll_ui.png' width=600>
+### @ Users of v0.3.0
 
+<img src='./easyRoll_ui_Start.png' width=600>
 
-### For Devs
-
-To build a version locally, run `npm run package`.
-
-To make an installer locally, run `npm run make`.  
-_(it is not necessary to provide the `.nupkg` file with the installer)_
+You should use the import option in order to retrieve your character(s) from deprecated JSON file(s).
 
 ### Links
 
