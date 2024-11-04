@@ -11,6 +11,7 @@ import { CardContent, CardActions, FormControl, InputLabel } from '@mui/material
 import MenuItem from '@mui/material/MenuItem'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore'
+
 import { evaluateModifierColor } from '../common/style-helpers'
 
 import { Ability } from '../../../domain/common/types'

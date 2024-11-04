@@ -41,6 +41,7 @@ export const createCharacterCollection = (repository: Repository<CharacterSheet>
     state.update('characters', [...state.characters, newCharacterSheet])
   }
 
+  // TODO: refactor to editCharacter(id, prop, value)
   const renameCharacter = (id: EntityId, newName: string) => {
     const targetCharacter = state.characters.find(c => c.id === id)
     if (targetCharacter) {

@@ -1,5 +1,7 @@
-import { useState } from 'react'
-import Stack from '@mui/material/Stack'
+import { useState, useEffect } from 'react'
+import Dialog from '@mui/material/Dialog'
+import DialogContent from '@mui/material/DialogContent'
+import DialogActions from '@mui/material/DialogActions'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 import AddIcon from '@mui/icons-material/Add'
@@ -20,7 +22,7 @@ import {
   GridSlots,
 } from '@mui/x-data-grid'
 
-import { EntityId, Attribute, CharacterSheet } from '../../domain/common/types'
+import { CharacterSheet } from '../../domain/common/types'
 
 //--
 
@@ -33,7 +35,7 @@ const EditToolbar = ({ title, addNewRecord }: EditToolbarProps) => {
   return (
     <GridToolbarContainer sx={{ padding: 0, mb: 1 }}>
       <Typography variant='h6' color='primary' marginRight={1}>{title}</Typography>
-      <Button size='small' variant='outlined' color='primary' startIcon={<AddIcon />} onClick={addNewRecord}>
+      <Button variant='outlined' color='primary' startIcon={<AddIcon />} onClick={addNewRecord}>
         Add
       </Button>
     </GridToolbarContainer>
@@ -65,21 +67,21 @@ const createRows = (data: Array<SimpleModel>): Array<GridRowData> => {
 
 type CharacterEditRecordsProps = {
   title: string
-  onApply: (newRecords: Array<SimpleModel>) => void,
+  onChange: (newRecords: Array<SimpleModel>) => void,
   records: Array<SimpleModel>
 }
 
 // TODO: look at https://mui.com/x/react-data-grid/editing/
 // need some work on data validation, error reporting
-const CharacterEditRecords = ({ title, onApply, records }: CharacterEditRecordsProps) => {
+const CharacterEditRecords = ({ title, onChange, records }: CharacterEditRecordsProps) => {
   const [lastCount, setLastCount] = useState(records.length +1)
   const [rows, setRows] = useState(createRows(records))
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({})
 
-  const handleApply= () => {
+  useEffect(() => {
     const newRecords: Array<SimpleModel> = rows.map(r => ({ name: r.name, value: r.value }))
-    onApply(newRecords)
-  }
+    onChange(newRecords)
+  }, [rows])
 
   const handleAddNewRecord = () => {
     const newName = 'New'
@@ -138,12 +140,16 @@ const CharacterEditRecords = ({ title, onApply, records }: CharacterEditRecordsP
   }
 
   const columns: GridColDef[] = [
-    { field: 'name', headerName: 'Name', width: 180, editable: true },
+    {
+      field: 'name',
+      headerName: 'Name',
+      width: 200,
+      editable: true
+    },
     {
       field: 'value',
       headerName: 'Value',
       type: 'number',
-      width: 80,
       align: 'left',
       headerAlign: 'left',
       editable: true,
@@ -152,7 +158,6 @@ const CharacterEditRecords = ({ title, onApply, records }: CharacterEditRecordsP
       field: 'actions',
       type: 'actions',
       headerName: 'Actions',
-      width: 100,
       cellClassName: 'actions',
       getActions: ({ id }) => {
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit
@@ -205,61 +210,105 @@ const CharacterEditRecords = ({ title, onApply, records }: CharacterEditRecordsP
   ]
 
   return (
-    <Stack padding={2}>
-      <DataGrid sx={{ border: 'none' }}
-        rows={rows}
-        columns={columns}
-        editMode='row'
-        rowModesModel={rowModesModel}
-        onRowModesModelChange={handleRowModesModelChange}
-        onRowEditStop={handleRowEditStop}
-        processRowUpdate={processRowUpdate}
-        slots={{
-          toolbar: EditToolbar as GridSlots['toolbar'],
-        }}
-        slotProps={{
-          toolbar: { title, addNewRecord: handleAddNewRecord },
-        }}
-      />
-      <Button variant='contained' color='primary' onClick={handleApply} fullWidth>
-        Apply
-      </Button>
-    </Stack>
+    <DataGrid sx={{ border: 'none' }}
+      rows={rows}
+      columns={columns}
+      editMode='row'
+      rowModesModel={rowModesModel}
+      onRowModesModelChange={handleRowModesModelChange}
+      onRowEditStop={handleRowEditStop}
+      processRowUpdate={processRowUpdate}
+      slots={{
+        toolbar: EditToolbar as GridSlots['toolbar'],
+      }}
+      slotProps={{
+        toolbar: { title, addNewRecord: handleAddNewRecord },
+      }}
+    />
   )
 }
 
 //--
 
-type CharacterEditProps = {
+type CharacterEditDialogProps = {
+  open: boolean
+  onClose: () => void
   character: CharacterSheet
 }
 
-export const CharacterEditAttributes = ({ character }: CharacterEditProps) => {
+// TODO: refactor with a common CharacterEditRecordsDialog ?
+export const CharacterEditAttributesDialog = ({ open, onClose, character }: CharacterEditDialogProps) => {
+  const [lastRecords, setLastRecords] = useState<Array<SimpleModel>>([])
 
-  const handleApply = (newRecords: Array<SimpleModel>) => {
-    window.electronAPI.changeCharacterAttributes(character.id, newRecords)
+  const handleCancel = () => {
+    onClose()
+  }
+
+  const handleApply = () => {
+    window.electronAPI.changeCharacterAttributes(character.id, lastRecords)
+    onClose()
+  }
+
+  const handleChange = (newRecords: Array<SimpleModel>) => {
+    setLastRecords(newRecords)
   }
 
   return (
-    <CharacterEditRecords
-      title='Edit Attributes'
-      onApply={handleApply}
-      records={character.attributes}
-    />
+    <Dialog fullWidth maxWidth='xl' open={open} sx={{
+      '& .MuiDialog-paper': {
+        height: '100%',
+        maxHeight: '80vh',
+      }
+    }}>
+      <DialogContent>
+        <CharacterEditRecords
+          title='Edit Attributes'
+          onChange={handleChange}
+          records={character.attributes}
+        />
+      </DialogContent>
+      <DialogActions>
+        <Button variant='text' onClick={handleCancel}>Cancel</Button>
+        <Button variant='contained' onClick={handleApply}>Apply</Button>
+      </DialogActions>
+    </Dialog>
   )
 }
 
-export const CharacterEditAbilities = ({ character }: CharacterEditProps) => {
+export const CharacterEditAbilitiesDialog = ({ open, onClose, character }: CharacterEditDialogProps) => {
+  const [lastRecords, setLastRecords] = useState<Array<SimpleModel>>([])
 
-  const handleApply = (newRecords: Array<SimpleModel>) => {
-    window.electronAPI.changeCharacterAbilities(character.id, newRecords)
+  const handleCancel = () => {
+    onClose()
+  }
+
+  const handleApply = () => {
+    window.electronAPI.changeCharacterAbilities(character.id, lastRecords)
+    onClose()
+  }
+
+  const handleChange = (newRecords: Array<SimpleModel>) => {
+    setLastRecords(newRecords)
   }
 
   return (
-    <CharacterEditRecords
-      title='Edit Abilities'
-      onApply={handleApply}
-      records={character.abilities}
-    />
+    <Dialog fullWidth maxWidth='xl' open={open} sx={{
+      '& .MuiDialog-paper': {
+        height: '100%',
+        maxHeight: '80vh',
+      }
+    }}>
+      <DialogContent>
+        <CharacterEditRecords
+          title='Edit Abilities'
+          onChange={handleChange}
+          records={character.abilities}
+        />
+      </DialogContent>
+      <DialogActions>
+        <Button variant='text' onClick={handleCancel}>Cancel</Button>
+        <Button variant='contained' onClick={handleApply}>Apply</Button>
+      </DialogActions>
+    </Dialog>
   )
 }

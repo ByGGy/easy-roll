@@ -22,8 +22,8 @@ export const BasicPopover = ({ triggerContent, popoverContent }: Props) => {
   const id = open ? 'simple-popover' : undefined
 
   return (
-    <div>
-      <IconButton aria-describedby={id} onClick={handleClick} color='primary'>
+    <>
+      <IconButton size='small' aria-describedby={id} onClick={handleClick} color='primary'>
         {triggerContent}
       </IconButton>
       <Popover
@@ -42,6 +42,6 @@ export const BasicPopover = ({ triggerContent, popoverContent }: Props) => {
       >
         {popoverContent}
       </Popover>
-    </div>
+    </>
   )
 }

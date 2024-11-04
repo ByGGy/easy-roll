@@ -1,44 +1,62 @@
+import { useState } from 'react'
 import Stack from '@mui/material/Stack'
-import List from '@mui/material/List'
-import ListItem from '@mui/material/ListItem'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
+import IconButton from '@mui/material/IconButton'
 import CasinoIcon from '@mui/icons-material/Casino'
+import EditIcon from '@mui/icons-material/Edit'
 
+import { CharacterEditAttributesDialog } from '../character-edit-records'
 import { BasicPopover } from '../common/pop-over'
 import { RddRoll } from './rdd-roll'
 
-import { Ability, Attribute } from '../../../domain/common/types'
+import { CharacterSheet } from '../../../domain/common/types'
 
 type Props = {
-  attributes: Readonly<Array<Attribute>>
-  abilities: Readonly<Array<Ability>>
+  character: CharacterSheet
 }
 
-export const RddAttributes = ({ attributes, abilities }: Props) => {
-  const sortedAttributes = attributes.toSorted((aA, aB) => aA.name.localeCompare(aB.name))
+export const RddAttributes = ({ character }: Props) => {
+  const [openEditDialog, setOpenEditDialog] = useState(false)
+
+  const handleEdit = () => {
+    setOpenEditDialog(true)
+  }
+
+  const handleEditClose = () => {
+    setOpenEditDialog(false)
+  }
+
+  const sortedAttributes = character.attributes.toSorted((aA, aB) => aA.name.localeCompare(aB.name))
 
   return (
     <Stack padding={2}>
-      <Typography variant='h6' color='primary'>Attributes</Typography>
-      <List dense>
+      <Grid container alignItems='center'>
+        <Grid item xs>
+          <Typography variant='h6' color='primary'>Attributes</Typography>
+        </Grid>
+        <Grid item xs='auto'>
+          <IconButton color='secondary' onClick={handleEdit}>
+            <EditIcon fontSize='small' />
+          </IconButton>
+        </Grid>
+      </Grid>
+      <Stack padding={1}>
         {sortedAttributes.map((attribute) =>
-          <ListItem key={attribute.name}
-            secondaryAction={
-              <BasicPopover triggerContent={<CasinoIcon />} popoverContent={<RddRoll attributeName={attribute.name} abilities={abilities} />} />
-            }
-          >
-            <Grid container alignItems='center' spacing={4}>
-              <Grid item xs>
-                <Typography variant='body1' color='text.secondary'>{attribute.name}</Typography>
-              </Grid>
-              <Grid item xs='auto' paddingRight={2}>
-                <Typography variant='body1'>{attribute.value}</Typography>
-              </Grid>
+          <Grid key={attribute.name} container alignItems='center' spacing={4}>
+            <Grid item xs>
+              <Typography variant='body1' color='text.secondary'>{attribute.name}</Typography>
             </Grid>
-          </ListItem>
+            <Grid item xs='auto'>
+              <Typography variant='body1'>{attribute.value}</Typography>
+            </Grid>
+            <Grid item xs='auto'>
+              <BasicPopover triggerContent={<CasinoIcon />} popoverContent={<RddRoll attributeName={attribute.name} abilities={character.abilities} />} />
+            </Grid>
+          </Grid>
         )}
-      </List>
+        <CharacterEditAttributesDialog open={openEditDialog} onClose={handleEditClose} character={character} />
+      </Stack>
     </Stack>
   )
 }

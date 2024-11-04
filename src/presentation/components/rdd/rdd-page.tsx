@@ -3,11 +3,11 @@ import Stack from '@mui/material/Stack'
 import Paper from '@mui/material/Paper'
 
 import { CharacterHeader } from '../character-header'
+import { RddAbilities } from './rdd-abilities'
 import { RddAttributes } from './rdd-attributes'
 import { DiceTray } from '../dice-tray'
 import { RollHistory } from '../roll-history'
 
-import { CharacterEditAttributes, CharacterEditAbilities } from '../character-edit-records'
 import { CharacterSheet } from '../../../domain/common/types'
 
 type Props = {
@@ -21,13 +21,10 @@ export const RddPage = ({ character }: Props) => {
         <CharacterHeader character={character} />
         <Stack spacing={1} direction={'row'}>
           <Paper elevation={4}>
-            <RddAttributes attributes={character.attributes} abilities={character.abilities} />
+            <RddAttributes character={character} />
           </Paper>
           <Paper elevation={4}>
-            <CharacterEditAttributes character={character} />
-          </Paper>
-          <Paper elevation={4}>
-            <CharacterEditAbilities character={character} />
+            <RddAbilities character={character} />
           </Paper>
           <Paper elevation={4}>
             <DiceTray />
