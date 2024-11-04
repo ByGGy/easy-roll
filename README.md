@@ -34,7 +34,7 @@ Then you can customize your character, by selecting it and clicking one of the `
 
 <img src='./EasyRoll_UI_Start.png' width=600>
 
-You should use the import option in order to retrieve your character(s) from deprecatedJSON file(s).
+You should use the import option in order to retrieve your character(s) from deprecated JSON file(s).
 
 ### Links
 
