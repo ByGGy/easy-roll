@@ -3,6 +3,7 @@ import { sendMessage } from '../../api/discordAPI'
 import { CharacterSheet, RollResult } from '../common/types'
 import { Repository } from '../../persistence/character/repository'
 import { SessionState } from '../session/session'
+import { unreachable } from '../common/tools'
 
 export const createRelay = (repository: Repository<CharacterSheet>) => {
 
@@ -52,6 +53,10 @@ export const createRelay = (repository: Repository<CharacterSheet>) => {
         if (roll.checkDetails !== null) {
           roll.checkDetails.factors.forEach(f => {
             switch (f.type) {
+              default:
+                unreachable(f.type)
+                break
+
               case 'base':
                 details.push(`${f.name}: ${f.value}`)
                 break

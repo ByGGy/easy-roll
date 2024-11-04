@@ -1,4 +1,5 @@
 import { EntityId, Game, Attribute, Ability, CharacterSheet, NotificationLevel } from '../common/types'
+import { unreachable } from '../common/tools'
 import { Repository } from '../../persistence/character/repository'
 import { StateEmitter, createState } from '../events/stateEmitter'
 import { createDefault as createAriaDefaultCharacter } from '../aria/characterTemplate'
@@ -8,10 +9,10 @@ export type CharacterCollectionState = {
   characters: Array<CharacterSheet>
 }
 
-type CharacterCollection = {
+export type CharacterCollection = {
   state: StateEmitter<CharacterCollectionState>
   initialize: () => void
-  createCharacter: (game: Game) => void
+  createCharacter: (game: Game) => CharacterSheet | null
   renameCharacter: (id: EntityId, newName: string) => void
   changeCharacterAttributes: (id: EntityId, newAttributes: Array<Attribute>) => void
   changeCharacterAbilities: (id: EntityId, newAbilities: Array<Ability>) => void
@@ -28,8 +29,12 @@ export const createCharacterCollection = (repository: Repository<CharacterSheet>
   }
 
   const createCharacter = (game: Game) => {
-    let newCharacterSheet
+    let newCharacterSheet = null
     switch (game) {
+      default:
+        unreachable(game)
+        break
+
       case 'Aria':
         newCharacterSheet = createAriaDefaultCharacter()
         break
@@ -39,8 +44,12 @@ export const createCharacterCollection = (repository: Repository<CharacterSheet>
         break
     }
 
-    repository.insert(newCharacterSheet)
-    state.update('characters', [...state.characters, newCharacterSheet])
+    if (newCharacterSheet !== null) {
+      repository.insert(newCharacterSheet)
+      state.update('characters', [...state.characters, newCharacterSheet])
+    }
+
+    return newCharacterSheet
   }
 
   // TODO: refactor to editCharacter(id, prop, value)

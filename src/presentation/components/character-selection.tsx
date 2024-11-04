@@ -8,6 +8,7 @@ import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 import AddIcon from '@mui/icons-material/Add'
+import ImportExportIcon from '@mui/icons-material/ImportExport'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import ListItemButton from '@mui/material/ListItemButton'
@@ -30,6 +31,10 @@ export const CharacterSelection = () => {
     window.electronAPI.createDefaultCharacterSheet('Rêve de Dragon')
   }
 
+  const handleImportCharacter = () => {
+    window.electronAPI.tryImportCharacter()
+  }
+
   const handleSelection = (id: EntityId) => {
     window.electronAPI.openSession(id)
   }
@@ -48,6 +53,9 @@ export const CharacterSelection = () => {
               </Button>
               <Button variant={characterSheets.length === 0 ? 'contained' : 'outlined'} startIcon={<AddIcon />} onClick={handleCreateRddCharacter}>
                 Create Rdd character
+              </Button>
+              <Button variant={characterSheets.length === 0 ? 'contained' : 'outlined'} color='secondary' startIcon={<ImportExportIcon />} onClick={handleImportCharacter}>
+                Import a character
               </Button>
             </Stack>
           </Grid>

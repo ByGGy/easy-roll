@@ -12,6 +12,7 @@ import ListItemText from '@mui/material/ListItemText'
 import Divider from '@mui/material/Divider'
 
 import { RollResult } from '../../domain/common/types'
+import { unreachable } from '../../domain/common/tools'
 
 type RollItemProps = {
   roll: RollResult
@@ -36,6 +37,10 @@ const RollItem = ({ roll, opacity }: RollItemProps) => {
   if (roll.checkDetails !== null) {
     roll.checkDetails.factors.forEach(f => {
       switch (f.type) {
+        default:
+          unreachable(f.type)
+          break
+
         case 'base':
           details.push(`${f.name}: ${f.value}`)
           break

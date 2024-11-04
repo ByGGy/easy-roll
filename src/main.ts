@@ -1,8 +1,9 @@
-import { app, BrowserWindow, ipcMain } from 'electron'
-import path from 'path';
+import { app, BrowserWindow, ipcMain, dialog } from 'electron'
+import path from 'path'
 
 import { createRepository } from './persistence/character/repository'
 import { createCharacterCollection } from './domain/character/characterCollection'
+import { createImportService } from './domain/character/importService'
 import { createSession } from './domain/session/session'
 import { engine as diceTrayEngine } from './domain/dicetray/engine'
 import { engine as ariaEngine } from './domain/aria/engine'
@@ -21,6 +22,7 @@ if (require('electron-squirrel-startup')) {
 
 const characterRepository = createRepository()
 const characterCollection = createCharacterCollection(characterRepository)
+const importService = createImportService(characterCollection)
 const discordRelay = createDiscordRelay(characterRepository)
 const session = createSession()
 let frontRelay
@@ -90,6 +92,21 @@ app.on('activate', () => {
 
 const handleGetAppVersion = (event: unknown) => {
   return app.getVersion()
+}
+
+const handleTryImportCharacter = (event: unknown) => {
+  const pathToLookAt = path.join(app.getPath('userData'), 'characters')
+  const filesToImport = dialog.showOpenDialogSync({
+    defaultPath: pathToLookAt,
+    properties: ['openFile', 'multiSelections'],
+    filters: [
+      { name: 'JSON Character File', extensions: ['json'] },
+    ]
+  })
+
+  if (filesToImport) {
+    filesToImport.forEach(importService.tryFromFile)
+  }
 }
 
 const handleCreateDefaultCharacterSheet = (event: unknown, game: Game) => {
@@ -162,6 +179,8 @@ const handleRddCheckAttribute = (event: unknown, attributeName: string, abilityN
 
 app.whenReady().then(() => {
   ipcMain.handle('getAppVersion', handleGetAppVersion)
+
+  ipcMain.handle('tryImportCharacter', handleTryImportCharacter)
 
   ipcMain.handle('createDefaultCharacterSheet', handleCreateDefaultCharacterSheet)
   ipcMain.handle('renameCharacter', handleRenameCharacter)

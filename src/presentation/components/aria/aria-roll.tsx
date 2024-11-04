@@ -12,6 +12,7 @@ import { CardContent, CardActions } from '@mui/material'
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore'
 
 import { PrimaryToggleButton, evaluateModifierColor } from '../common/style-helpers'
+import { unreachable } from '../../../domain/common/tools'
 
 type AriaRollStat = 'Attribute' | 'Ability'
 
@@ -45,6 +46,10 @@ export const AriaRoll = ({ rollStat, statName }: Props) => {
   // TODO: should dispatch a store action instead of calling the electronAPI in the components ?
   const handleRoll = useCallback(() => {
     switch (rollStat) {
+      default:
+        unreachable(rollStat)
+        break
+
       case 'Attribute': 
         window.electronAPI.ariaCheckAttribute(statName, difficulty, modifier)
         break

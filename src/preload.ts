@@ -16,7 +16,9 @@ contextBridge.exposeInMainWorld('electronAPI', {
 
   getAppVersion: () => ipcRenderer.invoke('getAppVersion'),
 
-  createDefaultCharacterSheet: (game: Game)  => ipcRenderer.invoke('createDefaultCharacterSheet', game),
+  tryImportCharacter: () => ipcRenderer.invoke('tryImportCharacter'),
+
+  createDefaultCharacterSheet: (game: Game) => ipcRenderer.invoke('createDefaultCharacterSheet', game),
   renameCharacter: (id: EntityId, newName: string) => ipcRenderer.invoke('renameCharacter', id, newName),
   changeCharacterAttributes: (id: EntityId, newAttributes: Array<Attribute>) => ipcRenderer.invoke('changeCharacterAttributes', id, newAttributes),
   changeCharacterAbilities: (id: EntityId, newAbilities: Array<Ability>) => ipcRenderer.invoke('changeCharacterAbilities', id, newAbilities),
