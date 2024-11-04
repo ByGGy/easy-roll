@@ -18,7 +18,7 @@ $ xattr -c <path/to/application.app>
 
 ### @ New Users
 
-<img src='./easyRoll_ui_Start.png' width=600>
+<img src='./EasyRoll_UI_Start.png' width=600>
 
 At the moment, two games are "supported":
 * Aria
@@ -28,13 +28,13 @@ You should first create a new Character for the game relevant to you.
 This new character will have a default name, and a default list of attributes and abilities based on the chosen game.  
 
 Then you can customize your character, by selecting it and clicking one of the `pen` icons:  
-<img src='./easyRoll_ui_EditCharacter.png' width=600>
+<img src='./EasyRoll_UI_EditCharacter.png' width=600>
 
 ### @ Users of v0.3.0
 
-<img src='./easyRoll_ui_Start.png' width=600>
+<img src='./EasyRoll_UI_Start.png' width=600>
 
-You should use the import option in order to retrieve your character(s) from deprecated JSON file(s).
+You should use the import option in order to retrieve your character(s) from deprecatedJSON file(s).
 
 ### Links
 
