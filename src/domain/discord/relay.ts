@@ -3,53 +3,26 @@ import { sendMessage } from '../../api/discordAPI'
 import { CharacterSheet, RollResult } from '../common/types'
 import { Repository } from '../../persistence/character/repository'
 import { SessionState } from '../session/session'
-import { StateEmitter, createState } from '../events/stateEmitter'
 
-export type RelayState = {
-  isEnabled: boolean
-}
-
-type Relay = {
-  state: StateEmitter<RelayState>
-  enable: () => void
-  disable: () => void
-}
-
-export const createRelay = (repository: Repository<CharacterSheet>): Relay => {
-  const state = createState<RelayState>({ isEnabled: false }, 'Domain.Discord')
-
-  const enable = () => {
-    state.update('isEnabled', true)
-  }
-
-  const disable = () => {
-    state.update('isEnabled', false)
-  }
-
-  const maybeHandle = (handler: (...args: any[]) => void) => (...args: any[]) => {
-    if (state.isEnabled)
-    {
-      handler(...args)
-    }
-  }
+export const createRelay = (repository: Repository<CharacterSheet>) => {
 
   const handleSessionUpdate = (previousState: SessionState, currentState: SessionState) => {
     if (currentState.characterId !== null) {
       const relevantCharacter = repository.getById(currentState.characterId)
-      if (relevantCharacter) {
+      if (relevantCharacter && relevantCharacter.discordNotification.enable) {
         const content = `<${relevantCharacter.name}> has entered the realm.`
         sendMessage({
-          channelId: relevantCharacter.discordConfiguration.channelId,
+          channelId: relevantCharacter.discordNotification.channelId,
           content
         })
       }
     } else {
       if (previousState.characterId !== null) {
         const relevantCharacter = repository.getById(previousState.characterId)
-        if (relevantCharacter) {
+        if (relevantCharacter && relevantCharacter.discordNotification.enable) {
           const content = `<${relevantCharacter.name}> has left the realm.`
           sendMessage({
-            channelId: relevantCharacter.discordConfiguration.channelId,
+            channelId: relevantCharacter.discordNotification.channelId,
             content
           })
         }
@@ -59,7 +32,7 @@ export const createRelay = (repository: Repository<CharacterSheet>): Relay => {
 
   const handleRollResult = (roll: RollResult) => {
     const relevantCharacter = repository.getById(roll.characterId)
-    if (relevantCharacter) {
+    if (relevantCharacter && relevantCharacter.discordNotification.enable) {
       let content = ''
       if (roll.checkDetails !== null) {
         const isSuccess = roll.diceDetails.total <= roll.checkDetails.successThreshold
@@ -95,22 +68,18 @@ export const createRelay = (repository: Repository<CharacterSheet>): Relay => {
       }
 
       sendMessage({
-        channelId: relevantCharacter.discordConfiguration.channelId,
+        channelId: relevantCharacter.discordNotification.channelId,
         content,
         detail: details.join(' | ')
       })
     }
   }
 
-  messageBus.on('Domain.Session.update', maybeHandle(handleSessionUpdate))
+  messageBus.on('Domain.Session.update', handleSessionUpdate)
 
-  messageBus.on('Domain.DiceTray.roll', maybeHandle(handleRollResult))
-  messageBus.on('Domain.Aria.check', maybeHandle(handleRollResult))
-  messageBus.on('Domain.Rdd.check', maybeHandle(handleRollResult))
+  messageBus.on('Domain.DiceTray.roll', handleRollResult)
+  messageBus.on('Domain.Aria.check', handleRollResult)
+  messageBus.on('Domain.Rdd.check', handleRollResult)
 
-  return {
-    state,
-    enable,
-    disable
-  }
+  return {}
 }

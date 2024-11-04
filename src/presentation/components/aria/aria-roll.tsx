@@ -4,15 +4,14 @@ import Grid from '@mui/material/Grid'
 import Card from '@mui/material/Card'
 import Stack from '@mui/material/Stack'
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
-import ToggleButton from '@mui/material/ToggleButton'
 import Slider from '@mui/material/Slider'
 import Typography from '@mui/material/Typography'
 import IconButton from '@mui/material/IconButton'
 import Button from '@mui/material/Button'
 import { CardContent, CardActions } from '@mui/material'
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore'
-import { styled } from '@mui/material/styles'
-import { evaluateModifierColor } from '../common/style-helpers'
+
+import { PrimaryToggleButton, evaluateModifierColor } from '../common/style-helpers'
 
 type AriaRollStat = 'Attribute' | 'Ability'
 
@@ -20,13 +19,6 @@ type Props = {
   rollStat: AriaRollStat
   statName: string
 }
-
-const PrimaryToggleButton = styled(ToggleButton)(props => ({
-  '&.Mui-selected, &.Mui-selected:hover': {
-    color: 'white',
-    backgroundColor: props.theme.palette.primary.main
-  }
-}))
 
 export const AriaRoll = ({ rollStat, statName }: Props) => {
   const [difficulty, setDifficulty] = useState(3)
@@ -50,6 +42,7 @@ export const AriaRoll = ({ rollStat, statName }: Props) => {
     setModifier(newValue as number)
   }
 
+  // TODO: should dispatch a store action instead of calling the electronAPI in the components ?
   const handleRoll = useCallback(() => {
     switch (rollStat) {
       case 'Attribute': 

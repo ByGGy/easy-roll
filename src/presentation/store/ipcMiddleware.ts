@@ -2,7 +2,6 @@ import { Middleware, UnknownAction } from 'redux'
 
 import { update as characterCollectionUpdate } from './characterCollectionSlice'
 import { update as sessionUpdate } from './sessionSlice'
-import { update as discordUpdate } from './discordSlice'
 import { add as addToHistory } from './rollHistorySlice'
 
 export const ipcMiddleware: Middleware = (store) => {
@@ -14,11 +13,6 @@ export const ipcMiddleware: Middleware = (store) => {
   window.electronAPI.onMessage('Domain.Session.update', (data: string) => {
     const states = JSON.parse(data)
     store.dispatch(sessionUpdate(states.current.characterId))
-  })
-
-  window.electronAPI.onMessage('Domain.Discord.update', (data: string) => {
-    const states = JSON.parse(data)
-    store.dispatch(discordUpdate(states.current.isEnabled))
   })
 
   window.electronAPI.onMessage('Domain.Roll.new', (data: string) => {

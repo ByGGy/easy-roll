@@ -1,4 +1,4 @@
-import { EntityId, Game, Attribute, Ability, CharacterSheet } from '../common/types'
+import { EntityId, Game, Attribute, Ability, CharacterSheet, NotificationLevel } from '../common/types'
 import { Repository } from '../../persistence/character/repository'
 import { StateEmitter, createState } from '../events/stateEmitter'
 import { createDefault as createAriaDefaultCharacter } from '../aria/characterTemplate'
@@ -15,6 +15,8 @@ type CharacterCollection = {
   renameCharacter: (id: EntityId, newName: string) => void
   changeCharacterAttributes: (id: EntityId, newAttributes: Array<Attribute>) => void
   changeCharacterAbilities: (id: EntityId, newAbilities: Array<Ability>) => void
+  changeCharacterDiscordNotification: (id: EntityId, enable: boolean, level: NotificationLevel, channelId: string) => void
+  toggleCharacterDiscordNotification: (id: EntityId, enable: boolean) => void
 }
 
 export const createCharacterCollection = (repository: Repository<CharacterSheet>): CharacterCollection=> {
@@ -75,12 +77,36 @@ export const createCharacterCollection = (repository: Repository<CharacterSheet>
     }
   }
 
+  const changeCharacterDiscordNotification = (id: EntityId, enable: boolean, level: NotificationLevel, channelId: string) => {
+    const targetCharacter = state.characters.find(c => c.id === id)
+    if (targetCharacter) {
+      // TODO: find a solution to mutate object instead ?
+      const updatedCharacter = {...targetCharacter}
+      updatedCharacter.discordNotification = {
+        enable,
+        level,
+        channelId
+      }
+      repository.update(updatedCharacter)
+      state.update('characters', [...state.characters.filter(c => c.id !== id), updatedCharacter])
+    }
+  }
+
+  const toggleCharacterDiscordNotification = (id: EntityId, enable: boolean) => {
+    const targetCharacter = state.characters.find(c => c.id === id)
+    if (targetCharacter) {
+      changeCharacterDiscordNotification(targetCharacter.id, enable, targetCharacter.discordNotification.level, targetCharacter.discordNotification.channelId)
+    }
+  }
+
   return {
     state,
     initialize,
     createCharacter,
     renameCharacter,
     changeCharacterAttributes,
-    changeCharacterAbilities
+    changeCharacterAbilities,
+    changeCharacterDiscordNotification,
+    toggleCharacterDiscordNotification
   }
 }

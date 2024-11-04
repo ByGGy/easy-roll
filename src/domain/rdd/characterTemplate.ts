@@ -112,7 +112,9 @@ export const createDefault = (): CharacterSheet => {
       { name: 'Narcos', value: ABILITY_DRACONIC_BASE_VALUE } as Ability,
       { name: 'Thanatos', value: ABILITY_DRACONIC_BASE_VALUE } as Ability,
     ],
-    discordConfiguration: {
+    discordNotification: {
+      enable: false,
+      level: 'Full',
       channelId: ''
     }
   }

@@ -33,7 +33,7 @@ export const CharacterHeader = ({ character }: Props) => {
           <Grid container alignItems='flex-end'>
             <Grid item xs='auto'>
               <Stack direction='row' alignItems='center' padding={2}>
-                <Typography variant='h5'>{character.name}</Typography>
+                <Typography variant='h5' mr={1}>{character.name}</Typography>
                 <BasicPopover triggerContent={<EditIcon color='secondary' fontSize='small' />} popoverContent={<CharacterRename character={character} />} />
               </Stack>
             </Grid>
@@ -44,7 +44,7 @@ export const CharacterHeader = ({ character }: Props) => {
         </Box>
       </Grid>
       <Grid item xs='auto'>
-        <DiscordConfiguration />
+        <DiscordConfiguration character={character} />
       </Grid>
     </Grid>
   )

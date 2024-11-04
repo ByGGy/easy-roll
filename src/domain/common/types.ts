@@ -21,7 +21,11 @@ export type Ability = Nominal<'Ability', Readonly<{
   value: number
 }>>
 
-export type DiscordConfiguration = {
+export type NotificationLevel = 'Strict' | 'Partial' | 'Full'
+
+export type DiscordNotification = {
+  enable: boolean
+  level: NotificationLevel
   channelId: string
 }
 
@@ -30,7 +34,7 @@ export type CharacterSheet = Entity & Readonly<{
   name: string
   attributes: Array<Attribute>
   abilities: Array<Ability>
-  discordConfiguration: DiscordConfiguration
+  discordNotification: DiscordNotification
 }>
 
 //--

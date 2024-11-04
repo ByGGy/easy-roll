@@ -9,7 +9,7 @@ import { engine as ariaEngine } from './domain/aria/engine'
 import { engine as rddEngine } from './domain/rdd/engine'
 import { createRelay as createDiscordRelay } from './domain/discord/relay'
 import { createRelay as createFrontRelay } from './domain/front/relay'
-import { EntityId, Game, Attribute, Ability } from './domain/common/types'
+import { EntityId, Game, Attribute, Ability, NotificationLevel } from './domain/common/types'
 
 // import { runTest } from './domain/dicetray/roll'
 // runTest()
@@ -92,10 +92,6 @@ const handleGetAppVersion = (event: unknown) => {
   return app.getVersion()
 }
 
-const handleToggleDiscordNotification = (event: unknown, enable: boolean) => {
-  enable ? discordRelay.enable() : discordRelay.disable()
-}
-
 const handleCreateDefaultCharacterSheet = (event: unknown, game: Game) => {
   characterCollection.createCharacter(game)
 }
@@ -110,6 +106,14 @@ const handleChangeCharacterAttributes = (event: unknown, id: EntityId, newAttrib
 
 const handleChangeCharacterAbilities = (event: unknown, id: EntityId, newAbilities: Array<Ability>) => {
   characterCollection.changeCharacterAbilities(id, newAbilities)
+}
+
+const handleChangeCharacterDiscordNotification = (event: unknown, id: EntityId, enable: boolean, level: NotificationLevel, channelId: string) => {
+  characterCollection.changeCharacterDiscordNotification(id, enable, level, channelId)
+}
+
+const handleToggleCharacterDiscordNotification = (event: unknown, id: EntityId, enable: boolean) => {
+  characterCollection.toggleCharacterDiscordNotification(id, enable)
 }
 
 const handleOpenSession = (event: unknown, id: EntityId) => {
@@ -159,12 +163,12 @@ const handleRddCheckAttribute = (event: unknown, attributeName: string, abilityN
 app.whenReady().then(() => {
   ipcMain.handle('getAppVersion', handleGetAppVersion)
 
-  ipcMain.handle('toggleDiscordNotification', handleToggleDiscordNotification)
-
   ipcMain.handle('createDefaultCharacterSheet', handleCreateDefaultCharacterSheet)
   ipcMain.handle('renameCharacter', handleRenameCharacter)
   ipcMain.handle('changeCharacterAttributes', handleChangeCharacterAttributes)
   ipcMain.handle('changeCharacterAbilities', handleChangeCharacterAbilities)
+  ipcMain.handle('changeCharacterDiscordNotification', handleChangeCharacterDiscordNotification)
+  ipcMain.handle('toggleCharacterDiscordNotification', handleToggleCharacterDiscordNotification)
 
   ipcMain.handle('openSession', handleOpenSession)
   ipcMain.handle('closeSession', handleCloseSession)

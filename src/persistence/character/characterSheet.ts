@@ -10,5 +10,5 @@ export const isCharacterSheet = (o: unknown): o is CharacterSheet => {
     && ((o as CharacterSheet).name !== undefined)
     && ((o as CharacterSheet).attributes !== undefined)
     && ((o as CharacterSheet).abilities !== undefined)
-    && ((o as CharacterSheet).discordConfiguration !== undefined)
+    && ((o as CharacterSheet).discordNotification !== undefined)
 }

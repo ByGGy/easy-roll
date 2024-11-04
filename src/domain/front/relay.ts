@@ -17,7 +17,6 @@ export const createRelay = (window: BrowserWindow) => {
   }
 
   transfer('Domain.Session.update', handleStateUpdate)
-  transfer('Domain.Discord.update', handleStateUpdate)
   transfer('Domain.CharacterCollection.update', handleStateUpdate)
 
   const handleRollResult = (roll: RollResult) => {
