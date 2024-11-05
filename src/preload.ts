@@ -11,6 +11,9 @@ declare global {
   }
 }
 
+// TODO: that's a lot of boilerplates to trigger something from renderer to Main process
+// NB: the other way is a lot easier, i.e. Main process to renderer, cause everything is goin through the onMessage
+// but we're loosing data typing; btw, it's lost both ways: Window.electronAPI?: any
 contextBridge.exposeInMainWorld('electronAPI', {
   onMessage: (channel: string, callback: (data: string) => void) => ipcRenderer.on(channel, (event, data) => callback(data)),
 

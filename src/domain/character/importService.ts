@@ -22,6 +22,9 @@ export const createImportService = (characterCollection: CharacterCollection): I
 
     const game = get(maybeSheet, 'game')
     if (isValidGame(game)) {
+      // TODO: for each file / characterSheet, there is 5 calls to characterCollection to create & edit its properties
+      // therefore 5 published events and 5 writes to the disk; there must be a better way
+      // e.g. create & edit the characterSheet, then add it to the collection
       const newSheet = characterCollection.createCharacter(game)
       if (newSheet !== null) {
         const name = get(maybeSheet, 'name', 'Imported Joe')

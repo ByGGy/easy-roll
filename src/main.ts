@@ -12,6 +12,7 @@ import { createRelay as createDiscordRelay } from './domain/discord/relay'
 import { createRelay as createFrontRelay } from './domain/front/relay'
 import { EntityId, Game, Attribute, Ability, NotificationLevel } from './domain/common/types'
 
+// TODO: use some unit testing lib instead of this..
 // import { runTest } from './domain/dicetray/roll'
 // runTest()
 
@@ -29,6 +30,7 @@ let frontRelay
 
 const createWindow = () => {
   // Create the browser window.
+  // TODO: store and apply window last position & size ? cf https://github.com/electron/electron/issues/526
   const mainWindow = new BrowserWindow({
     width: 1650,
     height: 950,
@@ -178,6 +180,7 @@ const handleRddCheckAttribute = (event: unknown, attributeName: string, abilityN
 }
 
 app.whenReady().then(() => {
+  // TODO: should put all those subscriptions, handlers and domain initialization in separate files
   ipcMain.handle('getAppVersion', handleGetAppVersion)
 
   ipcMain.handle('tryImportCharacter', handleTryImportCharacter)

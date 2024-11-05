@@ -24,7 +24,7 @@ const checkAttribute = (character: CharacterSheet, attributeName: string, abilit
           value: attribute.value
         },
         ...(ability !== undefined ? [{
-          type: 'base' as const, // TODO: should be an offset ?
+          type: 'base' as const, // TODO: should be an offset, but it would not appear in the roll title..
           name: ability.name,
           value: ability.value
         }] : []),

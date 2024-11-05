@@ -20,6 +20,7 @@ type RollItemProps = {
 }
 
 const RollItem = ({ roll, opacity }: RollItemProps) => {
+  // TODO: should also display the character name at some point
   let title
   if (roll.checkDetails !== null) {
     title = roll.checkDetails.factors.filter(f => f.type === 'base').map(f => f.name).join(' + ')
@@ -29,6 +30,7 @@ const RollItem = ({ roll, opacity }: RollItemProps) => {
 
   const isSuccess = roll.checkDetails !== null ? roll.diceDetails.total <= roll.checkDetails.successThreshold : null
 
+  // TODO: duplicated code with /src/domain/discord/relay.handleRollResult function
   const details = []
   details.push(`${roll.diceDetails.diceQty}d${roll.diceDetails.diceFaceQty} = ${roll.diceDetails.rolls.join(', ')}`)
   if (roll.diceDetails.modifier !== 0) {
@@ -78,6 +80,7 @@ const RollItem = ({ roll, opacity }: RollItemProps) => {
 }
 
 export const RollHistory = () => {
+  // TODO: display more than 10 rolls, with a proper scrollbar
   const maxVisibleQty = 10
   const fadedOutThreshold = Math.round(maxVisibleQty / 2)
   const fadedOutOpacity = 0.25

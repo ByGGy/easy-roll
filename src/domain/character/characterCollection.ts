@@ -52,7 +52,7 @@ export const createCharacterCollection = (repository: Repository<CharacterSheet>
     return newCharacterSheet
   }
 
-  // TODO: refactor to editCharacter(id, prop, value)
+  // TODO: refactor to editCharacter(id, prop, value) to avoid code duplication ?
   const renameCharacter = (id: EntityId, newName: string) => {
     const targetCharacter = state.characters.find(c => c.id === id)
     if (targetCharacter) {
@@ -60,6 +60,8 @@ export const createCharacterCollection = (repository: Repository<CharacterSheet>
       const updatedCharacter = {...targetCharacter}
       updatedCharacter.name = newName
       repository.update(updatedCharacter)
+      // TODO: updating the whole collection state and publishing event with the whole previous & current state
+      // only for a character rename ? Eeekk....
       state.update('characters', [...state.characters.filter(c => c.id !== id), updatedCharacter])
     }
   }

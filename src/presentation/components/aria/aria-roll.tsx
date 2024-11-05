@@ -43,7 +43,7 @@ export const AriaRoll = ({ rollStat, statName }: Props) => {
     setModifier(newValue as number)
   }
 
-  // TODO: should dispatch a store action instead of calling the electronAPI in the components ?
+  // TODO: should dispatch store actions instead of calling electronAPI in the components ?
   const handleRoll = useCallback(() => {
     switch (rollStat) {
       default:
