@@ -33,15 +33,6 @@ export type DiscordNotification = {
   channelId: string
 }
 
-// TODO: should have a creation date ?
-export type CharacterSheet = Entity & Readonly<{
-  game: Game
-  name: string
-  attributes: Array<Attribute>
-  abilities: Array<Ability>
-  discordNotification: DiscordNotification
-}>
-
 //--
 
 export type RollCheckFactor = {

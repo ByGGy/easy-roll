@@ -3,41 +3,62 @@ import { get } from 'lodash'
 
 import { unreachable } from '../common/tools'
 import { Game, Attribute, Ability, DiscordNotification } from '../common/types'
-import { CharacterState } from './character'
-import { createDefault as createAriaDefaultCharacter } from '../aria/characterTemplate'
-import { createDefault as createRddDefaultCharacter } from '../rdd/characterTemplate'
+import { Character, create } from './character'
+import { createDefaultAttributes as createAriaDefaultAttributes, createDefaultAbilities as createAriaDefaultAbilities } from '../aria/characterTemplate'
+import { createDefaultAttributes as createRddDefaultAttributes, createDefaultAbilities as  createRddDefaultAbilities } from '../rdd/characterTemplate'
 
-export type ImportService = {
-  tryFromFile: (path: string) => CharacterState | null
+export type CharacterService = {
+  createFor: (game: Game) => Character
+  tryCreateFromFile: (path: string) => Character | null
 }
 
 const isValidGame = (maybeGame: unknown): maybeGame is Game => {
   return typeof(maybeGame) === 'string' && (maybeGame === 'Aria' || maybeGame === 'Rêve de Dragon')
 }
 
-const createStateFor = (game: Game): CharacterState => {
+const createDefaultAttributesFor = (game: Game): Array<Attribute> => {
   switch (game) {
     default: return unreachable(game)
-    case 'Aria': return createAriaDefaultCharacter()
-    case 'Rêve de Dragon': return createRddDefaultCharacter()
+    case 'Aria': return createAriaDefaultAttributes()
+    case 'Rêve de Dragon': return createRddDefaultAttributes()
   }
 }
 
-export const createImportService = (): ImportService => {
+const createDefaultAbilitiesFor = (game: Game): Array<Ability> => {
+  switch (game) {
+    default: return unreachable(game)
+    case 'Aria': return createAriaDefaultAbilities()
+    case 'Rêve de Dragon': return createRddDefaultAbilities()
+  }
+}
+
+const createDefaultDiscordConfiguration = (): DiscordNotification => ({ enable: true, level: 'Standard', channelId: '' })
+
+export const createCharacterService = (): CharacterService => {
+
+  const createFor = (game: Game): Character => {
+    const defaultState = {
+      name: 'Average Joe',
+      game, 
+      attributes: createDefaultAttributesFor(game),
+      abilities: createDefaultAbilitiesFor(game),
+      discordNotification: createDefaultDiscordConfiguration()
+    }
+
+    return create(defaultState)
+  }
 
   // TODO: need better validation..
   // use https://www.npmjs.com/package/@sinclair/typebox + https://www.npmjs.com/package/ajv ?
-  const tryFromFile = (path: string): CharacterState | null => {
+  const tryCreateFromFile = (path: string): Character | null => {
     const data = readFileSync(path, 'utf8')
     const maybeSheet = JSON.parse(data)
 
     const game = get(maybeSheet, 'game')
     if (isValidGame(game)) {
-      const initialState = createStateFor(game)
-
       const name = get(maybeSheet, 'name', 'Imported Joe')
     
-      const attributes = [...initialState.attributes]
+      const attributes = createDefaultAttributesFor(game)
       const maybeAttributes = get(maybeSheet, 'attributes', [])
       maybeAttributes.forEach((maybeAttribute: Record<string, unknown>) => {
         const name = get(maybeAttribute, 'name')
@@ -52,7 +73,7 @@ export const createImportService = (): ImportService => {
         }
       })
 
-      const abilities = [...initialState.abilities]
+      const abilities = createDefaultAbilitiesFor(game)
       const maybeAbilities = get(maybeSheet, 'abilities', [])
       maybeAbilities.forEach((maybeAbility: Record<string, unknown>) => {
         const name = get(maybeAbility, 'name')
@@ -67,7 +88,7 @@ export const createImportService = (): ImportService => {
         }
       })
 
-      const discordNotification: DiscordNotification = { enable: true, level: 'Standard', channelId: '' }
+      const discordNotification = createDefaultDiscordConfiguration()
 
       // from v0.3.0 CharacterSheet shape..
       const maybeDiscordConfiguration = get(maybeSheet, 'discordConfiguration')
@@ -82,19 +103,22 @@ export const createImportService = (): ImportService => {
         discordNotification.channelId = get(maybeDiscordNotification, 'channelId', '')
       }
 
-      return {
+      const state = {
         name,
         game, 
         attributes,
         abilities,
         discordNotification,
       }
+
+      return create(state)
     }
 
     return null
   }
 
   return {
-    tryFromFile,
+    createFor,
+    tryCreateFromFile,
   }
 }

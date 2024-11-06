@@ -1,9 +1,18 @@
 import { randomUUID } from 'crypto'
-import { EntityId, EntityWithState, Attribute, Ability, DiscordNotification, CharacterSheet } from '../common/types'
+import { EntityId, EntityWithState, Game, Attribute, Ability, DiscordNotification } from '../common/types'
 import { createState } from '../events/stateEmitter'
 
-export type CharacterState = Omit<CharacterSheet, 'id'>
+// TODO: should have a creation date ?
+export type CharacterState = {
+  game: Game
+  name: string
+  attributes: Array<Attribute>
+  abilities: Array<Ability>
+  discordNotification: DiscordNotification
+}
+
 export type CharacterData = EntityWithState<CharacterState>
+
 export type Character = CharacterData & {
   rename: (newName: string) => void
   changeAttributes: (newAttributes: Array<Attribute>) => void

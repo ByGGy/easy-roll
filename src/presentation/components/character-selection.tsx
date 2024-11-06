@@ -24,11 +24,11 @@ export const CharacterSelection = () => {
   const sortedCharacters = characters.toSorted((cA, cB) => cA.state.name.localeCompare(cB.state.name))
 
   const handleCreateAriaCharacter = () => {
-    window.electronAPI.createDefaultCharacterSheet('Aria')
+    window.electronAPI.createDefaultCharacter('Aria')
   }
 
   const handleCreateRddCharacter = () => {
-    window.electronAPI.createDefaultCharacterSheet('Rêve de Dragon')
+    window.electronAPI.createDefaultCharacter('Rêve de Dragon')
   }
 
   const handleImportCharacter = () => {

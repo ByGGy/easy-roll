@@ -1,14 +1,10 @@
 import { app, BrowserWindow, ipcMain, dialog } from 'electron'
 import path from 'path'
 
-import { unreachable } from './domain/common/tools'
 import { EntityId, Game, Attribute, Ability, NotificationLevel } from './domain/common/types'
 import { createRepository } from './persistence/character/repository'
-import { createImportService } from './domain/character/importService'
+import { createCharacterService } from './domain/character/characterService'
 import { createSession } from './domain/session/session'
-import { create as createCharacter, CharacterState } from './domain/character/character'
-import { createDefault as createAriaDefaultCharacter } from './domain/aria/characterTemplate'
-import { createDefault as createRddDefaultCharacter } from './domain/rdd/characterTemplate'
 import { engine as diceTrayEngine } from './domain/dicetray/engine'
 import { engine as ariaEngine } from './domain/aria/engine'
 import { engine as rddEngine } from './domain/rdd/engine'
@@ -25,7 +21,7 @@ if (require('electron-squirrel-startup')) {
 }
 
 const characterRepository = createRepository()
-const importService = createImportService()
+const characterService = createCharacterService()
 const discordRelay = createDiscordRelay(characterRepository)
 const session = createSession()
 let frontRelay
@@ -110,24 +106,16 @@ const handleTryImportCharacter = (event: unknown) => {
 
   if (filesToImport) {
     filesToImport.forEach(path => {
-      const importedState = importService.tryFromFile(path)
-      if (importedState !== null) {
-        characterRepository.insert(createCharacter(importedState))
+      const newCharacter = characterService.tryCreateFromFile(path)
+      if (newCharacter !== null) {
+        characterRepository.insert(newCharacter)
       }
     })
   }
 }
 
-const handleCreateDefaultCharacterSheet = (event: unknown, game: Game) => {
-  const createStateFor = (game: Game): CharacterState => {
-    switch (game) {
-      default: return unreachable(game)
-      case 'Aria': return createAriaDefaultCharacter()
-      case 'Rêve de Dragon': return createRddDefaultCharacter()
-    }
-  }
-
-  characterRepository.insert(createCharacter(createStateFor(game)))
+const handleCreateDefaultCharacter = (event: unknown, game: Game) => {
+  characterRepository.insert(characterService.createFor(game))
 }
 
 const handleRenameCharacter = (event: unknown, id: EntityId, newName: string) => {
@@ -216,7 +204,7 @@ app.whenReady().then(() => {
 
   ipcMain.handle('tryImportCharacter', handleTryImportCharacter)
 
-  ipcMain.handle('createDefaultCharacterSheet', handleCreateDefaultCharacterSheet)
+  ipcMain.handle('createDefaultCharacter', handleCreateDefaultCharacter)
   ipcMain.handle('renameCharacter', handleRenameCharacter)
   ipcMain.handle('changeCharacterAttributes', handleChangeCharacterAttributes)
   ipcMain.handle('changeCharacterAbilities', handleChangeCharacterAbilities)
