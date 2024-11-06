@@ -26,7 +26,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   changeCharacterAttributes: (id: EntityId, newAttributes: Array<Attribute>) => ipcRenderer.invoke('changeCharacterAttributes', id, newAttributes),
   changeCharacterAbilities: (id: EntityId, newAbilities: Array<Ability>) => ipcRenderer.invoke('changeCharacterAbilities', id, newAbilities),
   changeCharacterDiscordNotification: (id: EntityId, enable: boolean, level: NotificationLevel, channelId: string) => ipcRenderer.invoke('changeCharacterDiscordNotification', id, enable, level, channelId),
-  toggleCharacterDiscordNotification: (id: EntityId, enable: boolean) => ipcRenderer.invoke('toggleCharacterDiscordNotification', id, enable),
+  toggleCharacterDiscordNotification: (id: EntityId) => ipcRenderer.invoke('toggleCharacterDiscordNotification', id),
 
   openSession: (id: EntityId) => ipcRenderer.invoke('openSession', id),
   closeSession: () => ipcRenderer.invoke('closeSession'),

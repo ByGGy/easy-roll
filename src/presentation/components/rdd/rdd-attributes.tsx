@@ -10,10 +10,10 @@ import { CharacterEditAttributesDialog } from '../character-edit-records'
 import { BasicPopover } from '../common/pop-over'
 import { RddRoll } from './rdd-roll'
 
-import { CharacterSheet } from '../../../domain/common/types'
+import { CharacterData } from '../../../domain/character/character'
 
 type Props = {
-  character: CharacterSheet
+  character: CharacterData
 }
 
 export const RddAttributes = ({ character }: Props) => {
@@ -27,7 +27,7 @@ export const RddAttributes = ({ character }: Props) => {
     setOpenEditDialog(false)
   }
 
-  const sortedAttributes = character.attributes.toSorted((aA, aB) => aA.name.localeCompare(aB.name))
+  const sortedAttributes = character.state.attributes.toSorted((aA, aB) => aA.name.localeCompare(aB.name))
 
   return (
     <Stack padding={2}>
@@ -51,7 +51,7 @@ export const RddAttributes = ({ character }: Props) => {
               <Typography variant='body1'>{attribute.value}</Typography>
             </Grid>
             <Grid item xs='auto'>
-              <BasicPopover triggerContent={<CasinoIcon />} popoverContent={<RddRoll attributeName={attribute.name} abilities={character.abilities} />} />
+              <BasicPopover triggerContent={<CasinoIcon />} popoverContent={<RddRoll attributeName={attribute.name} abilities={character.state.abilities} />} />
             </Grid>
           </Grid>
         )}

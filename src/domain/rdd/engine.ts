@@ -1,6 +1,7 @@
 import { messageBus } from '../events/messageBus'
 
-import { CharacterSheet, RollCheckDetails, RollDiceDetails, RollResult } from '../common/types'
+import { RollCheckDetails, RollDiceDetails, RollResult } from '../common/types'
+import { CharacterData } from '../character/character'
 import { rollDice } from '../dicetray/roll'
 
 const findThreshold = (attributeValue: number, modifier: number): number => {
@@ -9,10 +10,10 @@ const findThreshold = (attributeValue: number, modifier: number): number => {
   return Math.floor(attributeValue * multiplier)
 }
 
-const checkAttribute = (character: CharacterSheet, attributeName: string, abilityName: string, modifier: number): RollResult | null => {
-  const attribute = character.attributes.find((a) => a.name === attributeName)
+const checkAttribute = (character: CharacterData, attributeName: string, abilityName: string, modifier: number): RollResult | null => {
+  const attribute = character.state.attributes.find((a) => a.name === attributeName)
   if (attribute !== undefined) {
-    const ability = character.abilities.find((a) => a.name === abilityName)
+    const ability = character.state.abilities.find((a) => a.name === abilityName)
     const successThreshold = findThreshold(attribute.value, (ability !== undefined ? ability.value : 0) + modifier)
     const diceValue = rollDice(100)
 

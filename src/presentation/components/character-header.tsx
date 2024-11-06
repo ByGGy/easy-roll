@@ -10,13 +10,14 @@ import { BasicPopover } from './common/pop-over'
 import { CharacterRename } from './character-rename'
 import { DiscordConfiguration } from './discord-configuration'
 
-import { CharacterSheet } from '../../domain/common/types'
+import { CharacterData } from '../../domain/character/character'
 
 type Props = {
-  character: CharacterSheet
+  character: CharacterData
 }
 
 export const CharacterHeader = ({ character }: Props) => {
+
   const handleCloseSession = () => {
     window.electronAPI.closeSession()
   }
@@ -33,12 +34,12 @@ export const CharacterHeader = ({ character }: Props) => {
           <Grid container alignItems='flex-end'>
             <Grid item xs='auto'>
               <Stack direction='row' alignItems='center' padding={2}>
-                <Typography variant='h5' mr={1}>{character.name}</Typography>
+                <Typography variant='h5' mr={1}>{character.state.name}</Typography>
                 <BasicPopover triggerContent={<EditIcon color='secondary' fontSize='small' />} popoverContent={<CharacterRename character={character} />} />
               </Stack>
             </Grid>
             <Grid item xs>
-              <Typography padding={2} variant='subtitle1' color='text.secondary'>{character.game}</Typography>
+              <Typography padding={2} variant='subtitle1' color='text.secondary'>{character.state.game}</Typography>
             </Grid>
           </Grid>
         </Box>

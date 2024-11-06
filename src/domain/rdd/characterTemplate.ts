@@ -1,4 +1,3 @@
-import { randomUUID } from 'crypto'
 import { Attribute, Ability, CharacterSheet } from '../common/types'
 
 const ATTRIBUTE_AVERAGE_VALUE = 10
@@ -11,9 +10,8 @@ const ABILITY_SPECIALIZED_BASE_VALUE = -11
 const ABILITY_KNOWLEDGE_BASE_VALUE = -11
 const ABILITY_DRACONIC_BASE_VALUE = -11
 
-export const createDefault = (): CharacterSheet => {
+export const createDefault = (): Omit<CharacterSheet, 'id'> => {
   return {
-    id: randomUUID(),
     game: 'Rêve de Dragon',
     name: 'Average Joe',
     attributes: [

@@ -1,9 +1,10 @@
 import { messageBus } from '../events/messageBus'
 
-import { CharacterSheet, RollDiceDetails, RollResult } from '../common/types'
+import { RollDiceDetails, RollResult } from '../common/types'
+import { CharacterData } from '../character/character'
 import { rollDice } from './roll'
 
-const rollDices = (character: CharacterSheet, diceFaceQty: number, diceQty: number, modifier: number): RollResult => {
+const rollDices = (character: CharacterData, diceFaceQty: number, diceQty: number, modifier: number): RollResult => {
   const rolls = [...Array(diceQty)].map(_ => rollDice(diceFaceQty))
   const total = rolls.reduce((acc, value) => acc + value, modifier)
 

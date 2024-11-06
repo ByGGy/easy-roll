@@ -7,6 +7,10 @@ export type Entity = {
   id: Readonly<EntityId>
 }
 
+export type EntityWithState<T> = Entity & {
+  state: T
+}
+
 //--
 
 export type Game = 'Aria' | 'Rêve de Dragon'

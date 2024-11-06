@@ -5,14 +5,14 @@ import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import { CardContent, CardActions } from '@mui/material'
 
-import { CharacterSheet } from '../../domain/common/types'
+import { CharacterData } from '../../domain/character/character'
 
 type Props = {
-  character: CharacterSheet
+  character: CharacterData
 }
 
 export const CharacterRename = ({ character }: Props) => {
-  const [newName, setNewName] = useState(character.name) 
+  const [newName, setNewName] = useState(character.state.name) 
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewName(event.target.value)

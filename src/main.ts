@@ -1,16 +1,19 @@
 import { app, BrowserWindow, ipcMain, dialog } from 'electron'
 import path from 'path'
 
+import { unreachable } from './domain/common/tools'
+import { EntityId, Game, Attribute, Ability, NotificationLevel } from './domain/common/types'
 import { createRepository } from './persistence/character/repository'
-import { createCharacterCollection } from './domain/character/characterCollection'
 import { createImportService } from './domain/character/importService'
 import { createSession } from './domain/session/session'
+import { create as createCharacter, CharacterState } from './domain/character/character'
+import { createDefault as createAriaDefaultCharacter } from './domain/aria/characterTemplate'
+import { createDefault as createRddDefaultCharacter } from './domain/rdd/characterTemplate'
 import { engine as diceTrayEngine } from './domain/dicetray/engine'
 import { engine as ariaEngine } from './domain/aria/engine'
 import { engine as rddEngine } from './domain/rdd/engine'
 import { createRelay as createDiscordRelay } from './domain/discord/relay'
 import { createRelay as createFrontRelay } from './domain/front/relay'
-import { EntityId, Game, Attribute, Ability, NotificationLevel } from './domain/common/types'
 
 // TODO: use some unit testing lib instead of this..
 // import { runTest } from './domain/dicetray/roll'
@@ -22,8 +25,7 @@ if (require('electron-squirrel-startup')) {
 }
 
 const characterRepository = createRepository()
-const characterCollection = createCharacterCollection(characterRepository)
-const importService = createImportService(characterCollection)
+const importService = createImportService()
 const discordRelay = createDiscordRelay(characterRepository)
 const session = createSession()
 let frontRelay
@@ -56,7 +58,7 @@ const createWindow = () => {
   frontRelay = createFrontRelay(mainWindow)
 
   mainWindow.webContents.once('did-finish-load', () => {
-    characterCollection.initialize()
+    characterRepository.pulse()
   })
 };
 
@@ -107,32 +109,61 @@ const handleTryImportCharacter = (event: unknown) => {
   })
 
   if (filesToImport) {
-    filesToImport.forEach(importService.tryFromFile)
+    filesToImport.forEach(path => {
+      const importedState = importService.tryFromFile(path)
+      if (importedState !== null) {
+        characterRepository.insert(createCharacter(importedState))
+      }
+    })
   }
 }
 
 const handleCreateDefaultCharacterSheet = (event: unknown, game: Game) => {
-  characterCollection.createCharacter(game)
+  const createStateFor = (game: Game): CharacterState => {
+    switch (game) {
+      default: return unreachable(game)
+      case 'Aria': return createAriaDefaultCharacter()
+      case 'Rêve de Dragon': return createRddDefaultCharacter()
+    }
+  }
+
+  characterRepository.insert(createCharacter(createStateFor(game)))
 }
 
 const handleRenameCharacter = (event: unknown, id: EntityId, newName: string) => {
-  characterCollection.renameCharacter(id, newName)
+  const targetCharacter = characterRepository.getById(id)
+  if (targetCharacter) {
+    targetCharacter.rename(newName)
+  }
 }
 
 const handleChangeCharacterAttributes = (event: unknown, id: EntityId, newAttributes: Array<Attribute>) => {
-  characterCollection.changeCharacterAttributes(id, newAttributes)
+  const targetCharacter = characterRepository.getById(id)
+  if (targetCharacter) {
+    targetCharacter.changeAttributes(newAttributes)
+  }
 }
 
 const handleChangeCharacterAbilities = (event: unknown, id: EntityId, newAbilities: Array<Ability>) => {
-  characterCollection.changeCharacterAbilities(id, newAbilities)
+  const targetCharacter = characterRepository.getById(id)
+  if (targetCharacter) {
+    targetCharacter.changeAbilities(newAbilities)
+  }
 }
 
 const handleChangeCharacterDiscordNotification = (event: unknown, id: EntityId, enable: boolean, level: NotificationLevel, channelId: string) => {
-  characterCollection.changeCharacterDiscordNotification(id, enable, level, channelId)
+  const targetCharacter = characterRepository.getById(id)
+  if (targetCharacter) {
+    targetCharacter.changeDiscordConfiguration({ enable, level, channelId})
+  }
 }
 
-const handleToggleCharacterDiscordNotification = (event: unknown, id: EntityId, enable: boolean) => {
-  characterCollection.toggleCharacterDiscordNotification(id, enable)
+const handleToggleCharacterDiscordNotification = (event: unknown, id: EntityId) => {
+  const targetCharacter = characterRepository.getById(id)
+  if (targetCharacter) {
+    const newConfiguration = {...targetCharacter.state.discordNotification, enable: !targetCharacter.state.discordNotification.enable}
+    targetCharacter.changeDiscordConfiguration(newConfiguration)
+  }
 }
 
 const handleOpenSession = (event: unknown, id: EntityId) => {

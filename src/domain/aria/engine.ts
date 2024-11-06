@@ -1,10 +1,11 @@
 import { messageBus } from '../events/messageBus'
 
-import { CharacterSheet, RollCheckDetails, RollDiceDetails, RollResult } from '../common/types'
+import { RollCheckDetails, RollDiceDetails, RollResult } from '../common/types'
+import { CharacterData } from '../character/character'
 import { rollDice } from '../dicetray/roll'
 
-const checkAttribute = (character: CharacterSheet, attributeName: string, difficulty: number, modifier: number): RollResult | null => {
-  const attribute = character.attributes.find((a) => a.name === attributeName)
+const checkAttribute = (character: CharacterData, attributeName: string, difficulty: number, modifier: number): RollResult | null => {
+  const attribute = character.state.attributes.find((a) => a.name === attributeName)
   if (attribute !== undefined) {
     const successThreshold = attribute.value * difficulty + modifier
     const diceValue = rollDice(100)
@@ -51,8 +52,8 @@ const checkAttribute = (character: CharacterSheet, attributeName: string, diffic
   return null
 }
 
-const checkAbility = (character: CharacterSheet, abilityName: string, modifier: number): RollResult | null => {
-  const ability = character.abilities.find((a) => a.name === abilityName)
+const checkAbility = (character: CharacterData, abilityName: string, modifier: number): RollResult | null => {
+  const ability = character.state.abilities.find((a) => a.name === abilityName)
   if (ability !== undefined) {
     const successThreshold = ability.value + modifier
     const diceValue = rollDice(100)

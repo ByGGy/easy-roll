@@ -10,10 +10,10 @@ import { CharacterEditAttributesDialog } from '../character-edit-records'
 import { BasicPopover } from '../common/pop-over'
 import { AriaRoll } from './aria-roll'
 
-import { CharacterSheet } from '../../../domain/common/types'
+import { CharacterData } from '../../../domain/character/character'
 
 type Props = {
-  character: CharacterSheet
+  character: CharacterData
 }
 
 export const AriaAttributes = ({ character }: Props) => {
@@ -27,7 +27,7 @@ export const AriaAttributes = ({ character }: Props) => {
     setOpenEditDialog(false)
   }
 
-  const sortedAttributes = character.attributes.toSorted((aA, aB) => aA.name.localeCompare(aB.name))
+  const sortedAttributes = character.state.attributes.toSorted((aA, aB) => aA.name.localeCompare(aB.name))
   
   return (
     <Stack padding={2}>

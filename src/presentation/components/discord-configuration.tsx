@@ -19,17 +19,18 @@ import { BasicPopover } from './common/pop-over'
 import { PrimaryToggleButton } from './common/style-helpers'
 import { DiscordIcon } from './common/discord-icon'
 
-import { CharacterSheet, NotificationLevel } from '../../domain/common/types'
+import { NotificationLevel } from '../../domain/common/types'
+import { CharacterData } from '../../domain/character/character'
 import { unreachable } from '../../domain/common/tools'
 
 type DiscordEditProps = {
-  character: CharacterSheet
+  character: CharacterData
 }
 
 const DiscordEdit = ({ character }: DiscordEditProps) => {
-  const [enable, setEnable] = useState(character.discordNotification.enable)
-  const [level, setLevel] = useState(character.discordNotification.level)
-  const [channelId, setChannelId] = useState(character.discordNotification.channelId)
+  const [enable, setEnable] = useState(character.state.discordNotification.enable)
+  const [level, setLevel] = useState(character.state.discordNotification.level)
+  const [channelId, setChannelId] = useState(character.state.discordNotification.channelId)
   
   const handleEnableChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEnable(event.target.checked);
@@ -90,16 +91,16 @@ const DiscordEdit = ({ character }: DiscordEditProps) => {
 }
 
 type Props = {
-  character: CharacterSheet
+  character: CharacterData
 }
 
 export const DiscordConfiguration = ({ character }: Props) => {
-  const isEnabled = character.discordNotification.enable
+  const isEnabled = character.state.discordNotification.enable
 
   const getTallyColorPath = () => {
     if (isEnabled) {
-      switch (character.discordNotification.level) {
-        default: return unreachable(character.discordNotification.level)
+      switch (character.state.discordNotification.level) {
+        default: return unreachable(character.state.discordNotification.level)
         case 'Strict': return 'warning.main'
         case 'Standard': return 'success.main'
         case 'Verbose': return 'error.main'
@@ -112,13 +113,13 @@ export const DiscordConfiguration = ({ character }: Props) => {
   const theme = useTheme()
   const tallyColor = get(theme.palette, getTallyColorPath())
 
-  const handleEnableChange = () => {
-    window.electronAPI.toggleCharacterDiscordNotification(character.id, !isEnabled)
+  const handleToggleChange = () => {
+    window.electronAPI.toggleCharacterDiscordNotification(character.id)
   }
 
   return (
     <Stack direction='row'>
-      <Fab variant='extended' size='medium' onClick={handleEnableChange}
+      <Fab variant='extended' size='medium' onClick={handleToggleChange}
           sx={{
             backgroundColor: 'background.default'
           }}

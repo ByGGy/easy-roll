@@ -22,7 +22,7 @@ import {
   GridSlots,
 } from '@mui/x-data-grid'
 
-import { CharacterSheet } from '../../domain/common/types'
+import { CharacterData } from '../../domain/character/character'
 
 //--
 
@@ -233,7 +233,7 @@ const CharacterEditRecords = ({ title, onChange, records }: CharacterEditRecords
 type CharacterEditDialogProps = {
   open: boolean
   onClose: () => void
-  character: CharacterSheet
+  character: CharacterData
 }
 
 // TODO: refactor with a common CharacterEditRecordsDialog ?
@@ -264,7 +264,7 @@ export const CharacterEditAttributesDialog = ({ open, onClose, character }: Char
         <CharacterEditRecords
           title='Edit Attributes'
           onChange={handleChange}
-          records={character.attributes}
+          records={character.state.attributes}
         />
       </DialogContent>
       <DialogActions>
@@ -302,7 +302,7 @@ export const CharacterEditAbilitiesDialog = ({ open, onClose, character }: Chara
         <CharacterEditRecords
           title='Edit Abilities'
           onChange={handleChange}
-          records={character.abilities}
+          records={character.state.abilities}
         />
       </DialogContent>
       <DialogActions>

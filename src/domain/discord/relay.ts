@@ -1,29 +1,30 @@
 import { messageBus } from '../events/messageBus'
 import { sendMessage } from '../../api/discordAPI'
-import { CharacterSheet, RollResult } from '../common/types'
+import { EntityId, RollResult } from '../common/types'
 import { Repository } from '../../persistence/character/repository'
+import { Character, CharacterState } from '../character/character'
 import { SessionState } from '../session/session'
 import { unreachable } from '../common/tools'
 
-export const createRelay = (repository: Repository<CharacterSheet>) => {
+export const createRelay = (repository: Repository<Character, CharacterState>) => {
 
-  const handleSessionUpdate = (previousState: SessionState, currentState: SessionState) => {
+  const handleSessionUpdate = (_: EntityId, previousState: SessionState, currentState: SessionState) => {
     if (currentState.characterId !== null) {
       const relevantCharacter = repository.getById(currentState.characterId)
-      if (relevantCharacter && relevantCharacter.discordNotification.enable) {
-        const content = `<${relevantCharacter.name}> has entered the realm.`
+      if (relevantCharacter && relevantCharacter.state.discordNotification.enable) {
+        const content = `<${relevantCharacter.state.name}> has entered the realm.`
         sendMessage({
-          channelId: relevantCharacter.discordNotification.channelId,
+          channelId: relevantCharacter.state.discordNotification.channelId,
           content
         })
       }
     } else {
       if (previousState.characterId !== null) {
         const relevantCharacter = repository.getById(previousState.characterId)
-        if (relevantCharacter && relevantCharacter.discordNotification.enable) {
-          const content = `<${relevantCharacter.name}> has left the realm.`
+        if (relevantCharacter && relevantCharacter.state.discordNotification.enable) {
+          const content = `<${relevantCharacter.state.name}> has left the realm.`
           sendMessage({
-            channelId: relevantCharacter.discordNotification.channelId,
+            channelId: relevantCharacter.state.discordNotification.channelId,
             content
           })
         }
@@ -33,19 +34,19 @@ export const createRelay = (repository: Repository<CharacterSheet>) => {
 
   const handleRollResult = (roll: RollResult) => {
     const relevantCharacter = repository.getById(roll.characterId)
-    if (relevantCharacter && relevantCharacter.discordNotification.enable) {
+    if (relevantCharacter && relevantCharacter.state.discordNotification.enable) {
       let content = ''
-      const displayedRollValue = relevantCharacter.discordNotification.level === 'Strict' ? '**' : `${roll.diceDetails.total}`
+      const displayedRollValue = relevantCharacter.state.discordNotification.level === 'Strict' ? '**' : `${roll.diceDetails.total}`
       if (roll.checkDetails !== null) {
         const isSuccess = roll.diceDetails.total <= roll.checkDetails.successThreshold
         const baseFactors = roll.checkDetails.factors.filter(f => f.type === 'base').map(f => f.name).join(' + ')
-        content = `\`\`\`diff\n${isSuccess ? '+' : '-'} <${relevantCharacter.name}> ${baseFactors} : ${isSuccess ? 'success' : 'failure'} (${displayedRollValue})\n\`\`\``
+        content = `\`\`\`diff\n${isSuccess ? '+' : '-'} <${relevantCharacter.state.name}> ${baseFactors} : ${isSuccess ? 'success' : 'failure'} (${displayedRollValue})\n\`\`\``
       } else {
-        content = `<${relevantCharacter.name}> got \`${displayedRollValue}\` on his roll.`
+        content = `<${relevantCharacter.state.name}> got \`${displayedRollValue}\` on his roll.`
       }
       
       const details = []
-      if (relevantCharacter.discordNotification.level === 'Verbose') {
+      if (relevantCharacter.state.discordNotification.level === 'Verbose') {
         details.push(`${roll.diceDetails.diceQty}d${roll.diceDetails.diceFaceQty} = ${roll.diceDetails.rolls.join(', ')}`)
         if (roll.diceDetails.modifier !== 0) {
           details.push(`modifier: ${roll.diceDetails.modifier > 0 ? '+' :''}${roll.diceDetails.modifier}`)
@@ -76,7 +77,7 @@ export const createRelay = (repository: Repository<CharacterSheet>) => {
       }
 
       sendMessage({
-        channelId: relevantCharacter.discordNotification.channelId,
+        channelId: relevantCharacter.state.discordNotification.channelId,
         content,
         detail: details.join(' | ')
       })

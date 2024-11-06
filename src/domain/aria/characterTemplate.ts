@@ -1,13 +1,11 @@
-import { randomUUID } from 'crypto'
 import { Attribute, Ability, CharacterSheet } from '../common/types'
 
 const ATTRIBUTE_AVERAGE_VALUE = Math.floor(60 / 5)
 const ABILITY_AVERAGE_VALUE = ATTRIBUTE_AVERAGE_VALUE * 5
 
-// TODO: id generation and discord configuration should not be handled by game templates
-export const createDefault = (): CharacterSheet => {
+// TODO: discord configuration should not be handled by game templates
+export const createDefault = (): Omit<CharacterSheet, 'id'> => {
   return {
-    id: randomUUID(),
     game: 'Aria',
     name: 'Average Joe',
     attributes: [

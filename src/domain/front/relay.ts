@@ -1,8 +1,8 @@
 import { BrowserWindow } from 'electron'
 
 import { messageBus } from '../events/messageBus'
-
-import { RollResult } from '../common/types'
+import { Character } from '../character/character'
+import { EntityId, RollResult } from '../common/types'
 
 export const createRelay = (window: BrowserWindow) => {
 
@@ -11,14 +11,21 @@ export const createRelay = (window: BrowserWindow) => {
     messageBus.on(eventName, (...args) => listener(eventName, ...args))
   }
 
-  const handleStateUpdate = <T>(eventName: string, previousState: T, currentState: T) => {
-    const data = JSON.stringify({ previous: previousState, current: currentState })
+  const handleStateUpdate = <T>(eventName: string, id: EntityId, previousState: T, currentState: T) => {
+    const data = JSON.stringify({ id, previous: previousState, current: currentState })
     window.webContents.send(eventName, data)
   }
 
   transfer('Domain.Session.update', handleStateUpdate)
-  transfer('Domain.CharacterCollection.update', handleStateUpdate)
+  transfer('Domain.Character.update', handleStateUpdate)
+  // transfer('Domain.CharacterCollection.update', handleStateUpdate)
 
+  const handleCharacterRepositoryUpdate = (eventName: string, characters: Array<Character>) => {
+    window.webContents.send(eventName, JSON.stringify(characters))
+  }
+
+  transfer('Domain.CharacterRepository.update', handleCharacterRepositoryUpdate)
+  
   const handleRollResult = (roll: RollResult) => {
     window.webContents.send('Domain.Roll.new', JSON.stringify(roll))
   }

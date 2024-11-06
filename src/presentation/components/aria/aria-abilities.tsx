@@ -10,10 +10,10 @@ import { CharacterEditAbilitiesDialog } from '../character-edit-records'
 import { BasicPopover } from '../common/pop-over'
 import { AriaRoll } from './aria-roll'
 
-import { CharacterSheet } from '../../../domain/common/types'
+import { CharacterData } from '../../../domain/character/character'
 
 type Props = {
-  character: CharacterSheet
+  character: CharacterData
 }
 
 export const AriaAbilities = ({ character }: Props) => {
@@ -27,7 +27,7 @@ export const AriaAbilities = ({ character }: Props) => {
     setOpenEditDialog(false)
   }
 
-  const sortedAbilities = character.abilities.toSorted((aA, aB) => aA.name.localeCompare(aB.name))
+  const sortedAbilities = character.state.abilities.toSorted((aA, aB) => aA.name.localeCompare(aB.name))
 
   return (
     <Stack padding={2}>

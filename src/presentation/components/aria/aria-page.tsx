@@ -8,10 +8,10 @@ import { AriaAbilities } from './aria-abilities'
 import { DiceTray } from '../dice-tray'
 import { RollHistory } from '../roll-history'
 
-import { CharacterSheet } from '../../../domain/common/types'
+import { CharacterData } from '../../../domain/character/character'
 
 type Props = {
-  character: CharacterSheet
+  character: CharacterData
 }
 
 export const AriaPage = ({ character }: Props) => {

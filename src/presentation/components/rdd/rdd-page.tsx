@@ -8,10 +8,10 @@ import { RddAttributes } from './rdd-attributes'
 import { DiceTray } from '../dice-tray'
 import { RollHistory } from '../roll-history'
 
-import { CharacterSheet } from '../../../domain/common/types'
+import { CharacterData } from '../../../domain/character/character'
 
 type Props = {
-  character: CharacterSheet
+  character: CharacterData
 }
 
 export const RddPage = ({ character }: Props) => {

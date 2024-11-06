@@ -6,17 +6,17 @@ import { AriaPage } from './aria/aria-page'
 import { RddPage } from './rdd/rdd-page'
 
 export const CheapRouter = () => {
-  const characterSheets = useSelector((state: RootState) => state.characterCollection.characters)
+  const characters = useSelector((state: RootState) => state.characterCollection.characters)
   const characterId = useSelector((state: RootState) => state.session.characterId)
-  const character = characterSheets.find(sheet => sheet.id === characterId)
+  const character = characters.find(c => c.id === characterId)
 
   if (character) {
     // TODO: need a better check
-    if (character.game === 'Aria') {
+    if (character.state.game === 'Aria') {
       return <AriaPage character={character} />
     }
 
-    if (character.game === 'Rêve de Dragon') {
+    if (character.state.game === 'Rêve de Dragon') {
       return <RddPage character={character} />
     }
 

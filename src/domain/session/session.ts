@@ -12,7 +12,7 @@ type Session = {
 }
 
 export const createSession = (): Session => {
-  const state = createState<SessionState>({ characterId: null }, 'Domain.Session')
+  const state = createState<SessionState>({ characterId: null }, '', 'Domain.Session')
 
   const start = (characterId: EntityId) => {
     state.update('characterId', characterId)

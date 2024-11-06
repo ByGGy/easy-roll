@@ -1,10 +1,11 @@
+import { EntityId } from '../common/types'
 import { messageBus } from './messageBus'
 
 export type StateEmitter<T> = Readonly<T> & {
   update: <K extends keyof T>(p: K, value: T[K]) => void
 }
 
-export const createState = <T>(initialState: T, eventPrefix: string): StateEmitter<T> => {
+export const createState = <T>(initialState: T, id: EntityId, eventPrefix: string): StateEmitter<T> => {
   const state: T = {...initialState}
 
   const emitter: StateEmitter<T> = {
@@ -14,7 +15,7 @@ export const createState = <T>(initialState: T, eventPrefix: string): StateEmitt
         const previousState = {...state}
         state[p] = value
         Object.assign(emitter, state)
-        messageBus.emit(eventPrefix + '.update', previousState, state)
+        messageBus.emit(eventPrefix + '.update', id, previousState, state)
       }
     }
   }

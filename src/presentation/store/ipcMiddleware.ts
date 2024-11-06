@@ -1,18 +1,24 @@
 import { Middleware, UnknownAction } from 'redux'
 
-import { update as characterCollectionUpdate } from './characterCollectionSlice'
-import { update as sessionUpdate } from './sessionSlice'
+import { updateCollection as updateCharacterCollection, updateCharacter } from './characterCollectionSlice'
+import { update as updateSession } from './sessionSlice'
 import { add as addToHistory } from './rollHistorySlice'
 
 export const ipcMiddleware: Middleware = (store) => {
-  window.electronAPI.onMessage('Domain.CharacterCollection.update', (data: string) => {
+  window.electronAPI.onMessage('Domain.CharacterRepository.update', (data: string) => {
+    // TODO: need data validation and typing instead of just parsing with implicit any
+    const characters = JSON.parse(data)
+    store.dispatch(updateCharacterCollection(characters))
+  })
+
+  window.electronAPI.onMessage('Domain.Character.update', (data: string) => {
     const states = JSON.parse(data)
-    store.dispatch(characterCollectionUpdate(states.current.characters))
+    store.dispatch(updateCharacter(states))
   })
 
   window.electronAPI.onMessage('Domain.Session.update', (data: string) => {
     const states = JSON.parse(data)
-    store.dispatch(sessionUpdate(states.current.characterId))
+    store.dispatch(updateSession(states.current.characterId))
   })
 
   window.electronAPI.onMessage('Domain.Roll.new', (data: string) => {

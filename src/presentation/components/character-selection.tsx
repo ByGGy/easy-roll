@@ -20,8 +20,8 @@ import ListItemText from '@mui/material/ListItemText'
 import { EntityId } from '../../domain/common/types'
 
 export const CharacterSelection = () => {
-  const characterSheets = useSelector((state: RootState) => state.characterCollection.characters)
-  const sortedCharacterSheets = characterSheets.toSorted((sA, sB) => sA.name.localeCompare(sB.name))
+  const characters = useSelector((state: RootState) => state.characterCollection.characters)
+  const sortedCharacters = characters.toSorted((cA, cB) => cA.state.name.localeCompare(cB.state.name))
 
   const handleCreateAriaCharacter = () => {
     window.electronAPI.createDefaultCharacterSheet('Aria')
@@ -44,26 +44,26 @@ export const CharacterSelection = () => {
       <Box padding={2}>
         <Grid container alignItems='center' >
           <Grid item xs='auto'>
-            <Typography padding={2} variant='h5' color='primary'>{characterSheets.length === 0 ? 'No available characters' : 'Pick a character'}</Typography>
+            <Typography padding={2} variant='h5' color='primary'>{characters.length === 0 ? 'No available characters' : 'Pick a character'}</Typography>
           </Grid>
           <Grid item xs>
             <Stack direction='row' spacing={2}>
-              <Button variant={characterSheets.length === 0 ? 'contained' : 'outlined'} startIcon={<AddIcon />} onClick={handleCreateAriaCharacter}>
+              <Button variant={characters.length === 0 ? 'contained' : 'outlined'} startIcon={<AddIcon />} onClick={handleCreateAriaCharacter}>
                 Create an "Aria" character
               </Button>
-              <Button variant={characterSheets.length === 0 ? 'contained' : 'outlined'} startIcon={<AddIcon />} onClick={handleCreateRddCharacter}>
+              <Button variant={characters.length === 0 ? 'contained' : 'outlined'} startIcon={<AddIcon />} onClick={handleCreateRddCharacter}>
                 Create a "Rêve de Dragon" character
               </Button>
-              <Button variant={characterSheets.length === 0 ? 'contained' : 'outlined'} color='secondary' startIcon={<ImportExportIcon />} onClick={handleImportCharacter}>
+              <Button variant={characters.length === 0 ? 'contained' : 'outlined'} color='secondary' startIcon={<ImportExportIcon />} onClick={handleImportCharacter}>
                 Import a character
               </Button>
             </Stack>
           </Grid>
         </Grid>
         <List dense>
-          {sortedCharacterSheets.map((sheet) =>
-            <ListItem key={sheet.id} alignItems='flex-start'>
-              <ListItemButton onClick={() => handleSelection(sheet.id)} alignItems='flex-start'>
+          {sortedCharacters.map((c) =>
+            <ListItem key={c.id} alignItems='flex-start'>
+              <ListItemButton onClick={() => handleSelection(c.id)} alignItems='flex-start'>
                 <ListItemAvatar>
                   <Avatar>
                     <PersonIcon />
@@ -71,10 +71,10 @@ export const CharacterSelection = () => {
                 </ListItemAvatar>
                 <ListItemText
                   primary={
-                    <Typography variant='body1'>{sheet.name}</Typography>
+                    <Typography variant='body1'>{c.state.name}</Typography>
                   }
                   secondary={
-                    <Typography variant='caption' color='text.secondary'>{sheet.game}</Typography>
+                    <Typography variant='caption' color='text.secondary'>{c.state.game}</Typography>
                   }>
                 </ListItemText>
               </ListItemButton>

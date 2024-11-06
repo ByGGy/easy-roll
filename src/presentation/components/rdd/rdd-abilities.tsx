@@ -8,10 +8,10 @@ import EditIcon from '@mui/icons-material/Edit'
 import { evaluateModifierColor } from '../common/style-helpers'
 import { CharacterEditAbilitiesDialog } from '../character-edit-records'
 
-import { CharacterSheet } from '../../../domain/common/types'
+import { CharacterData } from '../../../domain/character/character'
 
 type Props = {
-  character: CharacterSheet
+  character: CharacterData
 }
 
 export const RddAbilities = ({ character }: Props) => {
@@ -25,7 +25,7 @@ export const RddAbilities = ({ character }: Props) => {
     setOpenEditDialog(false)
   }
 
-  const sortedAbilities = character.abilities.toSorted((aA, aB) => aA.name.localeCompare(aB.name))
+  const sortedAbilities = character.state.abilities.toSorted((aA, aB) => aA.name.localeCompare(aB.name))
 
   return (
     <Stack padding={2}>
