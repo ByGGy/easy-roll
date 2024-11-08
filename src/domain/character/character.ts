@@ -1,11 +1,10 @@
 import { randomUUID } from 'crypto'
-import { EntityId, EntityWithState, Game, Attribute, Ability, DiscordNotification } from '../common/types'
+import { EntityId, EntityWithState, Attribute, Ability, DiscordNotification } from '../common/types'
 import { createState } from '../events/stateEmitter'
 
 // TODO: should have a creation date ?
 // TODO: should allow to assign tags, like Hero | Villain | PNJ | Monster
 export type CharacterState = {
-  game: Game
   name: string
   attributes: Array<Attribute>
   abilities: Array<Ability>
