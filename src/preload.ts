@@ -20,7 +20,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
   getAppVersion: () => ipcRenderer.invoke('getAppVersion'),
 
   tryImportCharacter: () => ipcRenderer.invoke('tryImportCharacter'),
-
   createDefaultCharacter: (game: Game) => ipcRenderer.invoke('createDefaultCharacter', game),
   renameCharacter: (id: EntityId, newName: string) => ipcRenderer.invoke('renameCharacter', id, newName),
   changeCharacterAttributes: (id: EntityId, newAttributes: Array<Attribute>) => ipcRenderer.invoke('changeCharacterAttributes', id, newAttributes),
@@ -28,13 +27,14 @@ contextBridge.exposeInMainWorld('electronAPI', {
   changeCharacterDiscordNotification: (id: EntityId, enable: boolean, level: NotificationLevel, channelId: string) => ipcRenderer.invoke('changeCharacterDiscordNotification', id, enable, level, channelId),
   toggleCharacterDiscordNotification: (id: EntityId) => ipcRenderer.invoke('toggleCharacterDiscordNotification', id),
 
-  openSession: (id: EntityId) => ipcRenderer.invoke('openSession', id),
-  closeSession: () => ipcRenderer.invoke('closeSession'),
+  createSession: (game: Game) => ipcRenderer.invoke('createSession', game),
+  renameSession: (id: EntityId, newName: string) => ipcRenderer.invoke('renameSession', id, newName),
+  createCharacterForSession: (id: EntityId) => ipcRenderer.invoke('createCharacterForSession', id),
 
-  diceTrayRoll: (diceFaceQty: number, diceQty: number, modifier: number) => ipcRenderer.invoke('diceTrayRoll', diceFaceQty, diceQty, modifier),
+  diceTrayRoll: (characterId: EntityId, diceFaceQty: number, diceQty: number, modifier: number) => ipcRenderer.invoke('diceTrayRoll', characterId, diceFaceQty, diceQty, modifier),
 
-  ariaCheckAttribute: (attributeName: string, difficulty: number, modifier: number) => ipcRenderer.invoke('ariaCheckAttribute', attributeName, difficulty, modifier),
-  ariaCheckAbility: (abilityName: string, modifier: number) => ipcRenderer.invoke('ariaCheckAbility', abilityName, modifier),
+  ariaCheckAttribute: (characterId: EntityId, attributeName: string, difficulty: number, modifier: number) => ipcRenderer.invoke('ariaCheckAttribute', characterId, attributeName, difficulty, modifier),
+  ariaCheckAbility: (characterId: EntityId, abilityName: string, modifier: number) => ipcRenderer.invoke('ariaCheckAbility', characterId, abilityName, modifier),
 
-  rddCheckAttribute: (attributeName: string, abilityName: string, modifier: number) => ipcRenderer.invoke('rddCheckAttribute', attributeName, abilityName, modifier),
+  rddCheckAttribute: (characterId: EntityId, attributeName: string, abilityName: string, modifier: number) => ipcRenderer.invoke('rddCheckAttribute', characterId, attributeName, abilityName, modifier),
 })

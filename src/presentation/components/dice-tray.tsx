@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState } from 'react'
 import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
 import Grid from '@mui/material/Grid'
@@ -7,7 +7,10 @@ import Typography from '@mui/material/Typography'
 import IconButton from '@mui/material/IconButton'
 import Button from '@mui/material/Button'
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore'
+
 import { evaluateModifierColor } from './common/style-helpers'
+
+import { CharacterData } from '../../domain/character/character'
 
 const diceFaceQtyMarks = [
   {
@@ -24,7 +27,11 @@ const diceFaceQtyMarks = [
   },
 ];
 
-export const DiceTray = () => {
+type Props = {
+  character: CharacterData
+}
+
+export const DiceTray = ({ character }: Props) => {
   const [diceFaceQty, setDiceFaceQty] = useState(20)
   const [diceQty, setDiceQty] = useState(1)
   const [modifier, setModifier] = useState(0)
@@ -47,9 +54,9 @@ export const DiceTray = () => {
     setModifier(newValue as number)
   }
 
-  const handleRoll = useCallback(() => {
-    window.electronAPI.diceTrayRoll(diceFaceQty, diceQty, modifier)
-  }, [diceFaceQty, diceQty, modifier])
+  const handleRoll = () => {
+    window.electronAPI.diceTrayRoll(character.id, diceFaceQty, diceQty, modifier)
+  }
 
   return (
     <Box sx={{ minWidth: 400 }}>

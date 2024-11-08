@@ -4,17 +4,9 @@ import fs from 'fs'
 import { JSONFileSyncPreset } from 'lowdb/node'
 
 import { messageBus } from '../../domain/events/messageBus'
-import { EntityId, EntityWithState } from '../../domain/common/types'
+import { EntityId } from '../../domain/common/types'
+import { Repository } from '../common/types'
 import { Character, CharacterData, CharacterState, rehydrate } from '../../domain/character/character'
-
-export type Repository<TModel extends EntityWithState<TState>, TState extends object> = {
-  pulse: () => void
-  getAll: () => Readonly<Array<TModel>>
-  getById: (id: EntityId) => TModel | undefined
-  insert: (item: TModel) => void
-  update: (item: TModel) => void
-  deleteById: (id: EntityId) => void
-}
 
 type CharacterdbType = {
   characters: CharacterData[]

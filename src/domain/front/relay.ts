@@ -1,8 +1,9 @@
 import { BrowserWindow } from 'electron'
 
 import { messageBus } from '../events/messageBus'
-import { Character } from '../character/character'
 import { EntityId, RollResult } from '../common/types'
+import { Character } from '../character/character'
+import { Session } from '../session/session'
 
 export const createRelay = (window: BrowserWindow) => {
 
@@ -26,6 +27,12 @@ export const createRelay = (window: BrowserWindow) => {
 
   transfer('Domain.CharacterRepository.update', handleCharacterRepositoryUpdate)
   
+  const handleSessionRepositoryUpdate = (eventName: string, sessions: Array<Session>) => {
+    window.webContents.send(eventName, JSON.stringify(sessions))
+  }
+
+  transfer('Domain.SessionRepository.update', handleSessionRepositoryUpdate)
+
   const handleRollResult = (roll: RollResult) => {
     window.webContents.send('Domain.Roll.new', JSON.stringify(roll))
   }

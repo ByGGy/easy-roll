@@ -1,7 +1,7 @@
 import { Middleware, UnknownAction } from 'redux'
 
 import { updateCollection as updateCharacterCollection, updateCharacter } from './characterCollectionSlice'
-import { update as updateSession } from './sessionSlice'
+import { updateCollection as updateSessionCollection, updateSession } from './sessionCollectionSlice'
 import { add as addToHistory } from './rollHistorySlice'
 
 export const ipcMiddleware: Middleware = (store) => {
@@ -16,9 +16,14 @@ export const ipcMiddleware: Middleware = (store) => {
     store.dispatch(updateCharacter(states))
   })
 
+  window.electronAPI.onMessage('Domain.SessionRepository.update', (data: string) => {
+    const sessions = JSON.parse(data)
+    store.dispatch(updateSessionCollection(sessions))
+  })
+
   window.electronAPI.onMessage('Domain.Session.update', (data: string) => {
     const states = JSON.parse(data)
-    store.dispatch(updateSession(states.current.characterId))
+    store.dispatch(updateSession(states))
   })
 
   window.electronAPI.onMessage('Domain.Roll.new', (data: string) => {

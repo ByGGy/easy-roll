@@ -1,30 +1,45 @@
-import { EntityId } from '../common/types'
-import { StateEmitter, createState } from '../events/stateEmitter'
+import { randomUUID } from 'crypto'
+import { EntityId, EntityWithState, Game } from '../common/types'
+import { createState } from '../events/stateEmitter'
 
 export type SessionState = {
-  characterId: EntityId | null
+  game: Game
+  name: string
+  description: string
+  characterIds: Array<EntityId>
+  creationDate: string
 }
 
-type Session = {
-  state: StateEmitter<SessionState>
-  start: (characterId: EntityId) => void
-  end: () => void
+export type SessionData = EntityWithState<SessionState>
+
+export type Session = SessionData & {
+  rename: (newName: string) => void
+  changeCharacters : (newCharacterIds: Array<EntityId>) => void
 }
 
-export const createSession = (): Session => {
-  const state = createState<SessionState>({ characterId: null }, '', 'Domain.Session')
-
-  const start = (characterId: EntityId) => {
-    state.update('characterId', characterId)
+const createModel = (id: EntityId, state: SessionState): Session => {
+  const emitterState = createState<SessionState>({...state}, id, 'Domain.Session')
+  
+  const rename = (newName: string) => {
+    emitterState.update('name', newName)
   }
 
-  const end = () => {
-    state.update('characterId', null)
+  const changeCharacters = (newCharacterIds: Array<EntityId>) => {
+    emitterState.update('characterIds', newCharacterIds)
   }
 
   return {
-    state,
-    start,
-    end
+    id,
+    state: emitterState,
+    rename,
+    changeCharacters,
   }
+}
+
+export const rehydrate = (data: SessionData): Session => {
+  return createModel(data.id, data.state)
+}
+
+export const create = (initialState: SessionState): Session => {
+  return createModel(randomUUID(), initialState)
 }

@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState } from 'react'
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import Card from '@mui/material/Card'
@@ -14,7 +14,7 @@ import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore
 
 import { evaluateModifierColor } from '../common/style-helpers'
 
-import { Ability } from '../../../domain/common/types'
+import { Ability, EntityId } from '../../../domain/common/types'
 
 type AbilityItemProps = {
   ability: Ability
@@ -32,11 +32,12 @@ const AbilityItem = ({ ability }: AbilityItemProps) => {
 }
 
 type Props = {
+  characterId: EntityId
   attributeName: string
   abilities: Readonly<Array<Ability>>
 }
 
-export const RddRoll = ({ attributeName, abilities }: Props) => {
+export const RddRoll = ({ characterId, attributeName, abilities }: Props) => {
   const [abilityName, setAbilityName] = useState('')
   const [modifier, setModifier] = useState(0)
 
@@ -53,9 +54,9 @@ export const RddRoll = ({ attributeName, abilities }: Props) => {
     setModifier(newValue as number)
   }
 
-  const handleRoll = useCallback(() => {
-    window.electronAPI.rddCheckAttribute(attributeName, abilityName, modifier)
-  }, [attributeName, abilityName, modifier])
+  const handleRoll = () => {
+    window.electronAPI.rddCheckAttribute(characterId, attributeName, abilityName, modifier)
+  }
 
   const sortedAbilities = abilities.toSorted((aA, aB) => aA.name.localeCompare(aB.name))
 

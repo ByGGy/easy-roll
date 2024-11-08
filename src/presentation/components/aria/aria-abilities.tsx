@@ -51,7 +51,7 @@ export const AriaAbilities = ({ character }: Props) => {
               <Typography variant='body1'>{`${ability.value}%`}</Typography>
             </Grid>
             <Grid item xs='auto'>
-              <BasicPopover triggerContent={<CasinoIcon />} popoverContent={<AriaRoll rollStat='Ability' statName={ability.name} />} />
+              <BasicPopover triggerContent={<CasinoIcon />} popoverContent={<AriaRoll characterId={character.id} rollStat='Ability' statName={ability.name} />} />
             </Grid>
           </Grid>
         )}

@@ -26,7 +26,6 @@ export const characterCollectionSlice = createSlice({
       state.characters = action.payload
     },
     updateCharacter: (state, action: PayloadAction<StateUpdate<CharacterState>>) => {
-      // state.characters = [...state.characters.filter(c => c.id !== action.payload.id), { id: action.payload.id, state: action.payload.current }]
       const targetIndex = state.characters.findIndex(c => c.id === action.payload.id)
       if (targetIndex !== -1) {
         state.characters[targetIndex] = { id: action.payload.id, state: action.payload.current }

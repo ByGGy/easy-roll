@@ -32,7 +32,7 @@ const createDefaultAbilitiesFor = (game: Game): Array<Ability> => {
   }
 }
 
-const createDefaultDiscordConfiguration = (): DiscordNotification => ({ enable: true, level: 'Standard', channelId: '' })
+const createDefaultDiscordConfiguration = (): DiscordNotification => ({ enable: false, level: 'Standard', channelId: '' })
 
 export const createCharacterService = (): CharacterService => {
 

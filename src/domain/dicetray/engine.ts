@@ -4,6 +4,7 @@ import { RollDiceDetails, RollResult } from '../common/types'
 import { CharacterData } from '../character/character'
 import { rollDice } from './roll'
 
+// TODO: allow to roll from expressions, e.g. "3d8-1d4+2"
 const rollDices = (character: CharacterData, diceFaceQty: number, diceQty: number, modifier: number): RollResult => {
   const rolls = [...Array(diceQty)].map(_ => rollDice(diceFaceQty))
   const total = rolls.reduce((acc, value) => acc + value, modifier)

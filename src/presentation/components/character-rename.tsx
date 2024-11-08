@@ -11,6 +11,7 @@ type Props = {
   character: CharacterData
 }
 
+// TODO: use EditText and remove this
 export const CharacterRename = ({ character }: Props) => {
   const [newName, setNewName] = useState(character.state.name) 
 

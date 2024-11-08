@@ -2,14 +2,17 @@ import { app, BrowserWindow, ipcMain, dialog } from 'electron'
 import path from 'path'
 
 import { EntityId, Game, Attribute, Ability, NotificationLevel } from './domain/common/types'
-import { createRepository } from './persistence/character/repository'
+import { createRepository as createCharacterRepository } from './persistence/character/repository'
 import { createCharacterService } from './domain/character/characterService'
-import { createSession } from './domain/session/session'
+import { createRepository as createSessionRepository } from './persistence/session/repository'
+import { create as createSession } from './domain/session/session'
 import { engine as diceTrayEngine } from './domain/dicetray/engine'
 import { engine as ariaEngine } from './domain/aria/engine'
 import { engine as rddEngine } from './domain/rdd/engine'
 import { createRelay as createDiscordRelay } from './domain/discord/relay'
 import { createRelay as createFrontRelay } from './domain/front/relay'
+
+// TODO: support streamdeck integration ?
 
 // TODO: use some unit testing lib instead of this..
 // import { runTest } from './domain/dicetray/roll'
@@ -20,10 +23,10 @@ if (require('electron-squirrel-startup')) {
   app.quit();
 }
 
-const characterRepository = createRepository()
+const characterRepository = createCharacterRepository()
+const sessionRepository = createSessionRepository()
 const characterService = createCharacterService()
 const discordRelay = createDiscordRelay(characterRepository)
-const session = createSession()
 let frontRelay
 
 const createWindow = () => {
@@ -55,6 +58,7 @@ const createWindow = () => {
 
   mainWindow.webContents.once('did-finish-load', () => {
     characterRepository.pulse()
+    sessionRepository.pulse()
   })
 };
 
@@ -66,8 +70,7 @@ app.on('ready', () => {
 });
 
 app.on('before-quit', () => {
-  // Not working ?
-  session.end()
+  //
 })
 
 // Quit when all windows are closed, except on macOS. There, it's common
@@ -154,47 +157,59 @@ const handleToggleCharacterDiscordNotification = (event: unknown, id: EntityId) 
   }
 }
 
-const handleOpenSession = (event: unknown, id: EntityId) => {
-  session.start(id)
+const handleCreateSession = (event: unknown, game: Game) => {
+  const initialState = {
+    game,
+    name: 'New Session',
+    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed venenatis sollicitudin neque, sed pharetra odio consectetur sit amet. Vivamus commodo, sem ac maximus facilisis, massa quam commodo tortor, at vehicula augue enim ac ante.',
+    characterIds: [],
+    creationDate: new Date().toISOString(),
+  }
+
+  sessionRepository.insert(createSession(initialState))
 }
 
-const handleCloseSession = (event: unknown) => {
-  session.end()
-}
-
-const handleDiceTrayRoll = (event: unknown, diceFaceQty: number, diceQty: number, modifier: number) => {
-  if (session.state.characterId !== null) {
-    const currentCharacter = characterRepository.getById(session.state.characterId)
-    if (currentCharacter) {
-      diceTrayEngine.rollDices(currentCharacter, diceFaceQty, diceQty, modifier)
-    }
+const handleRenameSession = (event: unknown, id: EntityId, newName: string) => {
+  const targetSession = sessionRepository.getById(id)
+  if (targetSession) {
+    targetSession.rename(newName)
   }
 }
 
-const handleAriaCheckAttribute = (event: unknown, attributeName: string, difficulty: number, modifier: number) => {
-  if (session.state.characterId !== null) {
-    const currentCharacter = characterRepository.getById(session.state.characterId)
-    if (currentCharacter) {
-      ariaEngine.checkAttribute(currentCharacter, attributeName, difficulty, modifier)
-    }
+const handleCreateCharacterForSession = (event: unknown, id: EntityId) => {
+  const targetSession = sessionRepository.getById(id)
+  if (targetSession) {
+    const newCharacter = characterService.createFor(targetSession.state.game)
+    characterRepository.insert(newCharacter)
+    targetSession.changeCharacters([...targetSession.state.characterIds, newCharacter.id])
   }
 }
 
-const handleAriaCheckAbility = (event: unknown, abilityName: string, modifier: number) => {
-  if (session.state.characterId !== null) {
-    const currentCharacter = characterRepository.getById(session.state.characterId)
-    if (currentCharacter) {
-      ariaEngine.checkAbility(currentCharacter, abilityName, modifier)
-    }
+const handleDiceTrayRoll = (event: unknown, characterId: EntityId, diceFaceQty: number, diceQty: number, modifier: number) => {
+  const currentCharacter = characterRepository.getById(characterId)
+  if (currentCharacter) {
+    diceTrayEngine.rollDices(currentCharacter, diceFaceQty, diceQty, modifier)
   }
 }
 
-const handleRddCheckAttribute = (event: unknown, attributeName: string, abilityName: string, modifier: number) => {
-  if (session.state.characterId !== null) {
-    const currentCharacter = characterRepository.getById(session.state.characterId)
-    if (currentCharacter) {
-      rddEngine.checkAttribute(currentCharacter, attributeName, abilityName, modifier)
-    }
+const handleAriaCheckAttribute = (event: unknown, characterId: EntityId, attributeName: string, difficulty: number, modifier: number) => {
+  const currentCharacter = characterRepository.getById(characterId)
+  if (currentCharacter) {
+    ariaEngine.checkAttribute(currentCharacter, attributeName, difficulty, modifier)
+  }
+}
+
+const handleAriaCheckAbility = (event: unknown, characterId: EntityId, abilityName: string, modifier: number) => {
+  const currentCharacter = characterRepository.getById(characterId)
+  if (currentCharacter) {
+    ariaEngine.checkAbility(currentCharacter, abilityName, modifier)
+  }
+}
+
+const handleRddCheckAttribute = (event: unknown, characterId: EntityId, attributeName: string, abilityName: string, modifier: number) => {
+  const currentCharacter = characterRepository.getById(characterId)
+  if (currentCharacter) {
+    rddEngine.checkAttribute(currentCharacter, attributeName, abilityName, modifier)
   }
 }
 
@@ -211,8 +226,9 @@ app.whenReady().then(() => {
   ipcMain.handle('changeCharacterDiscordNotification', handleChangeCharacterDiscordNotification)
   ipcMain.handle('toggleCharacterDiscordNotification', handleToggleCharacterDiscordNotification)
 
-  ipcMain.handle('openSession', handleOpenSession)
-  ipcMain.handle('closeSession', handleCloseSession)
+  ipcMain.handle('createSession', handleCreateSession)
+  ipcMain.handle('renameSession', handleRenameSession)
+  ipcMain.handle('createCharacterForSession', handleCreateCharacterForSession)
 
   ipcMain.handle('diceTrayRoll', handleDiceTrayRoll)
 

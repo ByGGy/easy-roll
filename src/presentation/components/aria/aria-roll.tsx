@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState } from 'react'
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import Card from '@mui/material/Card'
@@ -13,15 +13,17 @@ import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore
 
 import { PrimaryToggleButton, evaluateModifierColor } from '../common/style-helpers'
 import { unreachable } from '../../../domain/common/tools'
+import { EntityId } from '../../../domain/common/types'
 
 type AriaRollStat = 'Attribute' | 'Ability'
 
 type Props = {
+  characterId: EntityId
   rollStat: AriaRollStat
   statName: string
 }
 
-export const AriaRoll = ({ rollStat, statName }: Props) => {
+export const AriaRoll = ({ characterId, rollStat, statName }: Props) => {
   const [difficulty, setDifficulty] = useState(3)
   const [modifier, setModifier] = useState(0)
 
@@ -44,21 +46,21 @@ export const AriaRoll = ({ rollStat, statName }: Props) => {
   }
 
   // TODO: should dispatch store actions instead of calling electronAPI in the components ?
-  const handleRoll = useCallback(() => {
+  const handleRoll = () => {
     switch (rollStat) {
       default:
         unreachable(rollStat)
         break
 
       case 'Attribute': 
-        window.electronAPI.ariaCheckAttribute(statName, difficulty, modifier)
+        window.electronAPI.ariaCheckAttribute(characterId, statName, difficulty, modifier)
         break
       
       case 'Ability':
-        window.electronAPI.ariaCheckAbility(statName, modifier)
+        window.electronAPI.ariaCheckAbility(characterId, statName, modifier)
         break
     }
-  }, [rollStat, statName, difficulty, modifier])
+  }
 
   return (
     <Card>

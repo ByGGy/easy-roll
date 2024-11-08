@@ -27,7 +27,7 @@ export const RddPage = ({ character }: Props) => {
             <RddAbilities character={character} />
           </Paper>
           <Paper elevation={4}>
-            <DiceTray />
+            <DiceTray character={character} />
           </Paper>
           <Paper elevation={4}>
             <RollHistory />

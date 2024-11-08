@@ -1,7 +1,7 @@
 import { messageBus } from '../events/messageBus'
 import { sendMessage } from '../../api/discordAPI'
 import { EntityId, RollResult } from '../common/types'
-import { Repository } from '../../persistence/character/repository'
+import { Repository } from '../../persistence/common/types'
 import { Character, CharacterState } from '../character/character'
 import { SessionState } from '../session/session'
 import { unreachable } from '../common/tools'
@@ -9,27 +9,27 @@ import { unreachable } from '../common/tools'
 export const createRelay = (repository: Repository<Character, CharacterState>) => {
 
   const handleSessionUpdate = (_: EntityId, previousState: SessionState, currentState: SessionState) => {
-    if (currentState.characterId !== null) {
-      const relevantCharacter = repository.getById(currentState.characterId)
-      if (relevantCharacter && relevantCharacter.state.discordNotification.enable) {
-        const content = `<${relevantCharacter.state.name}> has entered the realm.`
-        sendMessage({
-          channelId: relevantCharacter.state.discordNotification.channelId,
-          content
-        })
-      }
-    } else {
-      if (previousState.characterId !== null) {
-        const relevantCharacter = repository.getById(previousState.characterId)
-        if (relevantCharacter && relevantCharacter.state.discordNotification.enable) {
-          const content = `<${relevantCharacter.state.name}> has left the realm.`
-          sendMessage({
-            channelId: relevantCharacter.state.discordNotification.channelId,
-            content
-          })
-        }
-      }
-    }
+    // if (currentState.characterId !== null) {
+    //   const relevantCharacter = repository.getById(currentState.characterId)
+    //   if (relevantCharacter && relevantCharacter.state.discordNotification.enable) {
+    //     const content = `<${relevantCharacter.state.name}> has entered the realm.`
+    //     sendMessage({
+    //       channelId: relevantCharacter.state.discordNotification.channelId,
+    //       content
+    //     })
+    //   }
+    // } else {
+    //   if (previousState.characterId !== null) {
+    //     const relevantCharacter = repository.getById(previousState.characterId)
+    //     if (relevantCharacter && relevantCharacter.state.discordNotification.enable) {
+    //       const content = `<${relevantCharacter.state.name}> has left the realm.`
+    //       sendMessage({
+    //         channelId: relevantCharacter.state.discordNotification.channelId,
+    //         content
+    //       })
+    //     }
+    //   }
+    // }
   }
 
   const handleRollResult = (roll: RollResult) => {
