@@ -16,24 +16,22 @@ type Props = {
 
 export const RddPage = ({ character }: Props) => {
   return (
-    <Paper elevation={1}>
-      <Box padding={2}>
-        <CharacterHeader character={character} />
-        <Stack spacing={1} direction={'row'}>
-          <Paper elevation={4}>
-            <RddAttributes character={character} />
-          </Paper>
-          <Paper elevation={4}>
-            <RddAbilities character={character} />
-          </Paper>
-          <Paper elevation={4}>
-            <DiceTray character={character} />
-          </Paper>
-          <Paper elevation={4}>
-            <RollHistory />
-          </Paper>
-        </Stack>
-      </Box>
-    </Paper>
+    <Box padding={2}>
+      <CharacterHeader character={character} />
+      <Stack spacing={1} direction={'row'}>
+        <Paper elevation={4}>
+          <RddAttributes character={character} />
+        </Paper>
+        <Paper elevation={4}>
+          <RddAbilities character={character} />
+        </Paper>
+        <Paper elevation={4}>
+          <DiceTray character={character} />
+        </Paper>
+        <Paper elevation={4}>
+          <RollHistory />
+        </Paper>
+      </Stack>
+    </Box>
   )
 }

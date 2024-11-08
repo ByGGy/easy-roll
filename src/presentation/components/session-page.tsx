@@ -25,10 +25,10 @@ export const SessionPage = () => {
         <Box padding={2}>
           <SessionHeader session={session} />
           <Stack spacing={1} direction={'row'}>
-            <Paper elevation={4}>
+            <Paper elevation={2}>
               <CharacterSelection session={session} />
             </Paper>
-            <Paper elevation={4}>
+            <Paper elevation={2}>
               {character && session.state.game === 'Aria' && <AriaPage character={character} />}
               {character && session.state.game === 'Rêve de Dragon' && <RddPage character={character} />}
               {!character && <p>{characterId !== null ? 'character not found..' : 'No character selected'}</p>}

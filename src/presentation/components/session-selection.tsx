@@ -60,19 +60,17 @@ export const SessionSelection = () => {
           </Grid>
         </Grid>
         <Stack direction='row' padding={2} spacing={2} overflow='auto'>
-          {sortedSessions.map((c) =>
-            <Paper key={c.id} elevation={2}>
-              <Card sx={{ minWidth: 260, maxWidth: 320 }}>
-                <CardActionArea onClick={() => handleSelection(c.id)}>
+          {sortedSessions.map((session) =>
+            <Card key={session.id} sx={{ minWidth: 260, maxWidth: 320 }} elevation={4}>
+              <CardActionArea onClick={() => handleSelection(session.id)}>
                   <CardContent>
-                    <Typography variant='body1' color='primary' component='div'>{c.state.name}</Typography>
-                    <Typography gutterBottom variant='body2' color='secondary' component='div'>{`${c.state.game}, ${c.state.characterIds.length} characters`}</Typography>
-                    <Typography gutterBottom variant='body2' color='text.secondary'>{formatDate(c.state.creationDate)}</Typography>
-                    <Typography variant='caption' color='text.secondary' component='div'>{c.state.description}</Typography>
+                  <Typography variant='body1' color='primary' component='div'>{session.state.name}</Typography>
+                  <Typography gutterBottom variant='body2' color='secondary' component='div'>{`${session.state.game}, ${session.state.characterIds.length} characters`}</Typography>
+                  <Typography gutterBottom variant='body2' color='text.secondary'>{formatDate(session.state.creationDate)}</Typography>
+                  <Typography variant='caption' color='text.secondary' component='div'>{session.state.description}</Typography>
                   </CardContent>
                 </CardActionArea>
               </Card>
-            </Paper>
           )}
         </Stack>
       </Box>
