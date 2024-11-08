@@ -38,7 +38,12 @@ export const SessionSelection = () => {
   }
 
   const handleSelection = (id: EntityId) => {
-    dispatch(openSession(id))
+    const targetSession = sessions.find(s => s.id === id)
+    const payload = {
+      sessionId: id,
+      characterId: targetSession?.state.characterIds[0]
+    }
+    dispatch(openSession(payload))
   }
 
   return (
@@ -63,14 +68,14 @@ export const SessionSelection = () => {
           {sortedSessions.map((session) =>
             <Card key={session.id} sx={{ minWidth: 260, maxWidth: 320 }} elevation={4}>
               <CardActionArea onClick={() => handleSelection(session.id)}>
-                  <CardContent>
+                <CardContent>
                   <Typography variant='body1' color='primary' component='div'>{session.state.name}</Typography>
                   <Typography gutterBottom variant='body2' color='secondary' component='div'>{`${session.state.game}, ${session.state.characterIds.length} characters`}</Typography>
                   <Typography gutterBottom variant='body2' color='text.secondary'>{formatDate(session.state.creationDate)}</Typography>
                   <Typography variant='caption' color='text.secondary' component='div'>{session.state.description}</Typography>
-                  </CardContent>
-                </CardActionArea>
-              </Card>
+                </CardContent>
+              </CardActionArea>
+            </Card>
           )}
         </Stack>
       </Box>

@@ -13,12 +13,18 @@ const initialState: SelectionState = {
   characterId: null
 }
 
+type OpenPayload = {
+  sessionId: EntityId
+  characterId?: EntityId
+}
+
 export const selectionSlice = createSlice({
   name: 'selection',
   initialState,
   reducers: {
-    openSession: (state, action: PayloadAction<EntityId>) => {
-      state.sessionId = action.payload
+    openSession: (state, action: PayloadAction<OpenPayload>) => {
+      state.sessionId = action.payload.sessionId
+      state.characterId = action.payload.characterId ?? null
     },
     closeSession: (state) => {
       state.sessionId = null
