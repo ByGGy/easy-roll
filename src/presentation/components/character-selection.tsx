@@ -47,22 +47,25 @@ const AddCharacter = ({ ignoreCharacterIds, handleSelection }: AddCharacterProps
           </Grid>
         </Grid>
         <CardContent>
-          <List dense>
-            {sortedCharacters.map((c) =>
-              <ListItem key={c.id}>
-                <ListItemButton onClick={() => handleSelection(c.id)}>
-                  <ListItemAvatar>
-                    <Avatar>
-                      <PersonIcon />
-                    </Avatar>
-                  </ListItemAvatar>
-                  <ListItemText primary={
-                    <Typography variant='body1'>{c.state.name}</Typography>
-                  } />
-                </ListItemButton>
-              </ListItem>
-            )}
-          </List>
+          { sortedCharacters.length > 0 &&
+            <List dense>
+              {sortedCharacters.map((c) =>
+                <ListItem key={c.id}>
+                  <ListItemButton onClick={() => handleSelection(c.id)}>
+                    <ListItemAvatar>
+                      <Avatar>
+                        <PersonIcon />
+                      </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText primary={
+                      <Typography variant='body1'>{c.state.name}</Typography>
+                    } />
+                  </ListItemButton>
+                </ListItem>
+              )}
+            </List>
+          }
+          { relevantCharacters.length === 0 && <Typography>No character left to pick.</Typography>}
         </CardContent>
       </Box>
     </Card>
