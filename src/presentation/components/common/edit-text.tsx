@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
@@ -18,6 +18,10 @@ type Props = {
 
 export const EditText = ({ fieldLabel, fieldValue, actionLabel, onApply }: Props) => {
   const [newValue, setNewValue] = useState(fieldValue) 
+
+  useEffect(() => {
+    setNewValue(fieldValue)
+  }, [fieldValue])
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewValue(event.target.value)
