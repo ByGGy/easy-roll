@@ -9,7 +9,6 @@ import Grid from '@mui/material/Grid'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import IconButton from '@mui/material/IconButton'
-import Button from '@mui/material/Button'
 import ColorizeIcon from '@mui/icons-material/Colorize'
 import NoteAddIcon from '@mui/icons-material/NoteAdd'
 import ImportExportIcon from '@mui/icons-material/ImportExport'
@@ -82,6 +81,7 @@ export const CharacterSelection = ({ session }: Props) => {
   const allCharacters = useSelector((state: RootState) => state.characterCollection.characters)
   const relevantCharacters = session.state.characterIds.map(cId => allCharacters.find(c => c.id === cId)).filter(isNotUndefined)
   const sortedCharacters = relevantCharacters.toSorted((cA, cB) => cA.state.name.localeCompare(cB.state.name))
+  const selectedCharacterId = useSelector((state: RootState) => state.selection.characterId)
 
   const handleCreateCharacter = () => {
     window.electronAPI.createCharacterForSession(session.id)
@@ -133,12 +133,12 @@ export const CharacterSelection = ({ session }: Props) => {
           <ListItem key={c.id}>
             <ListItemButton onClick={() => handleSelection(c.id)}>
               <ListItemAvatar>
-                <Avatar>
+                <Avatar sx={{ bgcolor: c.id === selectedCharacterId ? 'text.primary' : '' }}>
                   <PersonIcon />
                 </Avatar>
               </ListItemAvatar>
               <ListItemText primary={
-                <Typography variant='body1'>{c.state.name}</Typography>
+                <Typography color={c.id === selectedCharacterId ? '' : 'text.secondary'} variant='body1'>{c.state.name}</Typography>
               } />
             </ListItemButton>
           </ListItem>

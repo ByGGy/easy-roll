@@ -22,7 +22,7 @@ export const CharacterHeader = ({ character }: Props) => {
   return (
     <Grid container alignItems='center'>
       <Grid item xs='auto'>        
-        <Avatar>
+        <Avatar sx={{ bgcolor: 'text.primary' }}>
           <PersonIcon />
         </Avatar>
       </Grid>
