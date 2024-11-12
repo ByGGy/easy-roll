@@ -7,12 +7,16 @@ import Typography from '@mui/material/Typography'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import ListItemAvatar from '@mui/material/ListItemAvatar'
+import Box from '@mui/material/Box'
 import Avatar from '@mui/material/Avatar'
+import Badge from '@mui/material/Badge'
+import PersonIcon from '@mui/icons-material/Person'
 import ListItemText from '@mui/material/ListItemText'
 import Divider from '@mui/material/Divider'
 
 import { RollResult } from '../../domain/common/types'
 import { unreachable } from '../../domain/common/tools'
+import { DarkTooltip } from './common/style-helpers'
 
 type RollItemProps = {
   roll: RollResult
@@ -20,6 +24,10 @@ type RollItemProps = {
 }
 
 const RollItem = ({ roll, opacity }: RollItemProps) => {
+  const allCharacters = useSelector((state: RootState) => state.characterCollection.characters)
+  const characterName = allCharacters.find(c => c.id === roll.characterId)?.state.name ?? 'Unknown'
+  const selectedCharacterId = useSelector((state: RootState) => state.selection.characterId)
+
   // TODO: should also display the character name at some point
   let title
   if (roll.checkDetails !== null) {
@@ -63,9 +71,13 @@ const RollItem = ({ roll, opacity }: RollItemProps) => {
   return (
     <ListItem sx={{ opacity }} alignItems='flex-start'>
       <ListItemAvatar>
-        <Avatar variant='rounded' sx={{ bgcolor: isSuccess !== null ? isSuccess ? 'success.main' : 'error.main' : 'info.light' }}>
-          <Typography variant='h5' fontWeight='bold'>{roll.diceDetails.total}</Typography>
-        </Avatar>
+        <DarkTooltip title={characterName} placement='left'>
+          <Badge badgeContent={roll.diceDetails.total} color={isSuccess !== null ? isSuccess ? 'success' : 'error' : 'info' }>
+            <Avatar sx={{ bgcolor: roll.characterId === selectedCharacterId ? 'text.primary' : '' }}>
+              <PersonIcon />
+            </Avatar>
+          </Badge>
+        </DarkTooltip>
       </ListItemAvatar>
       <ListItemText
         primary={<Typography variant='body1'>{title}</Typography>}
@@ -96,10 +108,10 @@ export const RollHistory = () => {
       </Grid>
       <List dense sx={{ flexGrow: 1, overflowY: 'auto' }}>
         {rolls.slice(0, maxVisibleQty).map((roll, index) =>
-          <>
+          <Box key={index}>
             <RollItem roll={roll} opacity={index > fadedOutThreshold ? fadedOutOpacity : 1 - index * (1 - fadedOutOpacity) / fadedOutThreshold} />
             <Divider variant='inset' component='li' />
-          </>
+          </Box>
         )}
       </List>
     </Stack>
