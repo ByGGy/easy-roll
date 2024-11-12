@@ -27,7 +27,7 @@ export const SessionSelection = () => {
   const dispatch = useDispatch<AppDispatch>()
 
   const sessions = useSelector((state: RootState) => state.sessionCollection.sessions)
-  const sortedSessions = sessions.toSorted((sA, sB) => sA.state.name.localeCompare(sB.state.name))
+  const sortedSessions = sessions.toSorted((sA, sB) => new Date(sB.state.creationDate).getTime() - new Date(sA.state.creationDate).getTime())
 
   const handleCreateAriaSession = () => {
     window.electronAPI.createSession('Aria')
