@@ -19,17 +19,17 @@ contextBridge.exposeInMainWorld('electronAPI', {
 
   getAppVersion: () => ipcRenderer.invoke('getAppVersion'),
 
-  tryImportCharacter: () => ipcRenderer.invoke('tryImportCharacter'),
-  createDefaultCharacter: (game: Game) => ipcRenderer.invoke('createDefaultCharacter', game),
+  createSession: (game: Game) => ipcRenderer.invoke('createSession', game),
+  renameSession: (id: EntityId, newName: string) => ipcRenderer.invoke('renameSession', id, newName),
+  createCharacterForSession: (id: EntityId) => ipcRenderer.invoke('createCharacterForSession', id),
+  tryImportCharacterForSession: (id: EntityId) => ipcRenderer.invoke('tryImportCharacterForSession', id),
+  addCharacterToSession: (id: EntityId, characterId: EntityId) => ipcRenderer.invoke('addCharacterToSession', id, characterId),
+
   renameCharacter: (id: EntityId, newName: string) => ipcRenderer.invoke('renameCharacter', id, newName),
   changeCharacterAttributes: (id: EntityId, newAttributes: Array<Attribute>) => ipcRenderer.invoke('changeCharacterAttributes', id, newAttributes),
   changeCharacterAbilities: (id: EntityId, newAbilities: Array<Ability>) => ipcRenderer.invoke('changeCharacterAbilities', id, newAbilities),
   changeCharacterDiscordNotification: (id: EntityId, enable: boolean, level: NotificationLevel, channelId: string) => ipcRenderer.invoke('changeCharacterDiscordNotification', id, enable, level, channelId),
   toggleCharacterDiscordNotification: (id: EntityId) => ipcRenderer.invoke('toggleCharacterDiscordNotification', id),
-
-  createSession: (game: Game) => ipcRenderer.invoke('createSession', game),
-  renameSession: (id: EntityId, newName: string) => ipcRenderer.invoke('renameSession', id, newName),
-  createCharacterForSession: (id: EntityId) => ipcRenderer.invoke('createCharacterForSession', id),
 
   diceTrayRoll: (characterId: EntityId, diceFaceQty: number, diceQty: number, modifier: number) => ipcRenderer.invoke('diceTrayRoll', characterId, diceFaceQty, diceQty, modifier),
 

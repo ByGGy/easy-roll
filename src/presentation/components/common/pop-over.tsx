@@ -1,13 +1,14 @@
 import * as React from 'react'
 import Popover from '@mui/material/Popover'
-import IconButton from '@mui/material/IconButton'
+import IconButton, { IconButtonOwnProps } from '@mui/material/IconButton'
 
 type Props = {
+  size?: IconButtonOwnProps['size']
   triggerContent: React.ReactNode
   popoverContent: React.ReactNode
 }
 
-export const BasicPopover = ({ triggerContent, popoverContent }: Props) => {
+export const BasicPopover = ({ size, triggerContent, popoverContent }: Props) => {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null)
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -23,7 +24,7 @@ export const BasicPopover = ({ triggerContent, popoverContent }: Props) => {
 
   return (
     <>
-      <IconButton size='small' aria-describedby={id} onClick={handleClick} color='primary'>
+      <IconButton size={size} aria-describedby={id} onClick={handleClick}>
         {triggerContent}
       </IconButton>
       <Popover

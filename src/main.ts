@@ -2,6 +2,7 @@ import { app, BrowserWindow, ipcMain, dialog } from 'electron'
 import path from 'path'
 
 import { EntityId, Game, Attribute, Ability, NotificationLevel } from './domain/common/types'
+import { isNotNull } from './domain/common/tools'
 import { createRepository as createCharacterRepository } from './persistence/character/repository'
 import { createCharacterService } from './domain/character/characterService'
 import { createRepository as createSessionRepository } from './persistence/session/repository'
@@ -97,28 +98,62 @@ const handleGetAppVersion = (event: unknown) => {
   return app.getVersion()
 }
 
-const handleTryImportCharacter = (event: unknown) => {
-  const pathToLookAt = path.join(app.getPath('userData'), 'characters')
-  const filesToImport = dialog.showOpenDialogSync({
-    defaultPath: pathToLookAt,
-    properties: ['openFile', 'multiSelections'],
-    filters: [
-      { name: 'JSON Character File', extensions: ['json'] },
-    ]
-  })
+const handleCreateSession = (event: unknown, game: Game) => {
+  const initialState = {
+    game,
+    name: 'New Session',
+    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed venenatis sollicitudin neque, sed pharetra odio consectetur sit amet. Vivamus commodo, sem ac maximus facilisis, massa quam commodo tortor, at vehicula augue enim ac ante.',
+    characterIds: [],
+    creationDate: new Date().toISOString(),
+  }
 
-  if (filesToImport) {
-    filesToImport.forEach(path => {
-      const newCharacter = characterService.tryCreateFromFile(path)
-      if (newCharacter !== null) {
-        characterRepository.insert(newCharacter)
-      }
-    })
+  sessionRepository.insert(createSession(initialState))
+}
+
+const handleRenameSession = (event: unknown, id: EntityId, newName: string) => {
+  const targetSession = sessionRepository.getById(id)
+  if (targetSession) {
+    targetSession.rename(newName)
   }
 }
 
-const handleCreateDefaultCharacter = (event: unknown, game: Game) => {
-  characterRepository.insert(characterService.createFor(game))
+const handleCreateCharacterForSession = (event: unknown, id: EntityId) => {
+  const targetSession = sessionRepository.getById(id)
+  if (targetSession) {
+    const newCharacter = characterService.createFor(targetSession.state.game)
+    characterRepository.insert(newCharacter)
+    targetSession.changeCharacters([...targetSession.state.characterIds, newCharacter.id])
+  }
+}
+
+const handleTryImportCharacterForSession = (event: unknown, id: EntityId) => {
+  const targetSession = sessionRepository.getById(id)
+  if (targetSession) {
+    const pathToLookAt = path.join(app.getPath('userData'), 'characters')
+    const filesToImport = dialog.showOpenDialogSync({
+      defaultPath: pathToLookAt,
+      properties: ['openFile', 'multiSelections'],
+      filters: [
+        { name: 'JSON Character File', extensions: ['json'] },
+      ]
+    })
+  
+    if (filesToImport) {
+      const newCharacters = filesToImport.map(characterService.tryCreateFromFile).filter(isNotNull)
+      newCharacters.forEach(characterRepository.insert)
+      targetSession.changeCharacters([...targetSession.state.characterIds, ...newCharacters.map(c => c.id)])
+    }
+  }
+}
+
+const handleAddCharacterToSession = (event: unknown, id: EntityId, characterId: EntityId) => {
+  const targetSession = sessionRepository.getById(id)
+  if (targetSession) {
+    const targetCharacter = characterRepository.getById(characterId)
+    if (targetCharacter) {
+      targetSession.changeCharacters([...targetSession.state.characterIds, targetCharacter.id])
+    }
+  }
 }
 
 const handleRenameCharacter = (event: unknown, id: EntityId, newName: string) => {
@@ -157,34 +192,6 @@ const handleToggleCharacterDiscordNotification = (event: unknown, id: EntityId) 
   }
 }
 
-const handleCreateSession = (event: unknown, game: Game) => {
-  const initialState = {
-    game,
-    name: 'New Session',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed venenatis sollicitudin neque, sed pharetra odio consectetur sit amet. Vivamus commodo, sem ac maximus facilisis, massa quam commodo tortor, at vehicula augue enim ac ante.',
-    characterIds: [],
-    creationDate: new Date().toISOString(),
-  }
-
-  sessionRepository.insert(createSession(initialState))
-}
-
-const handleRenameSession = (event: unknown, id: EntityId, newName: string) => {
-  const targetSession = sessionRepository.getById(id)
-  if (targetSession) {
-    targetSession.rename(newName)
-  }
-}
-
-const handleCreateCharacterForSession = (event: unknown, id: EntityId) => {
-  const targetSession = sessionRepository.getById(id)
-  if (targetSession) {
-    const newCharacter = characterService.createFor(targetSession.state.game)
-    characterRepository.insert(newCharacter)
-    targetSession.changeCharacters([...targetSession.state.characterIds, newCharacter.id])
-  }
-}
-
 const handleDiceTrayRoll = (event: unknown, characterId: EntityId, diceFaceQty: number, diceQty: number, modifier: number) => {
   const currentCharacter = characterRepository.getById(characterId)
   if (currentCharacter) {
@@ -217,18 +224,17 @@ app.whenReady().then(() => {
   // TODO: should put all those subscriptions, handlers and domain initialization in separate files
   ipcMain.handle('getAppVersion', handleGetAppVersion)
 
-  ipcMain.handle('tryImportCharacter', handleTryImportCharacter)
+  ipcMain.handle('createSession', handleCreateSession)
+  ipcMain.handle('renameSession', handleRenameSession)
+  ipcMain.handle('createCharacterForSession', handleCreateCharacterForSession)
+  ipcMain.handle('tryImportCharacterForSession', handleTryImportCharacterForSession)
+  ipcMain.handle('addCharacterToSession', handleAddCharacterToSession)
 
-  ipcMain.handle('createDefaultCharacter', handleCreateDefaultCharacter)
   ipcMain.handle('renameCharacter', handleRenameCharacter)
   ipcMain.handle('changeCharacterAttributes', handleChangeCharacterAttributes)
   ipcMain.handle('changeCharacterAbilities', handleChangeCharacterAbilities)
   ipcMain.handle('changeCharacterDiscordNotification', handleChangeCharacterDiscordNotification)
   ipcMain.handle('toggleCharacterDiscordNotification', handleToggleCharacterDiscordNotification)
-
-  ipcMain.handle('createSession', handleCreateSession)
-  ipcMain.handle('renameSession', handleRenameSession)
-  ipcMain.handle('createCharacterForSession', handleCreateCharacterForSession)
 
   ipcMain.handle('diceTrayRoll', handleDiceTrayRoll)
 
