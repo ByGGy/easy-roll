@@ -1,12 +1,10 @@
 import Stack from '@mui/material/Stack'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
-import EditIcon from '@mui/icons-material/Edit'
 import Avatar from '@mui/material/Avatar'
 import PersonIcon from '@mui/icons-material/Person'
 
-import { BasicPopover } from './common/pop-over'
-import { CharacterRename } from './character-rename'
+import { EditText } from './common/edit-text'
 import { DiscordConfiguration } from './discord-configuration'
 
 import { CharacterData } from '../../domain/character/character'
@@ -16,6 +14,11 @@ type Props = {
 }
 
 export const CharacterHeader = ({ character }: Props) => {
+
+  const handleRename = (newName: string) => {
+    window.electronAPI.renameCharacter(character.id, newName)
+  }
+
   return (
     <Grid container alignItems='center'>
       <Grid item xs='auto'>        
@@ -26,7 +29,7 @@ export const CharacterHeader = ({ character }: Props) => {
       <Grid item xs>
         <Stack direction='row' alignItems='center' padding={2}>
           <Typography variant='h5' mr={1}>{character.state.name}</Typography>
-          <BasicPopover triggerContent={<EditIcon color='secondary' fontSize='small' />} popoverContent={<CharacterRename character={character} />} />
+          <EditText fieldLabel='New Name' fieldValue={character.state.name} actionLabel='Rename' onApply={handleRename} />
         </Stack>
       </Grid>
       <Grid item xs='auto'>
