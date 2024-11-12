@@ -6,7 +6,6 @@ import { CharacterHeader } from '../character-header'
 import { RddAbilities } from './rdd-abilities'
 import { RddAttributes } from './rdd-attributes'
 import { DiceTray } from '../dice-tray'
-import { RollHistory } from '../roll-history'
 
 import { CharacterData } from '../../../domain/character/character'
 
@@ -27,9 +26,6 @@ export const RddPage = ({ character }: Props) => {
         </Paper>
         <Paper elevation={4}>
           <DiceTray character={character} />
-        </Paper>
-        <Paper elevation={4}>
-          <RollHistory />
         </Paper>
       </Stack>
     </Box>

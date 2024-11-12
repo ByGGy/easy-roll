@@ -9,6 +9,7 @@ import { SessionHeader } from './session-header'
 import { CharacterSelection } from './character-selection'
 import { AriaPage } from './aria/aria-page'
 import { RddPage } from './rdd/rdd-page'
+import { RollHistory } from './roll-history'
 
 export const SessionPage = () => {
   const sessions = useSelector((state: RootState) => state.sessionCollection.sessions)
@@ -32,6 +33,9 @@ export const SessionPage = () => {
               {character && session.state.game === 'Aria' && <AriaPage character={character} />}
               {character && session.state.game === 'Rêve de Dragon' && <RddPage character={character} />}
               {!character && <p>{characterId !== null ? 'character not found..' : 'No character selected'}</p>}
+            </Paper>
+            <Paper elevation={2}>
+              <RollHistory />
             </Paper>
           </Stack>
         </Box>

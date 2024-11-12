@@ -32,12 +32,12 @@ export const CharacterSelection = ({ session }: Props) => {
   const relevantCharacters = session.state.characterIds.map(cId => allCharacters.find(c => c.id === cId)).filter(isNotUndefined)
   const sortedCharacters = relevantCharacters.toSorted((cA, cB) => cA.state.name.localeCompare(cB.state.name))
 
-  const handlePickCharacter = () => {
-    // window.electronAPI.createDefaultCharacter('Aria')
-  }
-
   const handleCreateCharacter = () => {
     window.electronAPI.createCharacterForSession(session.id)
+  }
+
+  const handlePickCharacter = () => {
+    // window.electronAPI.createDefaultCharacter('Aria')
   }
 
   const handleImportCharacter = () => {
@@ -56,14 +56,14 @@ export const CharacterSelection = ({ session }: Props) => {
         </Grid>
         <Grid item xs='auto'>
           <Stack direction='row' spacing={2}>
-            <Button variant={sortedCharacters.length === 0 ? 'contained' : 'outlined'} startIcon={<ColorizeIcon />} onClick={handlePickCharacter}>
-              Pick a character
-            </Button>
             <Button variant={sortedCharacters.length === 0 ? 'contained' : 'outlined'} startIcon={<NoteAddIcon />} onClick={handleCreateCharacter}>
-              Create a character
+              Create
+            </Button>
+            <Button variant={sortedCharacters.length === 0 ? 'contained' : 'outlined'} startIcon={<ColorizeIcon />} onClick={handlePickCharacter}>
+              Pick
             </Button>
             <Button variant={sortedCharacters.length === 0 ? 'contained' : 'outlined'} color='secondary' startIcon={<ImportExportIcon />} onClick={handleImportCharacter}>
-              Import a character
+              Import
             </Button>
           </Stack>
         </Grid>
