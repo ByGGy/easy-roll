@@ -11,7 +11,10 @@ import Button from '@mui/material/Button'
 import AddIcon from '@mui/icons-material/Add'
 import Card from '@mui/material/Card'
 import CardActionArea from '@mui/material/CardActionArea'
+import CardMedia from '@mui/material/CardMedia'
 import CardContent from '@mui/material/CardContent'
+
+import { findGameImagePath } from './common/image-helper'
 
 import { EntityId } from '../../domain/common/types'
 
@@ -66,14 +69,22 @@ export const SessionSelection = () => {
         </Grid>
         <Stack direction='row' padding={2} spacing={2} overflow='auto'>
           {sortedSessions.map((session) =>
-            <Card key={session.id} sx={{ minWidth: 260, maxWidth: 320 }} elevation={4}>
+            <Card key={session.id} sx={{ minWidth: 300, maxwidth: 400 }} raised>
               <CardActionArea onClick={() => handleSelection(session.id)}>
-                <CardContent>
-                  <Typography variant='body1' color='primary' component='div'>{session.state.name}</Typography>
-                  <Typography gutterBottom variant='body2' color='secondary' component='div'>{`${session.state.game}, ${session.state.characterIds.length} characters`}</Typography>
-                  <Typography gutterBottom variant='body2' color='text.secondary'>{formatDate(session.state.creationDate)}</Typography>
-                  <Typography variant='caption' color='text.secondary' component='div'>{session.state.description}</Typography>
-                </CardContent>
+                <Stack direction='row'>
+                  <CardMedia
+                    component='img'
+                    sx={{ width: 150, objectFit: 'cover' }}
+                    image={findGameImagePath(session.state.game)}
+                    title='Game'
+                  />
+                  <CardContent>
+                    <Typography variant='body1' color='primary' component='div'>{session.state.name}</Typography>
+                    <Typography gutterBottom variant='body2' color='secondary' component='div'>{`${session.state.game}, ${session.state.characterIds.length} characters`}</Typography>
+                    <Typography gutterBottom variant='body2' color='text.secondary'>{formatDate(session.state.creationDate)}</Typography>
+                    <Typography variant='caption' color='text.secondary' component='div'>{session.state.description}</Typography>
+                  </CardContent>
+                </Stack>
               </CardActionArea>
             </Card>
           )}

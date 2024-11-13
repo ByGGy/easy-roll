@@ -11,6 +11,8 @@ import LogoutIcon from '@mui/icons-material/Logout'
 
 import { EditText } from './common/edit-text'
 
+import { findGameImagePath } from './common/image-helper'
+
 import { SessionData } from '../../domain/session/session'
 
 type Props = {
@@ -36,22 +38,21 @@ export const SessionHeader = ({ session }: Props) => {
         </Button>
       </Grid>
       <Grid item xs>
-        <Box>
-          <Grid container alignItems='flex-end'>
-            <Grid item xs='auto'>
-              <Stack direction='row' alignItems='center' padding={2}>
-                <Typography variant='h5' mr={1}>{session.state.name}</Typography>
-                <EditText fieldLabel='New Name' fieldValue={session.state.name} actionLabel='Rename' onApply={handleRename} />
-              </Stack>
-            </Grid>
-            <Grid item xs='auto'>
-              <Typography padding={2} variant='subtitle1' color='text.secondary'>{session.state.game}</Typography>
-            </Grid>
-            <Grid item xs>
-              <Typography padding={2} variant='caption' color='text.secondary'>{session.state.description}</Typography>
-            </Grid>
-          </Grid>
-        </Box>
+        <Stack direction='row' ml={1} padding={1}>
+          <Box
+            component='img'
+            sx={{ width: 50, objectFit: 'cover', borderRadius: 1 }}
+            src={findGameImagePath(session.state.game)}
+            alt='Game'
+          />
+          <Box ml={1}>
+            <Stack direction='row' alignItems='center'>
+              <Typography variant='h5' mr={1}>{session.state.name}</Typography>
+              <EditText fieldLabel='New Name' fieldValue={session.state.name} actionLabel='Rename' onApply={handleRename} />
+            </Stack>
+            <Typography variant='caption' color='text.secondary'>{session.state.description}</Typography>
+          </Box>
+        </Stack>
       </Grid>
     </Grid>
   )

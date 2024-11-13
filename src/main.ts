@@ -102,7 +102,7 @@ const handleCreateSession = (event: unknown, game: Game) => {
   const initialState = {
     game,
     name: 'New Session',
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed venenatis sollicitudin neque, sed pharetra odio consectetur sit amet. Vivamus commodo, sem ac maximus facilisis, massa quam commodo tortor, at vehicula augue enim ac ante.',
+    description: 'Wubba Lubba Dub Dub',
     characterIds: [],
     creationDate: new Date().toISOString(),
   }
