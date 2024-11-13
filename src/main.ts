@@ -34,7 +34,7 @@ const createWindow = () => {
   // Create the browser window.
   // TODO: store and apply window last position & size ? cf https://github.com/electron/electron/issues/526
   const mainWindow = new BrowserWindow({
-    width: 1650,
+    width: 1800,
     height: 950,
     backgroundColor: '#0e100b',
     webPreferences: {

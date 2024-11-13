@@ -54,7 +54,7 @@ export const SessionSelection = () => {
       <Box padding={2}>
         <Grid container alignItems='center' >
           <Grid item xs='auto'>
-            <Typography padding={2} variant='h5' color='primary'>{sessions.length === 0 ? 'No available sessions' : 'Pick a session'}</Typography>
+            <Typography padding={2} variant='h5' color='primary'>Pick a session</Typography>
           </Grid>
           <Grid item xs>
             <Stack direction='row' spacing={2}>
@@ -68,7 +68,7 @@ export const SessionSelection = () => {
           </Grid>
         </Grid>
         <Stack direction='row' padding={2} spacing={2} overflow='auto'>
-          {sortedSessions.map((session) =>
+          {sortedSessions.length > 0 && sortedSessions.map((session) =>
             <Card key={session.id} sx={{ minWidth: 300, maxwidth: 400 }} raised>
               <CardActionArea onClick={() => handleSelection(session.id)}>
                 <Stack direction='row'>
@@ -88,6 +88,7 @@ export const SessionSelection = () => {
               </CardActionArea>
             </Card>
           )}
+          {sortedSessions.length === 0 && <Typography color='text.disabled'>No session found, create one first.</Typography>}
         </Stack>
       </Box>
     </Paper>

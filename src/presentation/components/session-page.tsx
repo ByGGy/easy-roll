@@ -4,7 +4,10 @@ import { RootState } from '../store/store'
 import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
 import Paper from '@mui/material/Paper'
+import Avatar from '@mui/material/Avatar'
+import Typography from '@mui/material/Typography'
 
+import { HeroIcon } from './common/hero-icon'
 import { SessionHeader } from './session-header'
 import { CharacterSelection } from './character-selection'
 import { AriaPage } from './aria/aria-page'
@@ -23,22 +26,31 @@ export const SessionPage = () => {
   if (session) {
     return (
       <Paper elevation={1}>
-        <Box padding={2}>
-          <SessionHeader session={session} />
-          <Stack spacing={1} direction={'row'}>
-            <Paper elevation={2}>
-              <CharacterSelection session={session} />
-            </Paper>
-            <Paper elevation={2}>
-              {character && session.state.game === 'Aria' && <AriaPage character={character} />}
-              {character && session.state.game === 'Rêve de Dragon' && <RddPage character={character} />}
-              {!character && <p>{characterId !== null ? 'character not found..' : 'No character selected'}</p>}
-            </Paper>
-            <Paper elevation={2}>
-              <RollHistory />
-            </Paper>
-          </Stack>
-        </Box>
+        <Stack direction='row'>
+          <Box padding={2}>
+            <SessionHeader session={session} />
+            <Stack spacing={1} direction={'row'}>
+              <Paper elevation={2}>
+                <CharacterSelection session={session} />
+              </Paper>
+              <Paper elevation={2}>
+                {character && session.state.game === 'Aria' && <AriaPage character={character} />}
+                {character && session.state.game === 'Rêve de Dragon' && <RddPage character={character} />}
+                {!character &&
+                  <Stack direction='row' padding={2} spacing={2} sx={{ minWidth: 300 }} alignItems='center'>
+                    <Avatar sx={{ bgcolor: 'info.dark' }}>
+                      <HeroIcon />
+                    </Avatar>
+                    <Typography color='text.disabled'>No character selected.</Typography>
+                  </Stack>
+                }
+              </Paper>
+            </Stack>
+          </Box>
+          <Box padding={2}>
+            <RollHistory />
+          </Box>
+        </Stack>
       </Paper>
     )
   }

@@ -4,14 +4,10 @@ import { RootState } from '../store/store'
 import Stack from '@mui/material/Stack'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
-import List from '@mui/material/List'
-import ListItem from '@mui/material/ListItem'
-import ListItemAvatar from '@mui/material/ListItemAvatar'
 import Box from '@mui/material/Box'
 import Avatar from '@mui/material/Avatar'
 import Badge from '@mui/material/Badge'
-import PersonIcon from '@mui/icons-material/Person'
-import ListItemText from '@mui/material/ListItemText'
+import { HeroIcon } from './common/hero-icon'
 import Divider from '@mui/material/Divider'
 
 import { RollResult } from '../../domain/common/types'
@@ -69,25 +65,19 @@ const RollItem = ({ roll, opacity }: RollItemProps) => {
   }
 
   return (
-    <ListItem sx={{ opacity }} alignItems='flex-start'>
-      <ListItemAvatar>
-        <DarkTooltip title={characterName} placement='left'>
-          <Badge badgeContent={roll.diceDetails.total} color={isSuccess !== null ? isSuccess ? 'success' : 'error' : 'info' }>
-            <Avatar sx={{ bgcolor: roll.characterId === selectedCharacterId ? 'text.primary' : '' }}>
-              <PersonIcon />
-            </Avatar>
-          </Badge>
-        </DarkTooltip>
-      </ListItemAvatar>
-      <ListItemText
-        primary={<Typography variant='body1'>{title}</Typography>}
-        secondary={
-          <Typography variant='caption' color='text.secondary' >
-            {details.join(' | ')}
-          </Typography>
-        }>
-      </ListItemText>
-    </ListItem>
+    <Stack padding={2} spacing={2} direction='row' sx={{ opacity }} alignItems='flex-start'>
+      <DarkTooltip title={characterName} placement='left'>
+        <Avatar sx={{ bgcolor: roll.characterId === selectedCharacterId ? 'text.primary' : '' }}>
+          <HeroIcon />
+        </Avatar>
+      </DarkTooltip>
+      <DarkTooltip title={<span style={{ whiteSpace: 'pre-line' }}>{details.join('\n')}</span>}>
+        <Avatar variant='rounded' sx={{ bgcolor: isSuccess !== null ? isSuccess ? 'success.main' : 'error.main' : 'info.light' }}>
+          <Typography variant='h5' fontWeight='bold'>{roll.diceDetails.total}</Typography>
+        </Avatar>
+      </DarkTooltip>
+        <Typography variant='body1'>{title}</Typography>
+    </Stack>
   )
 }
 
@@ -100,20 +90,18 @@ export const RollHistory = () => {
   const rolls = useSelector((state: RootState) => state.rollHistory.rolls)
 
   return (
-    <Stack padding={2} sx={{ display: 'flex', flexDirection: 'column'}}>
+    <Stack padding={2} >
       <Grid container alignItems='center'>
         <Grid item xs>
           <Typography variant='h6' color='primary'>{`${maxVisibleQty} Most Recent Rolls`}</Typography>
         </Grid>
       </Grid>
-      <List dense sx={{ flexGrow: 1, overflowY: 'auto' }}>
-        {rolls.slice(0, maxVisibleQty).map((roll, index) =>
-          <Box key={index}>
-            <RollItem roll={roll} opacity={index > fadedOutThreshold ? fadedOutOpacity : 1 - index * (1 - fadedOutOpacity) / fadedOutThreshold} />
-            <Divider variant='inset' component='li' />
-          </Box>
-        )}
-      </List>
+      {rolls.slice(0, maxVisibleQty).map((roll, index) =>
+        <Box key={index}>
+          <RollItem roll={roll} opacity={index > fadedOutThreshold ? fadedOutOpacity : 1 - index * (1 - fadedOutOpacity) / fadedOutThreshold} />
+          <Divider variant='inset'/>
+        </Box>
+      )}
     </Stack>
   )
 }

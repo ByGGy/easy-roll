@@ -17,7 +17,7 @@ import ListItem from '@mui/material/ListItem'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemAvatar from '@mui/material/ListItemAvatar'
 import Avatar from '@mui/material/Avatar'
-import PersonIcon from '@mui/icons-material/Person'
+import { HeroIcon } from './common/hero-icon'
 import ListItemText from '@mui/material/ListItemText'
 
 import { BasicPopover } from './common/pop-over'
@@ -46,14 +46,14 @@ const AddCharacter = ({ ignoreCharacterIds, handleSelection }: AddCharacterProps
           </Grid>
         </Grid>
         <CardContent>
-          { sortedCharacters.length > 0 &&
+          {sortedCharacters.length > 0 &&
             <List dense>
               {sortedCharacters.map((c) =>
                 <ListItem key={c.id}>
                   <ListItemButton onClick={() => handleSelection(c.id)}>
                     <ListItemAvatar>
                       <Avatar>
-                        <PersonIcon />
+                        <HeroIcon />
                       </Avatar>
                     </ListItemAvatar>
                     <ListItemText primary={
@@ -64,7 +64,7 @@ const AddCharacter = ({ ignoreCharacterIds, handleSelection }: AddCharacterProps
               )}
             </List>
           }
-          { relevantCharacters.length === 0 && <Typography>No character left to pick.</Typography>}
+          {relevantCharacters.length === 0 && <Typography color='text.disabled'>No character left to pick.</Typography>}
         </CardContent>
       </Box>
     </Card>
@@ -106,7 +106,7 @@ export const CharacterSelection = ({ session }: Props) => {
           <Typography variant='h6' color='primary' mr={2}>Characters</Typography>
         </Grid>
         <Grid item xs='auto'>
-          <Stack direction='row' spacing={1}>
+          <Stack direction='row'>
             <DarkTooltip title='Create a new character'>
               <IconButton color='primary' onClick={handleCreateCharacter}>
                 <NoteAddIcon />
@@ -128,22 +128,25 @@ export const CharacterSelection = ({ session }: Props) => {
           </Stack>
         </Grid>
       </Grid>
-      <List dense>
-        {sortedCharacters.map((c) =>
-          <ListItem key={c.id}>
-            <ListItemButton onClick={() => handleSelection(c.id)}>
-              <ListItemAvatar>
-                <Avatar sx={{ bgcolor: c.id === selectedCharacterId ? 'text.primary' : '' }}>
-                  <PersonIcon />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText primary={
-                <Typography color={c.id === selectedCharacterId ? '' : 'text.secondary'} variant='body1'>{c.state.name}</Typography>
-              } />
-            </ListItemButton>
-          </ListItem>
-        )}
-      </List>
+      {sortedCharacters.length > 0 &&
+        <List dense>
+          { sortedCharacters.map((c) =>
+            <ListItem key={c.id}>
+              <ListItemButton onClick={() => handleSelection(c.id)}>
+                <ListItemAvatar>
+                  <Avatar sx={{ bgcolor: c.id === selectedCharacterId ? 'text.primary' : '' }}>
+                    <HeroIcon />
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText primary={
+                  <Typography color={c.id === selectedCharacterId ? '' : 'text.secondary'} variant='body1'>{c.state.name}</Typography>
+                } />
+              </ListItemButton>
+            </ListItem>
+          )}
+        </List>
+      }
+      {relevantCharacters.length === 0 && <Typography color='text.disabled'>No character found, add one first.</Typography>}
     </Stack>
   )
 }

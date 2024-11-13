@@ -59,7 +59,7 @@ export const DiceTray = ({ character }: Props) => {
   }
 
   return (
-    <Box sx={{ minWidth: 400 }}>
+    <Box sx={{ minWidth: 350 }}>
       <Stack padding={2} gap={2}>
         <Grid container alignItems='center'>
           <Grid item xs>
