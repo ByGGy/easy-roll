@@ -1,7 +1,7 @@
 import { messageBus } from '../events/messageBus'
 import { sendMessage } from '../../api/discordAPI'
 import { EntityId, RollResult } from '../common/types'
-import { Repository } from '../../persistence/common/types'
+import { Repository } from '../../persistence/common/repository'
 import { Character, CharacterState } from '../character/character'
 import { SessionState } from '../session/session'
 import { unreachable } from '../common/tools'

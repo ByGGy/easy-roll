@@ -3,10 +3,10 @@ import path from 'path'
 
 import { EntityId, Game, Attribute, Ability, NotificationLevel } from './domain/common/types'
 import { isNotNull } from './domain/common/tools'
-import { createRepository as createCharacterRepository } from './persistence/character/repository'
+import { createRepository } from './persistence/common/repository'
+import { rehydrate as rehydrateCharacter } from './domain/character/character'
 import { createCharacterService } from './domain/character/characterService'
-import { createRepository as createSessionRepository } from './persistence/session/repository'
-import { create as createSession } from './domain/session/session'
+import { rehydrate as rehydrateSession, create as createSession } from './domain/session/session'
 import { engine as diceTrayEngine } from './domain/dicetray/engine'
 import { engine as ariaEngine } from './domain/aria/engine'
 import { engine as rddEngine } from './domain/rdd/engine'
@@ -24,8 +24,8 @@ if (require('electron-squirrel-startup')) {
   app.quit();
 }
 
-const characterRepository = createCharacterRepository()
-const sessionRepository = createSessionRepository()
+const characterRepository = createRepository('Character', rehydrateCharacter)
+const sessionRepository = createRepository('Session', rehydrateSession)
 const characterService = createCharacterService()
 const discordRelay = createDiscordRelay(characterRepository)
 let frontRelay
