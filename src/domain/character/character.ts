@@ -6,6 +6,7 @@ import { createState } from '../events/stateEmitter'
 // TODO: should allow to assign tags, like Hero | Villain | PNJ | Monster
 export type CharacterState = {
   name: string
+  tags: Array<string>
   attributes: Array<Attribute>
   abilities: Array<Ability>
   discordNotification: DiscordNotification

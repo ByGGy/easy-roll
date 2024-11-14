@@ -41,7 +41,7 @@ export const createCharacterService = (): CharacterService => {
   const createFor = (game: Game): Character => {
     const defaultState = {
       name: 'Average Joe',
-      game, 
+      tags: [game], 
       attributes: createDefaultAttributesFor(game),
       abilities: createDefaultAbilitiesFor(game),
       discordNotification: createDefaultDiscordConfiguration()
@@ -107,7 +107,7 @@ export const createCharacterService = (): CharacterService => {
 
       const state = {
         name,
-        game, 
+        tags: [game], 
         attributes,
         abilities,
         discordNotification,
