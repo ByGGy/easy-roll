@@ -79,9 +79,9 @@ export const SessionSelection = () => {
                     title='Game'
                   />
                   <CardContent>
-                    <Typography variant='body1' color='primary' component='div'>{session.state.name}</Typography>
-                    <Typography gutterBottom variant='body2' color='secondary' component='div'>{`${session.state.game}, ${session.state.characterIds.length} characters`}</Typography>
+                    <Typography variant='body1' component='div'>{session.state.name}</Typography>
                     <Typography gutterBottom variant='body2' color='text.secondary'>{formatDate(session.state.creationDate)}</Typography>
+                    <Typography gutterBottom variant='body2' color='secondary' component='div'>{`${session.state.game}, ${session.state.characterIds.length} characters`}</Typography>
                     <Typography variant='caption' color='text.secondary' component='div'>{session.state.description}</Typography>
                   </CardContent>
                 </Stack>
