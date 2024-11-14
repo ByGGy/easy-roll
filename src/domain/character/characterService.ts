@@ -34,8 +34,6 @@ const createDefaultAbilitiesFor = (game: Game): Array<Ability> => {
 
 const createDefaultDiscordConfiguration = (): DiscordNotification => ({ enable: false, level: 'Standard', channelId: '' })
 
-// TODO: remove the game from the state used to create a character
-// TODO: need some data migration strategy to also remove it from persisted files ?
 export const createCharacterService = (): CharacterService => {
 
   const createFor = (game: Game): Character => {

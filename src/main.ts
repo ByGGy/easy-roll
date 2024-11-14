@@ -3,6 +3,7 @@ import path from 'path'
 
 import { EntityId, Game, Attribute, Ability, NotificationLevel } from './domain/common/types'
 import { isNotNull } from './domain/common/tools'
+import { createMigrationService } from './persistence/migrationService'
 import { createRepository } from './persistence/common/repository'
 import { rehydrate as rehydrateCharacter } from './domain/character/character'
 import { createCharacterService } from './domain/character/characterService'
@@ -26,6 +27,9 @@ import { createRelay as createFrontRelay } from './domain/front/relay'
 if (require('electron-squirrel-startup')) {
   app.quit();
 }
+
+const migrationService = createMigrationService()
+migrationService.maybeUpdateData()
 
 const characterRepository = createRepository('Character', rehydrateCharacter)
 const sessionRepository = createRepository('Session', rehydrateSession)
