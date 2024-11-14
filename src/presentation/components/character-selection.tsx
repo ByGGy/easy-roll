@@ -18,7 +18,7 @@ import ListItem from '@mui/material/ListItem'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemAvatar from '@mui/material/ListItemAvatar'
 import Avatar from '@mui/material/Avatar'
-import { HeroIcon } from './common/hero-icon'
+import Jdenticon from 'react-jdenticon'
 import ListItemText from '@mui/material/ListItemText'
 
 import { BasicPopover } from './common/pop-over'
@@ -54,7 +54,7 @@ const AddCharacter = ({ characterIds, handleSelection }: AddCharacterProps) => {
                   <ListItemButton onClick={() => handleSelection(c.id)}>
                     <ListItemAvatar>
                       <Avatar>
-                        <HeroIcon />
+                        <Jdenticon value={c.state.name} />
                       </Avatar>
                     </ListItemAvatar>
                     <ListItemText primary={
@@ -145,7 +145,7 @@ export const CharacterSelection = ({ session }: Props) => {
               <ListItemButton onClick={() => handleSelection(c.id)}>
                 <ListItemAvatar>
                   <Avatar sx={{ bgcolor: c.id === selectedCharacterId ? 'text.primary' : '' }}>
-                    <HeroIcon />
+                    <Jdenticon value={c.state.name} />
                   </Avatar>
                 </ListItemAvatar>
                 <ListItemText primary={

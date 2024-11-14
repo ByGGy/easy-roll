@@ -6,8 +6,7 @@ import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import Avatar from '@mui/material/Avatar'
-import Badge from '@mui/material/Badge'
-import { HeroIcon } from './common/hero-icon'
+import Jdenticon from 'react-jdenticon'
 import Divider from '@mui/material/Divider'
 
 import { RollResult } from '../../domain/common/types'
@@ -67,7 +66,7 @@ const RollItem = ({ roll, opacity }: RollItemProps) => {
     <Stack padding={2} spacing={2} direction='row' sx={{ opacity }} alignItems='flex-start'>
       <DarkTooltip title={characterName} placement='left'>
         <Avatar sx={{ bgcolor: roll.characterId === selectedCharacterId ? 'text.primary' : '' }}>
-          <HeroIcon />
+          <Jdenticon value={characterName} />
         </Avatar>
       </DarkTooltip>
       <DarkTooltip title={<span style={{ whiteSpace: 'pre-line' }}>{details.join('\n')}</span>}>

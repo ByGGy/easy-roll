@@ -1627,6 +1627,13 @@ callsites@^3.0.0:
   resolved "https://registry.npmjs.org/callsites/-/callsites-3.1.0.tgz"
   integrity sha512-P8BjAsXvZS+VIDUI11hHCQEv74YT67YUi5JJFNWIqL235sBmjX4+qx9Muvls5ivyNENctx46xQLQ3aTuE7ssaQ==
 
+canvas-renderer@~2.2.0:
+  version "2.2.1"
+  resolved "https://registry.npmjs.org/canvas-renderer/-/canvas-renderer-2.2.1.tgz"
+  integrity sha512-RrBgVL5qCEDIXpJ6NrzyRNoTnXxYarqm/cS/W6ERhUJts5UQtt/XPEosGN3rqUkZ4fjBArlnCbsISJ+KCFnIAg==
+  dependencies:
+    "@types/node" "*"
+
 chalk@^2.4.2:
   version "2.4.2"
   resolved "https://registry.npmjs.org/chalk/-/chalk-2.4.2.tgz"
@@ -3415,6 +3422,13 @@ jackspeak@^4.0.1:
   dependencies:
     "@isaacs/cliui" "^8.0.2"
 
+jdenticon@^3.1.1:
+  version "3.3.0"
+  resolved "https://registry.npmjs.org/jdenticon/-/jdenticon-3.3.0.tgz"
+  integrity sha512-DhuBRNRIybGPeAjMjdHbkIfiwZCCmf8ggu7C49jhp6aJ7DYsZfudnvnTY5/1vgUhrGA7JaDAx1WevnpjCPvaGg==
+  dependencies:
+    canvas-renderer "~2.2.0"
+
 "js-tokens@^3.0.0 || ^4.0.0", js-tokens@^4.0.0:
   version "4.0.0"
   resolved "https://registry.npmjs.org/js-tokens/-/js-tokens-4.0.0.tgz"
@@ -4463,6 +4477,14 @@ react-is@^18.3.1:
   version "18.3.1"
   resolved "https://registry.npmjs.org/react-is/-/react-is-18.3.1.tgz"
   integrity sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==
+
+react-jdenticon@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.npmjs.org/react-jdenticon/-/react-jdenticon-1.4.0.tgz"
+  integrity sha512-yq9laq2ccH0MeSOZ7aTD21TNl0MsmADgDqVV5JIIMIaQOY7Ybpstbv/4T3ArSRatr+fuo2Xh2HUhwJG/UoELKQ==
+  dependencies:
+    jdenticon "^3.1.1"
+    prop-types "^15.8.1"
 
 "react-redux@^7.2.1 || ^8.1.3 || ^9.0.0", react-redux@^9.1.2:
   version "9.1.2"

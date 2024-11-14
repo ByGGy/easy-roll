@@ -2,8 +2,8 @@ import Stack from '@mui/material/Stack'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
 import Avatar from '@mui/material/Avatar'
+import Jdenticon from 'react-jdenticon'
 
-import { HeroIcon } from './common/hero-icon'
 import { EditText } from './common/edit-text'
 import { DiscordConfiguration } from './discord-configuration'
 
@@ -23,7 +23,7 @@ export const CharacterHeader = ({ character }: Props) => {
     <Grid container alignItems='center' mb={1}>
       <Grid item xs='auto'>        
         <Avatar sx={{ bgcolor: 'text.primary' }}>
-          <HeroIcon />
+          <Jdenticon value={character.state.name} />
         </Avatar>
       </Grid>
       <Grid item xs>

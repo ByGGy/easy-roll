@@ -14,7 +14,6 @@ import { engine as rddEngine } from './domain/rdd/engine'
 import { createRelay as createDiscordRelay } from './domain/discord/relay'
 import { createRelay as createFrontRelay } from './domain/front/relay'
 
-// TODO: use https://www.npmjs.com/package/jdenticon for character icon ?
 // TODO: support streamdeck integration ?
 // TODO: provide LLM integration for MJs ? (e.g. location description, portrait generation)
 // TODO: provide LLM integration for "solo play" ?

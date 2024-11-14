@@ -5,9 +5,9 @@ import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
 import Paper from '@mui/material/Paper'
 import Avatar from '@mui/material/Avatar'
+import QuestionMarkIcon from '@mui/icons-material/QuestionMark'
 import Typography from '@mui/material/Typography'
 
-import { HeroIcon } from './common/hero-icon'
 import { SessionHeader } from './session-header'
 import { CharacterSelection } from './character-selection'
 import { AriaPage } from './aria/aria-page'
@@ -39,7 +39,7 @@ export const SessionPage = () => {
                 {!character &&
                   <Stack direction='row' padding={2} spacing={2} sx={{ minWidth: 300 }} alignItems='center'>
                     <Avatar sx={{ bgcolor: 'info.dark' }}>
-                      <HeroIcon />
+                      <QuestionMarkIcon />
                     </Avatar>
                     <Typography color='text.disabled'>No character selected.</Typography>
                   </Stack>
