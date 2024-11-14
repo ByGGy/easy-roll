@@ -16,25 +16,33 @@ To do this, open a console and type:
 $ xattr -c <path/to/application.app>
 ```
 
-### @ New Users
+### @ Users
 
 <img src='./EasyRoll_UI_Start.png' width=600>
 
-At the moment, two games are "supported":
-* Aria
-* Rêve de Dragon
+At the moment, two games are "supported":  
+<img src='./public/images/Aria_Cover.jpg' width=75> <img src='./public/images/Reve-de-Dragon_Cover.jpg' width=75>
 
-You should first create a new Character for the game relevant to you.  
-This new character will have a default name, and a default list of attributes and abilities based on the chosen game.  
+You should first create a new `Session` for the game relevant to you.  
+Once a new session has been created, you can use it and add some characters to it:  
+<img src='./EasyRoll_UI_AddCharacter.png' width=600>
 
-Then you can customize your character, by selecting it and clicking one of the `pen` icons:  
+There is 3 options:
+1. create a new character from scratch, mostly for new users
+2. add an already existing character, mostly for users of `v0.3.0` and `v0.4.0`  
+_(or if you want to reuse a character from another session)_
+3. import a character from a JSON file  
+_(probably not needed anymore, kinda deprecated..)_
+
+Once a character has been added, select it and click one of the `pen` icons to edit its:  
+* name
+* attributes
+* abilities
+* discord configuration
+
 <img src='./EasyRoll_UI_EditCharacter.png' width=600>
 
-### @ Users of v0.3.0
-
-<img src='./EasyRoll_UI_Start.png' width=600>
-
-You should use the import option in order to retrieve your character(s) from deprecated JSON file(s).
+NB: at the moment, it is not possible to delete a session or character.
 
 ### Links
 
