@@ -24,7 +24,6 @@ const RollItem = ({ roll, opacity }: RollItemProps) => {
   const characterName = allCharacters.find(c => c.id === roll.characterId)?.state.name ?? 'Unknown'
   const selectedCharacterId = useSelector((state: RootState) => state.selection.characterId)
 
-  // TODO: should also display the character name at some point
   let title
   if (roll.checkDetails !== null) {
     title = roll.checkDetails.factors.filter(f => f.type === 'base').map(f => f.name).join(' + ')
