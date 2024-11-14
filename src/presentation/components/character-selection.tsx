@@ -8,6 +8,7 @@ import { CardContent } from '@mui/material'
 import Grid from '@mui/material/Grid'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
+import Badge from '@mui/material/Badge'
 import IconButton from '@mui/material/IconButton'
 import ColorizeIcon from '@mui/icons-material/Colorize'
 import NoteAddIcon from '@mui/icons-material/NoteAdd'
@@ -28,13 +29,13 @@ import { EntityId } from '../../domain/common/types'
 import { SessionData } from '../../domain/session/session'
 
 type AddCharacterProps = {
-  ignoreCharacterIds: Array<EntityId>
+  characterIds: Array<EntityId>
   handleSelection: (id: EntityId) => void
 }
 
-const AddCharacter = ({ ignoreCharacterIds, handleSelection }: AddCharacterProps) => {
+const AddCharacter = ({ characterIds, handleSelection }: AddCharacterProps) => {
   const allCharacters = useSelector((state: RootState) => state.characterCollection.characters)
-  const relevantCharacters = allCharacters.filter(c => ignoreCharacterIds.every(id => id !== c.id))
+  const relevantCharacters = allCharacters.filter(c => characterIds.some(id => id === c.id))
   const sortedCharacters = relevantCharacters.toSorted((cA, cB) => cA.state.name.localeCompare(cB.state.name))
 
   return (
@@ -83,6 +84,8 @@ export const CharacterSelection = ({ session }: Props) => {
   const sortedCharacters = relevantCharacters.toSorted((cA, cB) => cA.state.name.localeCompare(cB.state.name))
   const selectedCharacterId = useSelector((state: RootState) => state.selection.characterId)
 
+  const availableCharactersToPick = allCharacters.filter(c => relevantCharacters.every(r => r.id !== c.id) && c.state.tags.includes(session.state.game))
+
   const handleCreateCharacter = () => {
     window.electronAPI.createCharacterForSession(session.id)
   }
@@ -115,10 +118,17 @@ export const CharacterSelection = ({ session }: Props) => {
             <BasicPopover
               triggerContent={
                 <DarkTooltip title='Pick an existing character'>
-                  <ColorizeIcon color='primary' />
+                  <Badge badgeContent={availableCharactersToPick.length} color='secondary'
+                    anchorOrigin={{
+                      vertical: 'bottom',
+                      horizontal: 'right',
+                    }}
+                  >
+                    <ColorizeIcon color='primary' />
+                  </Badge>
                 </DarkTooltip>
               }
-              popoverContent={<AddCharacter ignoreCharacterIds={relevantCharacters.map(c => c.id)} handleSelection={handleAddCharacter} />}
+              popoverContent={<AddCharacter characterIds={availableCharactersToPick.map(c => c.id)} handleSelection={handleAddCharacter} />}
             />
             <DarkTooltip title='Import a character from a file'>
               <IconButton color='secondary' onClick={handleImportCharacter}>
