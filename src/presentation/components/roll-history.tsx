@@ -12,6 +12,7 @@ import Divider from '@mui/material/Divider'
 import { RollResult } from '../../domain/common/types'
 import { unreachable } from '../../domain/common/tools'
 import { DarkTooltip } from './common/style-helpers'
+import { DiceIcon } from './common/dice-icon'
 
 type RollItemProps = {
   roll: RollResult
@@ -64,17 +65,29 @@ const RollItem = ({ roll, opacity }: RollItemProps) => {
 
   return (
     <Stack padding={2} spacing={2} direction='row' sx={{ opacity }} alignItems='flex-start'>
-      <DarkTooltip title={characterName} placement='left'>
-        <Avatar sx={{ bgcolor: roll.characterId === selectedCharacterId ? 'text.primary' : '' }}>
-          <Jdenticon value={characterName} />
-        </Avatar>
-      </DarkTooltip>
-      <DarkTooltip title={<span style={{ whiteSpace: 'pre-line' }}>{details.join('\n')}</span>}>
-        <Avatar variant='rounded' sx={{ bgcolor: isSuccess !== null ? isSuccess ? 'success.main' : 'error.main' : 'info.light' }}>
-          <Typography variant='h5' fontWeight='bold'>{roll.diceDetails.total}</Typography>
-        </Avatar>
-      </DarkTooltip>
+      <Avatar sx={{ bgcolor: roll.characterId === selectedCharacterId ? 'text.primary' : '' }}>
+        <Jdenticon value={characterName} />
+      </Avatar>
+      <Stack sx={{ width: 200 }}>
+        <Typography variant='subtitle2' color={roll.characterId === selectedCharacterId ? 'text.primary' : 'text.secondary'}>{characterName}</Typography>
         <Typography variant='body1'>{title}</Typography>
+      </Stack>
+      <DarkTooltip title={<span style={{ whiteSpace: 'pre-line' }}>{details.join('\n')}</span>} placement='right'>
+        <Stack
+          direction='row'
+          padding={0.5}
+          spacing={1}
+          alignItems='center'
+          sx={{
+            backgroundColor: isSuccess !== null ? isSuccess ? 'success.main' : 'error.main' : 'info.light',
+            color:'background.paper',
+            borderRadius: 4
+          }}
+        >
+          <DiceIcon color='inherit' />
+          <Typography variant='h6' color='inherit' fontWeight='bold'>{roll.diceDetails.total}</Typography>
+        </Stack>
+      </DarkTooltip>
     </Stack>
   )
 }
