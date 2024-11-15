@@ -7,19 +7,45 @@ import { Provider } from 'react-redux'
 import { VersionInfo } from './components/version-info'
 import { CheapRouter } from './components/cheap-router'
 
+const primaryColor = '#b95a34'
+const secondaryColor = '#3493b9'
+const backgroundColor = '#0e100b'
+
 export const themeOptions: ThemeOptions = {
   palette: {
     mode: 'dark',
     primary: {
-      main: '#b95a34',
+      main: primaryColor,
     },
     secondary: {
-      main: '#3493b9',
+      main: secondaryColor,
     },
     background: {
-      default: '#0e100b',
+      default: backgroundColor,
     },
   },
+  components: {
+    MuiCssBaseline: {
+      styleOverrides: {
+        '*': {
+          '&::-webkit-scrollbar': {
+            width: '6px',
+            height: '6px',
+          },
+          '&::-webkit-scrollbar-thumb': {
+            backgroundColor: 'rgba(255, 255, 255, 0.25)',
+            borderRadius: '10px',
+          },
+          '&::-webkit-scrollbar-track': {
+            backgroundColor: 'rgba(0, 0, 0, 0.25)',
+            borderRadius: '10px',
+            backgroundClip: 'content-box',
+            border: '1px solid transparent'
+          },
+          },
+          },
+          },
+          },
 }
 
 const theme = createTheme(themeOptions)
