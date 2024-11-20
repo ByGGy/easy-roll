@@ -45,11 +45,8 @@ export const SessionHeader = ({ session }: Props) => {
             src={findGameImagePath(session.state.game)}
             alt='Game'
           />
-          <Box ml={1}>
-            <Stack direction='row' alignItems='center'>
-              <Typography variant='h5' mr={1}>{session.state.name}</Typography>
-              <EditText fieldLabel='New Name' fieldValue={session.state.name} actionLabel='Rename' onApply={handleRename} />
-            </Stack>
+          <Box ml={1} flex={1}>
+            <EditText variant='h5' initialText={session.state.name} onApply={handleRename} />
             <Typography variant='caption' color='text.secondary'>{session.state.description}</Typography>
           </Box>
         </Stack>

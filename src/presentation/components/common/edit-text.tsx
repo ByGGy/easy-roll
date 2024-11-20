@@ -1,51 +1,93 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import Box from '@mui/material/Box'
-import Card from '@mui/material/Card'
+import Stack from '@mui/material/Stack'
+import Typography, { TypographyOwnProps } from '@mui/material/Typography'
 import TextField from '@mui/material/TextField'
-import Button from '@mui/material/Button'
-import { CardContent, CardActions } from '@mui/material'
+import IconButton from '@mui/material/IconButton'
 import EditIcon from '@mui/icons-material/Edit'
 
-import { BasicPopover } from './pop-over'
-
 type Props = {
-  fieldLabel: string
-  fieldValue: string
-  actionLabel: string
+  variant: TypographyOwnProps['variant']
+  initialText: string
   onApply: (newValue: string) => void
 }
 
-export const EditText = ({ fieldLabel, fieldValue, actionLabel, onApply }: Props) => {
-  const [newValue, setNewValue] = useState(fieldValue) 
+export const EditText = ({ variant, initialText, onApply }: Props) => {
+  const [isHovered, setIsHovered] = useState(false)
+  const [isEditing, setIsEditing] = useState(false)
+  const [text, setText] = useState(initialText)
+  const [editedText, setEditedText] = useState(initialText)
 
   useEffect(() => {
-    setNewValue(fieldValue)
-  }, [fieldValue])
+    setText(initialText)
+  }, [initialText])
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNewValue(event.target.value)
+  useEffect(() => {
+    onApply(text)
+  }, [text])
+
+  const handleMouseEnter = () => {
+    setIsHovered(true)
   }
 
-  const handleApply = () => {
-    onApply(newValue)
+  const handleMouseLeave = () => {
+    setIsHovered(false)
+  }
+
+  const handleStartEditing = () => {
+    setEditedText(text)
+    setIsEditing(true)
+  }
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEditedText(event.target.value)
+  }
+
+  const handleBlur = () => {
+    setText(editedText)
+    setIsEditing(false)
+  }
+
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      setText(editedText)
+      setIsEditing(false)
+    } else if (event.key === 'Escape') {
+      setEditedText(text)
+      setIsEditing(false)
+    }
   }
 
   return (
-    <BasicPopover
-      triggerContent={<EditIcon color='secondary' fontSize='small' />}
-      popoverContent={
-        <Card>
-          <Box padding={2} sx={{ minWidth: 300 }}>
-            <CardContent>
-              <TextField label={fieldLabel} variant='standard' autoFocus value={newValue} onChange={handleChange}/>
-            </CardContent>
-            <CardActions>
-              <Button variant='contained' color='primary' onClick={handleApply} fullWidth>{actionLabel}</Button>
-            </CardActions>
-          </Box>
-        </Card>
-      }
-    />
+    <Box
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
+      {isEditing ? (
+        <TextField
+          value={editedText}
+          autoFocus
+          onChange={handleChange}
+          onBlur={handleBlur}
+          onKeyDown={handleKeyDown}
+          size='small'
+          sx={{ width: '100%' }}
+        />
+      ) : (
+        <Stack direction='row' alignItems='center'>
+          <Typography variant={variant} mr={1} onDoubleClick={handleStartEditing} sx={{ cursor: 'pointer' }}>
+            {text}
+          </Typography>
+          <IconButton
+            size="small"
+            onClick={handleStartEditing}
+            sx={{ visibility: isHovered ? "visible" : "hidden" }}
+          >
+            <EditIcon fontSize="small" color='secondary' />
+          </IconButton>
+        </Stack>
+      )}
+    </Box>
   )
 }

@@ -26,11 +26,8 @@ export const CharacterHeader = ({ character }: Props) => {
           <Jdenticon value={character.state.name} />
         </Avatar>
       </Grid>
-      <Grid item xs>
-        <Stack direction='row' ml={1} alignItems='center'>
-          <Typography variant='h6' mr={1}>{character.state.name}</Typography>
-          <EditText fieldLabel='New Name' fieldValue={character.state.name} actionLabel='Rename' onApply={handleRename} />
-        </Stack>
+      <Grid item xs ml={1}>
+        <EditText variant='h6' initialText={character.state.name} onApply={handleRename} />
       </Grid>
       <Grid item xs='auto'>
         <DiscordConfiguration character={character} />
