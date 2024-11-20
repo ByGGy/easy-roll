@@ -1,11 +1,7 @@
-import { useState } from 'react'
-
 import { get } from 'lodash'
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
-import TextField from '@mui/material/TextField'
-import Button from '@mui/material/Button'
-import { CardContent, CardActions, useTheme, alpha } from '@mui/material'
+import { CardContent, useTheme, alpha } from '@mui/material'
 import FormGroup from '@mui/material/FormGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup'
@@ -13,11 +9,12 @@ import Switch from '@mui/material/Switch'
 import Stack from '@mui/material/Stack'
 import Fab from '@mui/material/Fab'
 import Typography from '@mui/material/Typography'
-import EditIcon from '@mui/icons-material/Edit'
+import MoreVertIcon from '@mui/icons-material/MoreVert'
 
 import { BasicPopover } from './common/pop-over'
 import { PrimaryToggleButton } from './common/style-helpers'
 import { DiscordIcon } from './common/discord-icon'
+import { EditText } from './common/edit-text'
 
 import { NotificationLevel } from '../../domain/common/types'
 import { CharacterData } from '../../domain/character/character'
@@ -28,12 +25,10 @@ type DiscordEditProps = {
 }
 
 const DiscordEdit = ({ character }: DiscordEditProps) => {
-  const [enable, setEnable] = useState(character.state.discordNotification.enable)
-  const [level, setLevel] = useState(character.state.discordNotification.level)
-  const [channelId, setChannelId] = useState(character.state.discordNotification.channelId)
+  const { enable, level, channelId } = character.state.discordNotification
   
   const handleEnableChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEnable(event.target.checked);
+    window.electronAPI.changeCharacterDiscordNotification(character.id, event.target.checked, level, channelId)
   };
 
   const handleLevelChange = (
@@ -41,16 +36,12 @@ const DiscordEdit = ({ character }: DiscordEditProps) => {
     value: NotificationLevel | null,
   ) => {
     if (value !== null) {
-      setLevel(value)
+      window.electronAPI.changeCharacterDiscordNotification(character.id, enable, value, channelId)
     }
   }
 
-  const handleChannelIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setChannelId(event.target.value)
-  }
-
-  const handleApply = () => {
-    window.electronAPI.changeCharacterDiscordNotification(character.id, enable, level, channelId)
+  const handleChannelIdChange = (newChannelId: string) => {
+    window.electronAPI.changeCharacterDiscordNotification(character.id, enable, level, newChannelId)
   }
 
   return (
@@ -77,14 +68,12 @@ const DiscordEdit = ({ character }: DiscordEditProps) => {
                 <PrimaryToggleButton value='Verbose'>Verbose</PrimaryToggleButton>
               </ToggleButtonGroup>
             </Box>
-            <TextField label='Channel ID' variant='standard' value={channelId} onChange={handleChannelIdChange}/>
+            <Box>
+              <Typography color='text.secondary'>Channel ID</Typography>
+              <EditText initialText={channelId} onApply={handleChannelIdChange} />
+            </Box>
           </Stack>
         </CardContent>
-        <CardActions>
-          <Button variant='contained' color='primary' onClick={handleApply} fullWidth>
-            Apply
-          </Button>
-        </CardActions>
       </Box>
     </Card>
   )
@@ -118,7 +107,7 @@ export const DiscordConfiguration = ({ character }: Props) => {
   }
 
   return (
-    <Stack direction='row'>
+    <Stack direction='row' sx={{ backgroundColor: 'rgba(0, 0, 0, 0.25)', borderRadius: 20 }}>
       <Fab variant='extended' size='medium' onClick={handleToggleChange}
           sx={{
             backgroundColor: 'background.default'
@@ -135,7 +124,7 @@ export const DiscordConfiguration = ({ character }: Props) => {
           ON AIR
         </Typography>
       </Fab>
-      <BasicPopover triggerContent={<EditIcon color='secondary' fontSize='small' />} popoverContent={<DiscordEdit character={character} />} />
+      <BasicPopover triggerContent={<MoreVertIcon color='secondary' fontSize='small' />} popoverContent={<DiscordEdit character={character} />} />
     </Stack>
   )
 }

@@ -8,7 +8,7 @@ import IconButton from '@mui/material/IconButton'
 import EditIcon from '@mui/icons-material/Edit'
 
 type Props = {
-  variant: TypographyOwnProps['variant']
+  variant?: TypographyOwnProps['variant']
   initialText: string
   onApply: (newValue: string) => void
 }
@@ -21,11 +21,16 @@ export const EditText = ({ variant, initialText, onApply }: Props) => {
 
   useEffect(() => {
     setText(initialText)
+    updateIsEditing(initialText)
   }, [initialText])
 
   useEffect(() => {
     onApply(text)
   }, [text])
+
+  const updateIsEditing = (value: string) => {
+    setIsEditing(value === '')
+  }
 
   const handleMouseEnter = () => {
     setIsHovered(true)
@@ -46,16 +51,16 @@ export const EditText = ({ variant, initialText, onApply }: Props) => {
 
   const handleBlur = () => {
     setText(editedText)
-    setIsEditing(false)
+    updateIsEditing(editedText)
   }
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === 'Enter') {
       setText(editedText)
-      setIsEditing(false)
+      updateIsEditing(editedText)
     } else if (event.key === 'Escape') {
       setEditedText(text)
-      setIsEditing(false)
+      updateIsEditing(text)
     }
   }
 
@@ -67,6 +72,7 @@ export const EditText = ({ variant, initialText, onApply }: Props) => {
       {isEditing ? (
         <TextField
           value={editedText}
+          variant='standard'
           autoFocus
           onChange={handleChange}
           onBlur={handleBlur}
