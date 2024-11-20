@@ -50,47 +50,45 @@ export const SessionSelection = () => {
   }
 
   return (
-    <Paper elevation={1}>
-      <Box padding={2}>
-        <Grid container alignItems='center' >
-          <Grid item xs='auto'>
-            <Typography padding={2} variant='h5' color='primary'>Pick a session</Typography>
-          </Grid>
-          <Grid item xs>
-            <Stack direction='row' spacing={2}>
-              <Button variant={sessions.length === 0 ? 'contained' : 'outlined'} startIcon={<AddIcon />} onClick={handleCreateAriaSession}>
-                Create an 'Aria' session
-              </Button>
-              <Button variant={sessions.length === 0 ? 'contained' : 'outlined'} startIcon={<AddIcon />} onClick={handleCreateRddSession}>
-                Create a 'Rêve de Dragon' session
-              </Button>
-            </Stack>
-          </Grid>
+    <Box>
+      <Grid container alignItems='center' >
+        <Grid item xs='auto'>
+          <Typography padding={2} variant='h5' color='primary'>Pick a session</Typography>
         </Grid>
-        <Stack direction='row' padding={2} spacing={2} overflow='auto'>
-          {sortedSessions.length > 0 && sortedSessions.map((session) =>
-            <Card key={session.id} sx={{ minWidth: 300, maxwidth: 400 }} raised>
-              <CardActionArea onClick={() => handleSelection(session.id)}>
-                <Stack direction='row'>
-                  <CardMedia
-                    component='img'
-                    sx={{ width: 150, objectFit: 'cover' }}
-                    image={findGameImagePath(session.state.game)}
-                    title='Game'
-                  />
-                  <CardContent>
-                    <Typography variant='body1' component='div'>{session.state.name}</Typography>
-                    <Typography gutterBottom variant='body2' color='text.secondary'>{formatDate(session.state.creationDate)}</Typography>
-                    <Typography gutterBottom variant='body2' color='secondary' component='div'>{`${session.state.game}, ${session.state.characterIds.length} characters`}</Typography>
-                    <Typography variant='caption' color='text.secondary' component='div'>{session.state.description}</Typography>
-                  </CardContent>
-                </Stack>
-              </CardActionArea>
-            </Card>
-          )}
-          {sortedSessions.length === 0 && <Typography color='text.disabled'>No session found, create one first.</Typography>}
-        </Stack>
-      </Box>
-    </Paper>
+        <Grid item xs>
+          <Stack direction='row' spacing={2}>
+            <Button variant={sessions.length === 0 ? 'contained' : 'outlined'} startIcon={<AddIcon />} onClick={handleCreateAriaSession}>
+              Create an 'Aria' session
+            </Button>
+            <Button variant={sessions.length === 0 ? 'contained' : 'outlined'} startIcon={<AddIcon />} onClick={handleCreateRddSession}>
+              Create a 'Rêve de Dragon' session
+            </Button>
+          </Stack>
+        </Grid>
+      </Grid>
+      <Stack direction='row' padding={2} spacing={2} overflow='auto'>
+        {sortedSessions.length > 0 && sortedSessions.map((session) =>
+          <Card key={session.id} sx={{ minWidth: 300, maxwidth: 400 }} raised>
+            <CardActionArea onClick={() => handleSelection(session.id)}>
+              <Stack direction='row'>
+                <CardMedia
+                  component='img'
+                  sx={{ width: 150, objectFit: 'cover' }}
+                  image={findGameImagePath(session.state.game)}
+                  title='Game'
+                />
+                <CardContent>
+                  <Typography variant='body1' component='div'>{session.state.name}</Typography>
+                  <Typography gutterBottom variant='body2' color='text.secondary'>{formatDate(session.state.creationDate)}</Typography>
+                  <Typography gutterBottom variant='body2' color='secondary' component='div'>{`${session.state.game}, ${session.state.characterIds.length} characters`}</Typography>
+                  <Typography variant='caption' color='text.secondary' component='div'>{session.state.description}</Typography>
+                </CardContent>
+              </Stack>
+            </CardActionArea>
+          </Card>
+        )}
+        {sortedSessions.length === 0 && <Typography color='text.disabled'>No session found, create one first.</Typography>}
+      </Stack>
+    </Box>
   )
 }

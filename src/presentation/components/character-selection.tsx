@@ -103,7 +103,7 @@ export const CharacterSelection = ({ session }: Props) => {
   }
 
   return (
-    <Stack padding={2}>
+    <Stack padding={2} height='100%' overflow='hidden'>
       <Grid container alignItems='center'>
         <Grid item xs>
           <Typography variant='h6' color='primary' mr={2}>Characters</Typography>
@@ -139,7 +139,7 @@ export const CharacterSelection = ({ session }: Props) => {
         </Grid>
       </Grid>
       {sortedCharacters.length > 0 &&
-        <List dense>
+        <List dense sx={{ flex: 1, overflow: 'auto' }}>
           { sortedCharacters.map((c) =>
             <ListItem key={c.id}>
               <ListItemButton onClick={() => handleSelection(c.id)}>

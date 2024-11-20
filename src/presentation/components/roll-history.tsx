@@ -93,26 +93,27 @@ const RollItem = ({ roll, opacity }: RollItemProps) => {
 }
 
 export const RollHistory = () => {
-  // TODO: display more than 10 rolls, with a proper scrollbar
-  const maxVisibleQty = 10
-  const fadedOutThreshold = Math.round(maxVisibleQty / 2)
-  const fadedOutOpacity = 0.25
-
   const rolls = useSelector((state: RootState) => state.rollHistory.rolls)
 
+  const maxVisibleQty = rolls.length
+  const fadedOutThreshold = 10 //Math.round(maxVisibleQty / 2)
+  const fadedOutOpacity = 0.25
+
   return (
-    <Stack padding={2} >
+    <Stack padding={2} height='100%' overflow='hidden'>
       <Grid container alignItems='center'>
         <Grid item xs>
           <Typography variant='h6' color='primary'>{`${maxVisibleQty} Most Recent Rolls`}</Typography>
         </Grid>
       </Grid>
-      {rolls.slice(0, maxVisibleQty).map((roll, index) =>
-        <Box key={index}>
-          <RollItem roll={roll} opacity={index > fadedOutThreshold ? fadedOutOpacity : 1 - index * (1 - fadedOutOpacity) / fadedOutThreshold} />
-          <Divider variant='inset'/>
-        </Box>
-      )}
+      <Box sx={{ flex: 1, overflow: 'auto' }}>
+        {rolls.slice(0, maxVisibleQty).map((roll, index) =>
+          <Box key={index}>
+            <RollItem roll={roll} opacity={index > fadedOutThreshold ? fadedOutOpacity : 1 - index * (1 - fadedOutOpacity) / fadedOutThreshold} />
+            <Divider variant='inset'/>
+          </Box>
+        )}
+      </Box>
     </Stack>
   )
 }

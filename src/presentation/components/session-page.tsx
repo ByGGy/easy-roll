@@ -1,7 +1,6 @@
 import { useSelector } from 'react-redux'
 import { RootState } from '../store/store'
 
-import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
 import Paper from '@mui/material/Paper'
 import Avatar from '@mui/material/Avatar'
@@ -25,33 +24,29 @@ export const SessionPage = () => {
 
   if (session) {
     return (
-      <Paper elevation={1}>
-        <Stack direction='row'>
-          <Box padding={2}>
-            <SessionHeader session={session} />
-            <Stack spacing={1} direction={'row'}>
-              <Paper elevation={2}>
-                <CharacterSelection session={session} />
-              </Paper>
-              <Paper elevation={2}>
-                {character && session.state.game === 'Aria' && <AriaPage character={character} />}
-                {character && session.state.game === 'Rêve de Dragon' && <RddPage character={character} />}
-                {!character &&
-                  <Stack direction='row' padding={2} spacing={2} sx={{ minWidth: 300 }} alignItems='center'>
-                    <Avatar sx={{ bgcolor: 'info.dark' }}>
-                      <QuestionMarkIcon />
-                    </Avatar>
-                    <Typography color='text.disabled'>No character selected.</Typography>
-                  </Stack>
-                }
-              </Paper>
-            </Stack>
-          </Box>
-          <Box padding={2}>
-            <RollHistory />
-          </Box>
+      <Stack direction='row' spacing={2} height='100%' overflow='hidden'>
+        <Stack height='100%' overflow='hidden'>
+          <SessionHeader session={session} />
+          <Stack flex={1} overflow='hidden' spacing={1} direction={'row'}>
+            <Paper elevation={2}>
+              <CharacterSelection session={session} />
+            </Paper>
+            <Paper elevation={2}>
+              {character && session.state.game === 'Aria' && <AriaPage character={character} />}
+              {character && session.state.game === 'Rêve de Dragon' && <RddPage character={character} />}
+              {!character &&
+                <Stack direction='row' padding={2} spacing={2} sx={{ minWidth: 300 }} alignItems='center'>
+                  <Avatar sx={{ bgcolor: 'info.dark' }}>
+                    <QuestionMarkIcon />
+                  </Avatar>
+                  <Typography color='text.disabled'>No character selected.</Typography>
+                </Stack>
+              }
+            </Paper>
+          </Stack>
         </Stack>
-      </Paper>
+        <RollHistory />
+      </Stack>
     )
   }
 

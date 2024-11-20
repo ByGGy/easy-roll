@@ -30,7 +30,7 @@ export const AriaAbilities = ({ character }: Props) => {
   const sortedAbilities = character.state.abilities.toSorted((aA, aB) => aA.name.localeCompare(aB.name))
 
   return (
-    <Stack padding={2}>
+    <Stack padding={2} height='100%' overflow='hidden'>
       <Grid container alignItems='center'>
         <Grid item xs>
           <Typography variant='h6' color='primary'>Abilities</Typography>
@@ -41,7 +41,7 @@ export const AriaAbilities = ({ character }: Props) => {
           </IconButton>
         </Grid>
       </Grid>
-      <Stack padding={1}>
+      <Stack padding={1} sx={{ flex: 1, overflow: 'auto' }}>
         {sortedAbilities.map((ability) =>
           <Grid key={ability.name} container alignItems='center' spacing={4}>
             <Grid item xs>

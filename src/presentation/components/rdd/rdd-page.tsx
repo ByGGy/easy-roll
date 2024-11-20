@@ -1,4 +1,3 @@
-import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
 import Paper from '@mui/material/Paper'
 
@@ -15,9 +14,9 @@ type Props = {
 
 export const RddPage = ({ character }: Props) => {
   return (
-    <Box padding={2}>
+    <Stack padding={2} height='100%' overflow='hidden'>
       <CharacterHeader character={character} />
-      <Stack spacing={1} direction={'row'}>
+      <Stack spacing={1} direction={'row'} flex={1} overflow='hidden'>
         <Paper elevation={4}>
           <RddAttributes character={character} />
         </Paper>
@@ -28,6 +27,6 @@ export const RddPage = ({ character }: Props) => {
           <DiceTray character={character} />
         </Paper>
       </Stack>
-    </Box>
+    </Stack>
   )
 }

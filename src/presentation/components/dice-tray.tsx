@@ -59,75 +59,73 @@ export const DiceTray = ({ character }: Props) => {
   }
 
   return (
-    <Box sx={{ minWidth: 350 }}>
-      <Stack padding={2} gap={2}>
-        <Grid container alignItems='center'>
-          <Grid item xs>
-            <Typography variant='h6' color='primary'>Dice Tray</Typography>
-          </Grid>
-          <Grid item xs='auto'>
-            <IconButton color='secondary' onClick={handleReset}>
-              <SettingsBackupRestoreIcon />
-            </IconButton>
-          </Grid>
+    <Stack padding={2} gap={2} height='100%' overflow='hidden' sx={{ minWidth: 350 }}>
+      <Grid container alignItems='center'>
+        <Grid item xs>
+          <Typography variant='h6' color='primary'>Dice Tray</Typography>
         </Grid>
-        <Stack gap={1}>
-          <Box>
-            <Stack direction='row' spacing={2} sx={{ mb: 1 }} alignItems='baseline'>
-              <Typography color='text.secondary'>Dice</Typography>
-              <Typography variant='body2'>{`d${diceFaceQty}`}</Typography>
-            </Stack>
-            <Slider
-              value={diceFaceQty}
-              onChange={handleDiceFaceChange}
-              min={2}
-              max={100}
-              step={1}
-              marks={diceFaceQtyMarks}
-              sx={{
-                '& .MuiSlider-markLabel': {
-                  color: 'primary.light',
-                  fontSize: '0.65rem',
-                },
-              }}
-            />
-          </Box>
-          <Box>
-            <Stack direction='row' spacing={2} sx={{ mb: 1 }} alignItems='baseline'>
-              <Typography color='text.secondary'>Quantity</Typography>
-              <Typography variant='body2'>{`x${diceQty}`}</Typography>
-            </Stack>
-            <Slider
-              value={diceQty}
-              onChange={handleDiceQtyChange}
-              min={1}
-              max={10}
-              step={1}
-              marks
-            />
-          </Box>
-          <Box>
-            <Stack direction='row' spacing={2} sx={{ mb: 1 }} alignItems='baseline'>
-              <Typography color='text.secondary'>Modifier</Typography>
-              <Typography variant='body2'>{`${modifier > 0 ? '+' :''}${modifier}`}</Typography>
-            </Stack>
-            <Slider
-              value={modifier}
-              onChange={handleModifierChange}
-              min={-20}
-              max={+20}
-              step={1}
-              marks
-              sx={{
-                color: evaluateModifierColor(modifier)
-              }}
-            />
-          </Box>
-        </Stack>
+        <Grid item xs='auto'>
+          <IconButton color='secondary' onClick={handleReset}>
+            <SettingsBackupRestoreIcon />
+          </IconButton>
+        </Grid>
+      </Grid>
+      <Stack gap={1} sx={{ flex: 1, overflow: 'auto' }}>
+        <Box>
+          <Stack direction='row' spacing={2} sx={{ mb: 1 }} alignItems='baseline'>
+            <Typography color='text.secondary'>Dice</Typography>
+            <Typography variant='body2'>{`d${diceFaceQty}`}</Typography>
+          </Stack>
+          <Slider
+            value={diceFaceQty}
+            onChange={handleDiceFaceChange}
+            min={2}
+            max={100}
+            step={1}
+            marks={diceFaceQtyMarks}
+            sx={{
+              '& .MuiSlider-markLabel': {
+                color: 'primary.light',
+                fontSize: '0.65rem',
+              },
+            }}
+          />
+        </Box>
+        <Box>
+          <Stack direction='row' spacing={2} sx={{ mb: 1 }} alignItems='baseline'>
+            <Typography color='text.secondary'>Quantity</Typography>
+            <Typography variant='body2'>{`x${diceQty}`}</Typography>
+          </Stack>
+          <Slider
+            value={diceQty}
+            onChange={handleDiceQtyChange}
+            min={1}
+            max={10}
+            step={1}
+            marks
+          />
+        </Box>
+        <Box>
+          <Stack direction='row' spacing={2} sx={{ mb: 1 }} alignItems='baseline'>
+            <Typography color='text.secondary'>Modifier</Typography>
+            <Typography variant='body2'>{`${modifier > 0 ? '+' :''}${modifier}`}</Typography>
+          </Stack>
+          <Slider
+            value={modifier}
+            onChange={handleModifierChange}
+            min={-20}
+            max={+20}
+            step={1}
+            marks
+            sx={{
+              color: evaluateModifierColor(modifier)
+            }}
+          />
+        </Box>
         <Button variant='outlined' color='primary' onClick={handleRoll} fullWidth>
           Roll
         </Button>
       </Stack>
-    </Box>
+    </Stack>
   )
 }

@@ -3,6 +3,8 @@ import CssBaseline from '@mui/material/CssBaseline'
 import { createRoot } from 'react-dom/client'
 import { store } from './store/store'
 import { Provider } from 'react-redux'
+import Box from '@mui/material/Box'
+import Paper from '@mui/material/Paper'
 
 import { VersionInfo } from './components/version-info'
 import { CheapRouter } from './components/cheap-router'
@@ -42,10 +44,10 @@ export const themeOptions: ThemeOptions = {
             backgroundClip: 'content-box',
             border: '1px solid transparent'
           },
-          },
-          },
-          },
-          },
+        },
+      },
+    },
+  },
 }
 
 const theme = createTheme(themeOptions)
@@ -55,8 +57,12 @@ const App = () => {
     <Provider store={store}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <CheapRouter />
-        <VersionInfo />
+        <Box sx={{ height: '100vh', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+          <Paper elevation={1} sx={{ flex: '1', overflow:'auto', padding: 2 }}>
+            <CheapRouter />
+          </Paper>
+          <VersionInfo />
+        </Box>
       </ThemeProvider>
     </Provider>
   )
