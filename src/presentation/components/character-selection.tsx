@@ -12,7 +12,7 @@ import Badge from '@mui/material/Badge'
 import IconButton from '@mui/material/IconButton'
 import ColorizeIcon from '@mui/icons-material/Colorize'
 import NoteAddIcon from '@mui/icons-material/NoteAdd'
-import ImportExportIcon from '@mui/icons-material/ImportExport'
+import UploadFileIcon from '@mui/icons-material/UploadFile'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import ListItemButton from '@mui/material/ListItemButton'
@@ -132,7 +132,7 @@ export const CharacterSelection = ({ session }: Props) => {
             />
             <DarkTooltip title='Import a character from a file'>
               <IconButton color='secondary' onClick={handleImportCharacter}>
-                <ImportExportIcon />
+                <UploadFileIcon />
               </IconButton>
             </DarkTooltip>
           </Stack>
