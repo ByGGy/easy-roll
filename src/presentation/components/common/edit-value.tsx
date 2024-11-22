@@ -92,7 +92,15 @@ export const EditValue = <T extends EditableType>({ variant, color, initialValue
           }}
         />
       ) : (
-        <Typography tabIndex={0} variant={variant} color={color} mr={1} onDoubleClick={handleStartEditing} onKeyDown={handleTypoKeyDown} sx={{ cursor: 'pointer' }}>
+        <Typography tabIndex={0} variant={variant} color={color} mr={1} onDoubleClick={handleStartEditing} onKeyDown={handleTypoKeyDown}
+          sx={{
+            cursor: 'pointer',
+            '&:focus': {
+              outline: 'none',
+              backgroundColor: 'rgba(255, 255, 255, 0.1)',
+              borderRadius: '4px',
+            }
+          }}>
           {value}
         </Typography>
       )}
