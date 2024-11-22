@@ -18,10 +18,6 @@ import { createRelay as createFrontRelay } from './domain/front/relay'
 // TODO: provide LLM integration for MJs ? (e.g. location description, portrait generation)
 // TODO: provide LLM integration for "solo play" ?
 
-// TODO: use some unit testing lib instead of this..
-// import { runTest } from './domain/dicetray/roll'
-// runTest()
-
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
   app.quit();
