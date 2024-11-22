@@ -158,6 +158,16 @@ const handleAddCharacterToSession = (event: unknown, id: EntityId, characterId: 
   }
 }
 
+const handleRemoveCharacterFromSession = (event: unknown, id: EntityId, characterId: EntityId) => {
+  const targetSession = sessionRepository.getById(id)
+  if (targetSession) {
+    const targetCharacter = characterRepository.getById(characterId)
+    if (targetCharacter) {
+      targetSession.changeCharacters(targetSession.state.characterIds.filter(id => id !== targetCharacter.id))
+    }
+  }
+}
+
 const handleRenameCharacter = (event: unknown, id: EntityId, newName: string) => {
   const targetCharacter = characterRepository.getById(id)
   if (targetCharacter) {
@@ -231,6 +241,7 @@ app.whenReady().then(() => {
   ipcMain.handle('createCharacterForSession', handleCreateCharacterForSession)
   ipcMain.handle('tryImportCharacterForSession', handleTryImportCharacterForSession)
   ipcMain.handle('addCharacterToSession', handleAddCharacterToSession)
+  ipcMain.handle('removeCharacterFromSession', handleRemoveCharacterFromSession)
 
   ipcMain.handle('renameCharacter', handleRenameCharacter)
   ipcMain.handle('changeCharacterAttributes', handleChangeCharacterAttributes)

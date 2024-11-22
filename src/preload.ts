@@ -24,6 +24,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   createCharacterForSession: (id: EntityId) => ipcRenderer.invoke('createCharacterForSession', id),
   tryImportCharacterForSession: (id: EntityId) => ipcRenderer.invoke('tryImportCharacterForSession', id),
   addCharacterToSession: (id: EntityId, characterId: EntityId) => ipcRenderer.invoke('addCharacterToSession', id, characterId),
+  removeCharacterFromSession: (id: EntityId, characterId: EntityId) => ipcRenderer.invoke('removeCharacterFromSession', id, characterId),
 
   renameCharacter: (id: EntityId, newName: string) => ipcRenderer.invoke('renameCharacter', id, newName),
   changeCharacterAttributes: (id: EntityId, newAttributes: Array<Attribute>) => ipcRenderer.invoke('changeCharacterAttributes', id, newAttributes),

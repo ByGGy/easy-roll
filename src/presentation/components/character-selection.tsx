@@ -19,6 +19,7 @@ import ListItemButton from '@mui/material/ListItemButton'
 import ListItemAvatar from '@mui/material/ListItemAvatar'
 import Avatar from '@mui/material/Avatar'
 import Jdenticon from 'react-jdenticon'
+import BackspaceIcon from '@mui/icons-material/Backspace'
 import ListItemText from '@mui/material/ListItemText'
 
 import { BasicPopover } from './common/pop-over'
@@ -94,6 +95,10 @@ export const CharacterSelection = ({ session }: Props) => {
     window.electronAPI.addCharacterToSession(session.id, id)
   }
 
+  const handleRemoveCharacter = (id: EntityId) => {
+    window.electronAPI.removeCharacterFromSession(session.id, id)
+  }
+
   const handleImportCharacter = () => {
     window.electronAPI.tryImportCharacterForSession(session.id)
   }
@@ -141,7 +146,25 @@ export const CharacterSelection = ({ session }: Props) => {
       {sortedCharacters.length > 0 &&
         <List dense sx={{ flex: 1, overflow: 'auto' }}>
           { sortedCharacters.map((c) =>
-            <ListItem key={c.id}>
+            <ListItem
+              key={c.id}
+              sx={{
+                '& .secondary-action': {
+                  visibility: 'hidden',
+                  opacity: 0,
+                  transition: 'opacity 0.2s',
+                },
+                '&:hover .secondary-action': {
+                  visibility: 'visible',
+                  opacity: 1,
+                },
+              }}
+              secondaryAction={
+                <IconButton edge='end' aria-label='remove' className='secondary-action' color='secondary' size='small' onClick={() => handleRemoveCharacter(c.id)}>
+                  <BackspaceIcon />
+                </IconButton>
+              }
+            >
               <ListItemButton onClick={() => handleSelection(c.id)}>
                 <ListItemAvatar>
                   <Avatar sx={{ bgcolor: c.id === selectedCharacterId ? 'text.primary' : '' }}>
