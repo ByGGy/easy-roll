@@ -9,6 +9,7 @@ import Button from '@mui/material/Button'
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore'
 
 import { evaluateModifierColor } from './common/style-helpers'
+import { DiceIcon } from './common/dice-icon'
 
 import { CharacterData } from '../../domain/character/character'
 
@@ -122,7 +123,7 @@ export const DiceTray = ({ character }: Props) => {
             }}
           />
         </Box>
-        <Button variant='outlined' color='primary' onClick={handleRoll} fullWidth>
+        <Button variant='outlined' color='primary' startIcon={<DiceIcon />} onClick={handleRoll} fullWidth>
           Roll
         </Button>
       </Stack>

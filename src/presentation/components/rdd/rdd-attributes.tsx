@@ -3,12 +3,12 @@ import Stack from '@mui/material/Stack'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
 import IconButton from '@mui/material/IconButton'
-import CasinoIcon from '@mui/icons-material/Casino'
 import EditIcon from '@mui/icons-material/Edit'
 
 import { CharacterEditAttributesDialog } from '../character-edit-records'
 import { BasicPopover } from '../common/pop-over'
 import { RddRoll } from './rdd-roll'
+import { DiceIcon } from '../common/dice-icon'
 
 import { CharacterData } from '../../../domain/character/character'
 
@@ -51,7 +51,7 @@ export const RddAttributes = ({ character }: Props) => {
               <Typography variant='body1'>{attribute.value}</Typography>
             </Grid>
             <Grid item xs='auto'>
-              <BasicPopover size='small' triggerContent={<CasinoIcon fontSize='small' color='primary' />} popoverContent={<RddRoll characterId={character.id} attributeName={attribute.name} abilities={character.state.abilities} />} />
+              <BasicPopover size='small' triggerContent={<DiceIcon fontSize='small' color='primary' />} popoverContent={<RddRoll characterId={character.id} attributeName={attribute.name} abilities={character.state.abilities} />} />
             </Grid>
           </Grid>
         )}

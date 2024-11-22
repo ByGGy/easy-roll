@@ -3,12 +3,12 @@ import Stack from '@mui/material/Stack'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
 import IconButton from '@mui/material/IconButton'
-import CasinoIcon from '@mui/icons-material/Casino'
 import EditIcon from '@mui/icons-material/Edit'
 
 import { CharacterEditAttributesDialog } from '../character-edit-records'
 import { BasicPopover } from '../common/pop-over'
 import { AriaRoll } from './aria-roll'
+import { DiceIcon } from '../common/dice-icon'
 
 import { CharacterData } from '../../../domain/character/character'
 
@@ -51,7 +51,7 @@ export const AriaAttributes = ({ character }: Props) => {
               <Typography variant='body1'>{attribute.value}</Typography>
             </Grid>
             <Grid item xs='auto'>
-              <BasicPopover size='small' triggerContent={<CasinoIcon fontSize='small' color='primary' />} popoverContent={<AriaRoll characterId={character.id} rollStat='Attribute' statName={attribute.name} />} />
+              <BasicPopover size='small' triggerContent={<DiceIcon fontSize='small' color='primary' />} popoverContent={<AriaRoll characterId={character.id} rollStat='Attribute' statName={attribute.name} />} />
             </Grid>
           </Grid>
         )}
