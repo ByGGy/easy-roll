@@ -1,10 +1,8 @@
-import Stack from '@mui/material/Stack'
 import Grid from '@mui/material/Grid'
-import Typography from '@mui/material/Typography'
 import Avatar from '@mui/material/Avatar'
 import Jdenticon from 'react-jdenticon'
 
-import { EditText } from './common/edit-text'
+import { EditValue } from './common/edit-value'
 import { DiscordConfiguration } from './discord-configuration'
 
 import { CharacterData } from '../../domain/character/character'
@@ -27,7 +25,7 @@ export const CharacterHeader = ({ character }: Props) => {
         </Avatar>
       </Grid>
       <Grid item xs ml={1}>
-        <EditText variant='h6' initialText={character.state.name} onApply={handleRename} />
+        <EditValue variant='h6' initialValue={character.state.name} onApply={handleRename} />
       </Grid>
       <Grid item xs='auto'>
         <DiscordConfiguration character={character} />

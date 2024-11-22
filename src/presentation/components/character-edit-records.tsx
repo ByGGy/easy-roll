@@ -5,20 +5,13 @@ import DialogActions from '@mui/material/DialogActions'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 import AddIcon from '@mui/icons-material/Add'
-import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/DeleteOutlined'
-import SaveIcon from '@mui/icons-material/Save'
-import CancelIcon from '@mui/icons-material/Close'
 import {
-  GridRowModesModel,
-  GridRowModes,
   DataGrid,
   GridColDef,
   GridToolbarContainer,
   GridActionsCellItem,
-  GridEventListener,
   GridRowId,
-  GridRowEditStopReasons,
   GridSlots,
 } from '@mui/x-data-grid'
 
@@ -76,7 +69,6 @@ type CharacterEditRecordsProps = {
 const CharacterEditRecords = ({ title, onChange, records }: CharacterEditRecordsProps) => {
   const [lastCount, setLastCount] = useState(records.length +1)
   const [rows, setRows] = useState(createRows(records))
-  const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({})
 
   useEffect(() => {
     const newRecords: Array<SimpleModel> = rows.map(r => ({ name: r.name, value: r.value }))
@@ -91,52 +83,17 @@ const CharacterEditRecords = ({ title, onChange, records }: CharacterEditRecords
       { id: newId, name: newName, value: 0, isNew: true },
     ])
 
-    setRowModesModel((oldModel) => ({
-      ...oldModel,
-      [newId]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
-    }))
-
     setLastCount((oldValue) => oldValue +1)
-  }
-
-  const handleRowEditStop: GridEventListener<'rowEditStop'> = (params, event) => {
-    if (params.reason === GridRowEditStopReasons.rowFocusOut) {
-      event.defaultMuiPrevented = true
-    }
-  }
-
-  const handleEditClick = (id: GridRowId) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } })
-  }
-
-  const handleSaveClick = (id: GridRowId) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } })
   }
 
   const handleDeleteClick = (id: GridRowId) => () => {
     setRows(rows.filter((row) => row.id !== id))
   }
 
-  const handleCancelClick = (id: GridRowId) => () => {
-    setRowModesModel({
-      ...rowModesModel,
-      [id]: { mode: GridRowModes.View, ignoreModifications: true },
-    })
-
-    const editedRow = rows.find((row) => row.id === id)
-    if (editedRow?.isNew) {
-      setRows(rows.filter((row) => row.id !== id))
-    }
-  }
-
   const processRowUpdate = (newRow: GridRowData) => {
     const updatedRow = { ...newRow, isNew: false }
     setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)))
     return updatedRow
-  }
-
-  const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {
-    setRowModesModel(newRowModesModel)
   }
 
   const columns: GridColDef[] = [
@@ -160,41 +117,7 @@ const CharacterEditRecords = ({ title, onChange, records }: CharacterEditRecords
       headerName: 'Actions',
       cellClassName: 'actions',
       getActions: ({ id }) => {
-        const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit
-
-        if (isInEditMode) {
-          return [
-            <GridActionsCellItem
-              key='Save'
-              icon={<SaveIcon />}
-              label='Save'
-              sx={{
-                color: 'primary.main',
-              }}
-              onClick={handleSaveClick(id)}
-            />,
-            <GridActionsCellItem
-              key='Cancel'
-              icon={<CancelIcon />}
-              label='Cancel'
-              sx={{
-                color: 'text.primary',
-              }}
-              onClick={handleCancelClick(id)}
-            />,
-          ]
-        }
-
         return [
-          <GridActionsCellItem
-            key='Edit'
-            icon={<EditIcon />}
-            label='Edit'
-            sx={{
-              color: 'text.primary',
-            }}
-            onClick={handleEditClick(id)}
-          />,
           <GridActionsCellItem
             key='Delete'
             icon={<DeleteIcon />}
@@ -214,9 +137,6 @@ const CharacterEditRecords = ({ title, onChange, records }: CharacterEditRecords
       rows={rows}
       columns={columns}
       editMode='row'
-      rowModesModel={rowModesModel}
-      onRowModesModelChange={handleRowModesModelChange}
-      onRowEditStop={handleRowEditStop}
       processRowUpdate={processRowUpdate}
       slots={{
         toolbar: EditToolbar as GridSlots['toolbar'],

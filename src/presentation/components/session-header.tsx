@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 import LogoutIcon from '@mui/icons-material/Logout'
 
-import { EditText } from './common/edit-text'
+import { EditValue } from './common/edit-value'
 
 import { findGameImagePath } from './common/image-helper'
 
@@ -46,7 +46,7 @@ export const SessionHeader = ({ session }: Props) => {
             alt='Game'
           />
           <Box ml={1} flex={1}>
-            <EditText variant='h5' initialText={session.state.name} onApply={handleRename} />
+            <EditValue variant='h5' initialValue={session.state.name} onApply={handleRename} />
             <Typography variant='caption' color='text.secondary'>{session.state.description}</Typography>
           </Box>
         </Stack>

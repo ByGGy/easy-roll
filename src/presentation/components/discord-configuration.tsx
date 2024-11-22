@@ -14,7 +14,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert'
 import { BasicPopover } from './common/pop-over'
 import { PrimaryToggleButton } from './common/style-helpers'
 import { DiscordIcon } from './common/discord-icon'
-import { EditText } from './common/edit-text'
+import { EditValue } from './common/edit-value'
 
 import { NotificationLevel } from '../../domain/common/types'
 import { CharacterData } from '../../domain/character/character'
@@ -70,7 +70,7 @@ const DiscordEdit = ({ character }: DiscordEditProps) => {
             </Box>
             <Box>
               <Typography color='text.secondary'>Channel ID</Typography>
-              <EditText initialText={channelId} onApply={handleChannelIdChange} />
+              <EditValue initialValue={channelId} onApply={handleChannelIdChange} />
             </Box>
           </Stack>
         </CardContent>
