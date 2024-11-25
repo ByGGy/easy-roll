@@ -19,7 +19,7 @@ import ListItemButton from '@mui/material/ListItemButton'
 import ListItemAvatar from '@mui/material/ListItemAvatar'
 import Avatar from '@mui/material/Avatar'
 import Jdenticon from 'react-jdenticon'
-import BackspaceIcon from '@mui/icons-material/Backspace'
+import PersonRemoveIcon from '@mui/icons-material/PersonRemove'
 import ListItemText from '@mui/material/ListItemText'
 
 import { BasicPopover } from './common/pop-over'
@@ -161,7 +161,7 @@ export const CharacterSelection = ({ session }: Props) => {
               }}
               secondaryAction={
                 <IconButton edge='end' aria-label='remove' className='secondary-action' color='secondary' size='small' onClick={() => handleRemoveCharacter(c.id)}>
-                  <BackspaceIcon />
+                  <PersonRemoveIcon />
                 </IconButton>
               }
             >
