@@ -13,6 +13,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select'
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore'
 
 import { evaluateModifierColor } from '../common/style-helpers'
+import { DiceIcon } from '../common/dice-icon'
 
 import { Ability, EntityId } from '../../../domain/common/types'
 
@@ -110,7 +111,7 @@ export const RddRoll = ({ characterId, attributeName, abilities }: Props) => {
           </Stack>
         </CardContent>
         <CardActions>
-          <Button variant='contained' color='primary' onClick={handleRoll} fullWidth>
+          <Button variant='contained' color='primary' startIcon={<DiceIcon />} onClick={handleRoll} fullWidth>
             Roll
           </Button>
         </CardActions>

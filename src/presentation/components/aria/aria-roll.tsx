@@ -12,6 +12,8 @@ import { CardContent, CardActions } from '@mui/material'
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore'
 
 import { PrimaryToggleButton, evaluateModifierColor } from '../common/style-helpers'
+import { DiceIcon } from '../common/dice-icon'
+
 import { unreachable } from '../../../domain/common/tools'
 import { EntityId } from '../../../domain/common/types'
 
@@ -117,7 +119,7 @@ export const AriaRoll = ({ characterId, rollStat, statName }: Props) => {
           </Stack>
         </CardContent>
         <CardActions>
-          <Button variant='contained' color='primary' onClick={handleRoll} fullWidth>
+          <Button variant='contained' color='primary' startIcon={<DiceIcon />} onClick={handleRoll} fullWidth>
             Roll
           </Button>
         </CardActions>
