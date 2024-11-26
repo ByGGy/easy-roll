@@ -33,6 +33,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   toggleCharacterDiscordNotification: (id: EntityId) => ipcRenderer.invoke('toggleCharacterDiscordNotification', id),
 
   diceTrayRoll: (characterId: EntityId, diceFaceQty: number, diceQty: number, modifier: number) => ipcRenderer.invoke('diceTrayRoll', characterId, diceFaceQty, diceQty, modifier),
+  diceTrayEvaluate: (characterId: EntityId, expression: string) => ipcRenderer.invoke('diceTrayEvaluate', characterId, expression),
 
   ariaCheckAttribute: (characterId: EntityId, attributeName: string, difficulty: number, modifier: number) => ipcRenderer.invoke('ariaCheckAttribute', characterId, attributeName, difficulty, modifier),
   ariaCheckAbility: (characterId: EntityId, abilityName: string, modifier: number) => ipcRenderer.invoke('ariaCheckAbility', characterId, abilityName, modifier),

@@ -211,6 +211,13 @@ const handleDiceTrayRoll = (event: unknown, characterId: EntityId, diceFaceQty: 
   }
 }
 
+const handleDiceTrayEvaluate = (event: unknown, characterId: EntityId, expression: string) => {
+  const currentCharacter = characterRepository.getById(characterId)
+  if (currentCharacter) {
+    diceTrayEngine.evaluate(currentCharacter, expression)
+  }
+}
+
 const handleAriaCheckAttribute = (event: unknown, characterId: EntityId, attributeName: string, difficulty: number, modifier: number) => {
   const currentCharacter = characterRepository.getById(characterId)
   if (currentCharacter) {
@@ -250,6 +257,7 @@ app.whenReady().then(() => {
   ipcMain.handle('toggleCharacterDiscordNotification', handleToggleCharacterDiscordNotification)
 
   ipcMain.handle('diceTrayRoll', handleDiceTrayRoll)
+  ipcMain.handle('diceTrayEvaluate', handleDiceTrayEvaluate)  
 
   ipcMain.handle('ariaCheckAttribute', handleAriaCheckAttribute)
   ipcMain.handle('ariaCheckAbility', handleAriaCheckAbility)
