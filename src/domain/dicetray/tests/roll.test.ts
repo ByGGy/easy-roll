@@ -1,4 +1,4 @@
-import { describe, expect, test } from '@jest/globals'
+import { describe, expect, test, jest } from '@jest/globals'
 
 import { rollDice } from '../roll'
 
@@ -18,6 +18,30 @@ import { rollDice } from '../roll'
 //    otherwise, fail to reject the null hypothesis
 
 describe('roll module', () => {
+  test('checks the die minimum is correct', () => {
+    jest.spyOn(global.Math, 'random').mockReturnValue(0)
+
+    expect(rollDice(-100)).toBe(-1)
+    expect(rollDice(-20)).toBe(-1)
+    expect(rollDice(0)).toBe(0)
+    expect(rollDice(20)).toBe(1)
+    expect(rollDice(100)).toBe(1)
+
+    jest.spyOn(global.Math, 'random').mockRestore()
+  })
+
+  test('checks the die maximum is correct', () => {
+    jest.spyOn(global.Math, 'random').mockReturnValue(1 - Number.EPSILON)
+
+    expect(rollDice(-100)).toBe(-100)
+    expect(rollDice(-20)).toBe(-20)
+    expect(rollDice(0)).toBe(0)
+    expect(rollDice(20)).toBe(20)
+    expect(rollDice(100)).toBe(100)
+
+    jest.spyOn(global.Math, 'random').mockRestore()
+  })
+
   test('checks the die is not too biased', () => {
     const diceFaceQty = 8
     // for α = 0.05 and df = 7
