@@ -47,8 +47,8 @@ export const diceRolls: Operator = {
   symbol: 'd',
   arity: 2,
   f: (a: number, b: number) => {
-      const rolls = [...Array(a)].map(_ => rollDice(b))
-      const total = rolls.reduce((acc, value) => acc + value, 0)
-      return total
+    const rolls = [...Array(a)].map(_ => rollDice(b))
+    const total = rolls.reduce((acc, value) => acc + value, 0)
+    return total
   }
 }
