@@ -1,5 +1,6 @@
 import Grid from '@mui/material/Grid'
 import Avatar from '@mui/material/Avatar'
+// @ts-ignore
 import Jdenticon from 'react-jdenticon'
 
 import { EditValue } from './common/edit-value'

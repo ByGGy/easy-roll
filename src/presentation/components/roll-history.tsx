@@ -6,6 +6,7 @@ import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import Avatar from '@mui/material/Avatar'
+// @ts-ignore
 import Jdenticon from 'react-jdenticon'
 import Divider from '@mui/material/Divider'
 

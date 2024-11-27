@@ -18,6 +18,7 @@ import ListItem from '@mui/material/ListItem'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemAvatar from '@mui/material/ListItemAvatar'
 import Avatar from '@mui/material/Avatar'
+// @ts-ignore
 import Jdenticon from 'react-jdenticon'
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove'
 import ListItemText from '@mui/material/ListItemText'
