@@ -4,6 +4,7 @@ import { messageBus } from '../events/messageBus'
 import { EntityId, RollResult } from '../common/types'
 import { Character } from '../character/character'
 import { Session } from '../session/session'
+import { ParseResult } from '../dicetray/calculator/input/parser'
 
 export const createRelay = (window: BrowserWindow) => {
 
@@ -19,7 +20,6 @@ export const createRelay = (window: BrowserWindow) => {
 
   transfer('Domain.Session.update', handleStateUpdate)
   transfer('Domain.Character.update', handleStateUpdate)
-  // transfer('Domain.CharacterCollection.update', handleStateUpdate)
 
   const handleCharacterRepositoryUpdate = (eventName: string, characters: Array<Character>) => {
     window.webContents.send(eventName, JSON.stringify(characters))
@@ -32,6 +32,12 @@ export const createRelay = (window: BrowserWindow) => {
   }
 
   transfer('Domain.SessionRepository.update', handleSessionRepositoryUpdate)
+
+  const handleDiceTrayValidation = (eventName: string, validationResult: ParseResult) => {
+    window.webContents.send(eventName, JSON.stringify(validationResult))
+  }
+
+  transfer('Domain.DiceTray.validation', handleDiceTrayValidation)
 
   const handleRollResult = (roll: RollResult) => {
     window.webContents.send('Domain.Roll.new', JSON.stringify(roll))

@@ -1,6 +1,12 @@
 import { Operator } from '../core/operators'
 import { Operand } from '../core/operation'
 
+export type ParseResult = {
+  operand: Operand | null
+  errorMessage: string
+  helpMessage: string
+}
+
 export const create = (supportedOperators: Array<Operator>) => {
   // NB: brackets such as parentheses are not supported atm 
   const atomize = (input: string): Operand => {
@@ -18,18 +24,25 @@ export const create = (supportedOperators: Array<Operator>) => {
       return { operator, a: atomize(input.substring(0, position)), b: atomize(input.substring(position+1, input.length)) }
     }
 
-    throw new Error(`invalid expression in "${input}"`)
+    throw new Error(`invalid expression at "${input}"`)
   }
 
-  const parse = (input: string): Operand | null => {
+  const parse = (input: string): ParseResult => {
     let result = null
+    let errorMessage = ''
+
     try {
       result = atomize(input.trim().replaceAll(' ', ''))      
     } catch (e) {
       console.log(`debug: ${e}`)
+      errorMessage = e.toString()
     }
 
-    return result
+    return {
+      operand: result,
+      errorMessage,
+      helpMessage: `List of supported operators: ${supportedOperators.map(o => o.symbol).join(', ')}`
+    }
   }
 
   return {

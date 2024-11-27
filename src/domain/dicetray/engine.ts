@@ -30,6 +30,14 @@ const rollDices = (character: CharacterData, diceFaceQty: number, diceQty: numbe
   return result
 }
 
+const validate = (expression: string): boolean => {
+  const calculator = createRPG01()
+  const result = calculator.validate(expression)
+  
+  messageBus.emit('Domain.DiceTray.validation', result)
+  return result.operand !== null
+}
+
 const evaluate = (character: CharacterData, expression: string): RollResult | null => {
   const calculator = createRPG01()
   const calcResult = calculator.compute(expression)
@@ -61,5 +69,6 @@ const evaluate = (character: CharacterData, expression: string): RollResult | nu
 
 export const engine = {
   rollDices,
+  validate,
   evaluate,
 }

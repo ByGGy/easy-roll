@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Stack from '@mui/material/Stack'
 import Grid from '@mui/material/Grid'
 import TextField from '@mui/material/TextField'
@@ -13,11 +13,30 @@ type Props = {
   character: CharacterData
 }
 
+type ValidationResult = {
+  isExpressionValid: boolean
+  errorMessage: string
+  helpMessage: string
+}
+
 export const DiceTray = ({ character }: Props) => {
   const [expression, setExpression] = useState('1d20')
+  const [validationResult, setValidationResult] = useState<ValidationResult | null>(null)
+
+  useEffect(() => {
+    window.electronAPI.onMessage('Domain.DiceTray.validation', (data: string) => {
+      const parseResult = JSON.parse(data)
+      setValidationResult({
+        isExpressionValid: parseResult.operand !== null,
+        errorMessage: parseResult.errorMessage,
+        helpMessage: parseResult.helpMessage
+      })
+    })
+  }, [])
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setExpression(event.target.value)
+    window.electronAPI.diceTrayValidate(event.target.value)
   }
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
@@ -37,7 +56,7 @@ export const DiceTray = ({ character }: Props) => {
           <Typography variant='h6' color='primary'>Dice Tray</Typography>
         </Grid>
       </Grid>
-      <Stack direction='row' gap={2}>
+      <Stack direction='row' gap={2} alignItems='flex-start'>
         <TextField
           type='text'
           value={expression}
@@ -45,6 +64,8 @@ export const DiceTray = ({ character }: Props) => {
           size='small'
           onChange={handleChange}
           onKeyDown={handleKeyDown}
+          error={validationResult !== null && !validationResult.isExpressionValid}
+          helperText={validationResult?.errorMessage || validationResult?.helpMessage}
         />
         <Button variant='outlined' color='primary' startIcon={<DiceIcon />} onClick={handleRoll}>
           Roll

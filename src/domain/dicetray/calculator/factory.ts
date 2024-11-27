@@ -6,18 +6,21 @@ const create = (supportedOperators: Array<Operator>) => {
   const parser = createParser(supportedOperators)
   const solver = createSolver()
 
-  // TODO: how could we get the list of roll results ?
+  const validate = (expression: string) => {
+    return parser.parse(expression)
+  }
+
   const compute = (expression: string) => {
-    const operand = parser.parse(expression)
-    if (operand !== null) {
-      return solver.solve(operand)
+    const result = parser.parse(expression)
+    if (result.operand !== null) {
+      return solver.solve(result.operand)
     }
 
     return null
   }
   
   return {
-    // TODO: add something to check that an expression is valid before tryin to compute it ? (UI validation)
+    validate,
     compute,
   }
 }
