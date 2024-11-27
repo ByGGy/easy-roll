@@ -13,8 +13,8 @@ const initialState: SessionCollectionState = {
 }
 
 type StateUpdate<T> = {
-  id: EntityId,
-  previous: T,
+  id: EntityId
+  previous: T
   current: T
 }
 

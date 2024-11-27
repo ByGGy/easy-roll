@@ -1,8 +1,8 @@
 import { Operator, OperatorResult } from './operators'
 
 export type Operation = {
-  operator: Operator,
-  a: Operand,
+  operator: Operator
+  a: Operand
   b: Operand
 }
 

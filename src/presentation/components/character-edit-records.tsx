@@ -20,7 +20,7 @@ import { CharacterData } from '../../domain/character/character'
 //--
 
 type EditToolbarProps = {
-  title: string,
+  title: string
   addNewRecord: () => void
 }
 
@@ -38,12 +38,12 @@ const EditToolbar = ({ title, addNewRecord }: EditToolbarProps) => {
 //--
 
 type SimpleModel = {
-  name: string,
+  name: string
   value: number
 }
 
 type GridRowData = SimpleModel & {
-  id: string,
+  id: string
   isNew: boolean
 }
 
@@ -60,7 +60,7 @@ const createRows = (data: Array<SimpleModel>): Array<GridRowData> => {
 
 type CharacterEditRecordsProps = {
   title: string
-  onChange: (newRecords: Array<SimpleModel>) => void,
+  onChange: (newRecords: Array<SimpleModel>) => void
   records: Array<SimpleModel>
 }
 

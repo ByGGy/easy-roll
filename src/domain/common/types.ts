@@ -16,12 +16,12 @@ export type EntityWithState<T> = Entity & {
 export type Game = 'Aria' | 'Rêve de Dragon'
 
 export type Attribute = Nominal<'Attribute', Readonly<{
-  name: string,
+  name: string
   value: number
 }>>
 
 export type Ability = Nominal<'Ability', Readonly<{
-  name: string,
+  name: string
   value: number
 }>>
 

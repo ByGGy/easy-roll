@@ -13,8 +13,8 @@ const initialState: CharacterCollectionState = {
 }
 
 type StateUpdate<T> = {
-  id: EntityId,
-  previous: T,
+  id: EntityId
+  previous: T
   current: T
 }
 

@@ -8,9 +8,9 @@ export type OperatorResult = {
 }
 
 export type Operator = {
-  name: string,
-  symbol: string,
-  arity: number,
+  name: string
+  symbol: string
+  arity: number
   f: (...operands: Array<number>) => OperatorResult
 }
 
