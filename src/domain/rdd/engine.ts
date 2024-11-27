@@ -25,7 +25,7 @@ const checkAttribute = (character: CharacterData, attributeName: string, ability
           value: attribute.value
         },
         ...(ability !== undefined ? [{
-          type: 'base' as const, // TODO: should be an offset, but it would not appear in the roll title..
+          type: 'offset' as const,
           name: ability.name,
           value: ability.value
         }] : []),
@@ -39,15 +39,17 @@ const checkAttribute = (character: CharacterData, attributeName: string, ability
     }
 
     const diceDetails: RollDiceDetails = {
-      diceFaceQty: 100,
-      diceQty: 1,
-      modifier: 0,
-      rolls: [diceValue],
+      groups: [{
+        diceQty: 1,
+        diceFaceQty: 100,
+        rolls: [diceValue],
+      }],
       total: diceValue
     }
   
     const result: RollResult = {
       characterId: character.id,
+      title: [attribute.name, ...(ability !== undefined ? [ability.name] : [])].join(' + '),
       checkDetails: checkDetails,
       diceDetails
     }

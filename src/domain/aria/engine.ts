@@ -32,15 +32,17 @@ const checkAttribute = (character: CharacterData, attributeName: string, difficu
     }
 
     const diceDetails: RollDiceDetails = {
-      diceFaceQty: 100,
-      diceQty: 1,
-      modifier: 0,
-      rolls: [diceValue],
+      groups: [{
+        diceQty: 1,
+        diceFaceQty: 100,
+        rolls: [diceValue],
+      }],
       total: diceValue
     }
   
     const result: RollResult = {
       characterId: character.id,
+      title: attribute.name,
       checkDetails: checkDetails,
       diceDetails
     }
@@ -75,15 +77,17 @@ const checkAbility = (character: CharacterData, abilityName: string, modifier: n
     }
 
     const diceDetails: RollDiceDetails = {
-      diceFaceQty: 100,
-      diceQty: 1,
-      modifier: 0,
-      rolls: [diceValue],
+      groups: [{
+        diceQty: 1,
+        diceFaceQty: 100,
+        rolls: [diceValue],
+      }],   
       total: diceValue
     }
   
     const result: RollResult = {
       characterId: character.id,
+      title: ability.name,
       checkDetails: checkDetails,
       diceDetails
     }

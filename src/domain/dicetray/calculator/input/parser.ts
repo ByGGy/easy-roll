@@ -7,7 +7,6 @@ export const create = (supportedOperators: Array<Operator>) => {
     const maybeNumber = Number(input)
     // TODO: should consider empty string to be an invalid expression instead of 0 ?
     if (!isNaN(maybeNumber)) {
-      console.log(`tryin to parse number ${input}`)
       return maybeNumber
     }
   
@@ -16,7 +15,6 @@ export const create = (supportedOperators: Array<Operator>) => {
       // NB: operator arity is not supported atm
       // TODO: we should already know the index of the symbol from the "find" above
       const position = input.indexOf(operator.symbol)
-      console.log(`found operator ${operator.symbol}, splitting ${input} at p${position}`)
       return { operator, a: atomize(input.substring(0, position)), b: atomize(input.substring(position+1, input.length)) }
     }
 

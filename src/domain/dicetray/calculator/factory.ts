@@ -22,7 +22,7 @@ const create = (supportedOperators: Array<Operator>) => {
   }
 }
 
-// NB: operator order is important: this guaranty that multiplication and division will be evaluated first
+// NB: operator order is important: e.g. for BM01, this guaranty that multiplication and division will be evaluated first
 export const createBasic = () => create([addition, substraction])
 export const createBM01 = () => create([addition, substraction, multiplication, division, exponentiation])
 export const createRPG01 = () => create([addition, substraction, diceRolls])

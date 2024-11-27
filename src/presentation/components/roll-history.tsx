@@ -25,21 +25,16 @@ const RollItem = ({ roll, opacity }: RollItemProps) => {
   const characterName = allCharacters.find(c => c.id === roll.characterId)?.state.name ?? 'Unknown'
   const selectedCharacterId = useSelector((state: RootState) => state.selection.characterId)
 
-  let title
-  if (roll.checkDetails !== null) {
-    title = roll.checkDetails.factors.filter(f => f.type === 'base').map(f => f.name).join(' + ')
-  } else {
-    title = `${roll.diceDetails.diceQty}d${roll.diceDetails.diceFaceQty}${roll.diceDetails.modifier !== 0 ? `${roll.diceDetails.modifier > 0 ? '+' :''}${roll.diceDetails.modifier}` : ''}`
-  }
+  const title = roll.title
 
   const isSuccess = roll.checkDetails !== null ? roll.diceDetails.total <= roll.checkDetails.successThreshold : null
 
   // TODO: duplicated code with /src/domain/discord/relay.handleRollResult function
   const details = []
-  details.push(`${roll.diceDetails.diceQty}d${roll.diceDetails.diceFaceQty} = ${roll.diceDetails.rolls.join(', ')}`)
-  if (roll.diceDetails.modifier !== 0) {
-    details.push(`modifier: ${roll.diceDetails.modifier > 0 ? '+' :''}${roll.diceDetails.modifier}`)
-  }
+  roll.diceDetails.groups.forEach(g => {
+    details.push(`${g.diceQty}d${g.diceFaceQty} = ${g.rolls.join(', ')}`)  
+  })
+
   if (roll.checkDetails !== null) {
     roll.checkDetails.factors.forEach(f => {
       switch (f.type) {

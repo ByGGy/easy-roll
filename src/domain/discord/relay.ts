@@ -39,18 +39,17 @@ export const createRelay = (repository: Repository<Character, CharacterState>) =
       const displayedRollValue = relevantCharacter.state.discordNotification.level === 'Strict' ? '**' : `${roll.diceDetails.total}`
       if (roll.checkDetails !== null) {
         const isSuccess = roll.diceDetails.total <= roll.checkDetails.successThreshold
-        const baseFactors = roll.checkDetails.factors.filter(f => f.type === 'base').map(f => f.name).join(' + ')
-        content = `\`\`\`diff\n${isSuccess ? '+' : '-'} <${relevantCharacter.state.name}> ${baseFactors} : ${isSuccess ? 'success' : 'failure'} (${displayedRollValue})\n\`\`\``
+        content = `\`\`\`diff\n${isSuccess ? '+' : '-'} <${relevantCharacter.state.name}> ${roll.title} : ${isSuccess ? 'success' : 'failure'} (${displayedRollValue})\n\`\`\``
       } else {
         content = `<${relevantCharacter.state.name}> got \`${displayedRollValue}\` on his roll.`
       }
       
       const details = []
       if (relevantCharacter.state.discordNotification.level === 'Verbose') {
-        details.push(`${roll.diceDetails.diceQty}d${roll.diceDetails.diceFaceQty} = ${roll.diceDetails.rolls.join(', ')}`)
-        if (roll.diceDetails.modifier !== 0) {
-          details.push(`modifier: ${roll.diceDetails.modifier > 0 ? '+' :''}${roll.diceDetails.modifier}`)
-        }
+        roll.diceDetails.groups.forEach(g => {
+          details.push(`${g.diceQty}d${g.diceFaceQty} = ${g.rolls.join(', ')}`)  
+        })
+        
         if (roll.checkDetails !== null) {
           roll.checkDetails.factors.forEach(f => {
             switch (f.type) {
@@ -73,6 +72,8 @@ export const createRelay = (repository: Repository<Character, CharacterState>) =
           })
   
           details.push(`threshold: ${roll.checkDetails.successThreshold}`)
+        } else {
+          details.push(`${roll.title}= ${roll.diceDetails.total}`)
         }
       }
 

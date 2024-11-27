@@ -46,17 +46,20 @@ export type RollCheckDetails = {
   successThreshold: number
 }
 
-export type RollDiceDetails = {
-  diceFaceQty: number
+export type RollDiceGroup = {
   diceQty: number
-  modifier: number
-  
+  diceFaceQty: number
   rolls: Array<number>
+}
+
+export type RollDiceDetails = {
+  groups: Array<RollDiceGroup>
   total: number
 }
 
 export type RollResult = {
   characterId: EntityId
+  title: string
   checkDetails: RollCheckDetails | null
   diceDetails: RollDiceDetails
 }
