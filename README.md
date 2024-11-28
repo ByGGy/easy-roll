@@ -34,7 +34,7 @@ _(or if you want to reuse a character from another session)_
 3. import a character from a JSON file  
 _(probably not needed anymore, kinda deprecated..)_
 
-Once a character has been added, select it and click one of the `pen` icons to edit its:  
+Once a character has been added, select it and click one of the `pen` or `more` icons to edit its:  
 * name
 * attributes
 * abilities
