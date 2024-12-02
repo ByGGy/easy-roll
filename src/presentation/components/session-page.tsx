@@ -12,6 +12,7 @@ import { CharacterSelection } from './character-selection'
 import { AriaPage } from './aria/aria-page'
 import { RddPage } from './rdd/rdd-page'
 import { RollHistory } from './roll-history'
+import { StoryTeller } from './story-teller'
 
 export const SessionPage = () => {
   const sessions = useSelector((state: RootState) => state.sessionCollection.sessions)
@@ -46,6 +47,7 @@ export const SessionPage = () => {
           </Stack>
         </Stack>
         <RollHistory />
+        <StoryTeller />
       </Stack>
     )
   }

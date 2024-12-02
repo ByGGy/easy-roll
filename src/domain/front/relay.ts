@@ -47,5 +47,12 @@ export const createRelay = (window: BrowserWindow) => {
   messageBus.on('Domain.Aria.check', handleRollResult)
   messageBus.on('Domain.Rdd.check', handleRollResult)
 
+  const handleStoryTeller = (eventName: string, paragraph: string) => {
+    window.webContents.send(eventName, paragraph)
+  }
+
+  transfer('Domain.StoryTeller.tell', handleStoryTeller)
+  transfer('Domain.StoryTeller.answer', handleStoryTeller)
+
   return {}
 }

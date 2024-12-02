@@ -40,4 +40,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
   ariaCheckAbility: (characterId: EntityId, abilityName: string, modifier: number) => ipcRenderer.invoke('ariaCheckAbility', characterId, abilityName, modifier),
 
   rddCheckAttribute: (characterId: EntityId, attributeName: string, abilityName: string, modifier: number) => ipcRenderer.invoke('rddCheckAttribute', characterId, attributeName, abilityName, modifier),
+
+  chatWithStoryTeller: (message: string) => ipcRenderer.invoke('chatWithStoryTeller', message),
 })

@@ -13,6 +13,7 @@ import { engine as ariaEngine } from './domain/aria/engine'
 import { engine as rddEngine } from './domain/rdd/engine'
 import { createRelay as createDiscordRelay } from './domain/discord/relay'
 import { createRelay as createFrontRelay } from './domain/front/relay'
+import { create as createJack } from './domain/storyTeller/jack'
 
 // TODO: support streamdeck integration ?
 // TODO: provide LLM integration for MJs ? (e.g. location description, portrait generation)
@@ -31,6 +32,7 @@ const sessionRepository = createRepository('Session', rehydrateSession)
 const characterService = createCharacterService()
 const discordRelay = createDiscordRelay(characterRepository)
 let frontRelay
+const storyTeller = createJack()
 
 const createWindow = () => {
   // Create the browser window.
@@ -243,6 +245,10 @@ const handleRddCheckAttribute = (event: unknown, characterId: EntityId, attribut
   }
 }
 
+const handleChatWithStoryTeller = (event: unknown, message: string) => {
+  storyTeller.tell(message)
+}
+
 app.whenReady().then(() => {
   // TODO: should put all those subscriptions, handlers and domain initialization in separate files
   ipcMain.handle('getAppVersion', handleGetAppVersion)
@@ -268,4 +274,6 @@ app.whenReady().then(() => {
   ipcMain.handle('ariaCheckAbility', handleAriaCheckAbility)
 
   ipcMain.handle('rddCheckAttribute', handleRddCheckAttribute)
+
+  ipcMain.handle('chatWithStoryTeller', handleChatWithStoryTeller)
 })

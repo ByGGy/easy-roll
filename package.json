@@ -48,6 +48,7 @@
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@fontsource/roboto": "^5.0.8",
+    "@google/generative-ai": "^0.21.0",
     "@mui/icons-material": "^5.14.14",
     "@mui/material": "^5.16.7",
     "@mui/x-data-grid": "^7.22.0",
