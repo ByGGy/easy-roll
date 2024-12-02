@@ -8,7 +8,7 @@ export type ParseResult = {
 }
 
 export const create = (supportedOperators: Array<Operator>) => {
-  // NB: brackets such as parentheses are not supported atm 
+  // TODO: brackets such as parentheses are not supported atm 
   const atomize = (input: string): Operand => {
     const maybeNumber = Number(input)
     // TODO: should consider empty string to be an invalid expression instead of 0 ?
@@ -18,7 +18,7 @@ export const create = (supportedOperators: Array<Operator>) => {
   
     const operator = supportedOperators.find(operator => input.indexOf(operator.symbol) !== -1)
     if (operator !== undefined) {
-      // NB: operator arity is not supported atm
+      // TODO: operator arity is not supported atm
       // TODO: we should already know the index of the symbol from the "find" above
       const position = input.indexOf(operator.symbol)
       return { operator, a: atomize(input.substring(0, position)), b: atomize(input.substring(position+1, input.length)) }
