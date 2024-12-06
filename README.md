@@ -21,7 +21,7 @@ $ xattr -c <path/to/application.app>
 <img src='./EasyRoll_UI_Start.png' width=600>
 
 At the moment, three games are "supported":  
-<img src='./public/images/Aria_Cover.jpg' width=75> <img src='./public/images/Reve-de-Dragon_Cover.jpg' width=75> <img src='./public/images/Basic_Cover.jpg' width=75>
+<img src='./public/images/Aria_Cover.jpg' width=75> <img src='./public/images/Reve-de-Dragon_Cover.jpg' width=75> <img src='./public/images/BaSIC_Cover.jpg' width=75>
 
 You should first create a new `Session` for the game relevant to you.  
 Once a new session has been created, you can use it and add some characters to it:  
