@@ -11,6 +11,7 @@ import { rehydrate as rehydrateSession, create as createSession } from './domain
 import { engine as diceTrayEngine } from './domain/dicetray/engine'
 import { engine as ariaEngine } from './domain/aria/engine'
 import { engine as rddEngine } from './domain/rdd/engine'
+import { engine as basicEngine } from './domain/basic/engine'
 import { createRelay as createDiscordRelay } from './domain/discord/relay'
 import { createRelay as createFrontRelay } from './domain/front/relay'
 
@@ -243,6 +244,20 @@ const handleRddCheckAttribute = (event: unknown, characterId: EntityId, attribut
   }
 }
 
+const handleBasicCheckAttribute = (event: unknown, characterId: EntityId, attributeName: string, modifier: number) => {
+  const currentCharacter = characterRepository.getById(characterId)
+  if (currentCharacter) {
+    basicEngine.checkAttribute(currentCharacter, attributeName, modifier)
+  }
+}
+
+const handleBasicCheckAbility = (event: unknown, characterId: EntityId, abilityName: string, difficulty: number, modifier: number) => {
+  const currentCharacter = characterRepository.getById(characterId)
+  if (currentCharacter) {
+    basicEngine.checkAbility(currentCharacter, abilityName, difficulty, modifier)
+  }
+}
+
 app.whenReady().then(() => {
   // TODO: should put all those subscriptions, handlers and domain initialization in separate files
   ipcMain.handle('getAppVersion', handleGetAppVersion)
@@ -268,4 +283,7 @@ app.whenReady().then(() => {
   ipcMain.handle('ariaCheckAbility', handleAriaCheckAbility)
 
   ipcMain.handle('rddCheckAttribute', handleRddCheckAttribute)
+
+  ipcMain.handle('basicCheckAttribute', handleBasicCheckAttribute)
+  ipcMain.handle('basicCheckAbility', handleBasicCheckAbility)
 })

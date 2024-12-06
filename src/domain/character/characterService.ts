@@ -6,6 +6,7 @@ import { Game, Attribute, Ability, DiscordNotification } from '../common/types'
 import { Character, create } from './character'
 import { createDefaultAttributes as createAriaDefaultAttributes, createDefaultAbilities as createAriaDefaultAbilities } from '../aria/characterTemplate'
 import { createDefaultAttributes as createRddDefaultAttributes, createDefaultAbilities as  createRddDefaultAbilities } from '../rdd/characterTemplate'
+import { createDefaultAttributes as createBasicDefaultAttributes, createDefaultAbilities as  createBasicDefaultAbilities } from '../basic/characterTemplate'
 
 export type CharacterService = {
   createFor: (game: Game) => Character
@@ -13,7 +14,7 @@ export type CharacterService = {
 }
 
 const isValidGame = (maybeGame: unknown): maybeGame is Game => {
-  return typeof(maybeGame) === 'string' && (maybeGame === 'Aria' || maybeGame === 'Rêve de Dragon')
+  return typeof(maybeGame) === 'string' && (maybeGame === 'Aria' || maybeGame === 'Rêve de Dragon' || maybeGame === 'BaSIC')
 }
 
 const createDefaultAttributesFor = (game: Game): Array<Attribute> => {
@@ -21,6 +22,7 @@ const createDefaultAttributesFor = (game: Game): Array<Attribute> => {
     default: return unreachable(game)
     case 'Aria': return createAriaDefaultAttributes()
     case 'Rêve de Dragon': return createRddDefaultAttributes()
+    case 'BaSIC': return createBasicDefaultAttributes()
   }
 }
 
@@ -29,6 +31,7 @@ const createDefaultAbilitiesFor = (game: Game): Array<Ability> => {
     default: return unreachable(game)
     case 'Aria': return createAriaDefaultAbilities()
     case 'Rêve de Dragon': return createRddDefaultAbilities()
+    case 'BaSIC': return createBasicDefaultAbilities()
   }
 }
 

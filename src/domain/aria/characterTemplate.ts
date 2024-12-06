@@ -20,7 +20,7 @@ export const createDefaultAbilities = () => {
     { name: 'Combat à distance', value: ABILITY_AVERAGE_VALUE } as Ability,
     { name: 'Connaissance de la nature', value: ABILITY_AVERAGE_VALUE } as Ability,
     { name: 'Connaissance des secrets', value: ABILITY_AVERAGE_VALUE } as Ability,
-    { name: 'Courir, Sauter', value: ABILITY_AVERAGE_VALUE } as Ability,
+    { name: 'Courir, sauter', value: ABILITY_AVERAGE_VALUE } as Ability,
     { name: 'Discrétion', value: ABILITY_AVERAGE_VALUE } as Ability,
     { name: 'Droit', value: ABILITY_AVERAGE_VALUE } as Ability,
     { name: 'Esquiver', value: ABILITY_AVERAGE_VALUE } as Ability,

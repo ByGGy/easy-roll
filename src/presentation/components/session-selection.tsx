@@ -39,6 +39,10 @@ export const SessionSelection = () => {
     window.electronAPI.createSession('Rêve de Dragon')
   }
 
+  const handleCreateBasicSession = () => {
+    window.electronAPI.createSession('BaSIC')
+  }
+
   const handleSelection = (id: EntityId) => {
     const targetSession = sessions.find(s => s.id === id)
     const payload = {
@@ -61,6 +65,9 @@ export const SessionSelection = () => {
             </Button>
             <Button variant={sessions.length === 0 ? 'contained' : 'outlined'} startIcon={<AddIcon />} onClick={handleCreateRddSession}>
               Create a 'Rêve de Dragon' session
+            </Button>
+            <Button variant={sessions.length === 0 ? 'contained' : 'outlined'} startIcon={<AddIcon />} onClick={handleCreateBasicSession}>
+              Create a 'BaSIC' session
             </Button>
           </Stack>
         </Grid>
