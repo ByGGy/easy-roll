@@ -85,6 +85,20 @@ export const exponentiation: Operator = {
   }
 }
 
+export const modulo: Operator = {
+  name: 'modulo',
+  symbol: '%',
+  arity: 2,
+  f: (a: number, b: number) => {
+    return {
+      name: 'modulo',
+      operands: [a, b],
+      value: a%b,
+      extra: [],
+    }
+  }
+}
+
 export const diceRolls: Operator = {
   name: 'diceRolls',
   symbol: 'd',

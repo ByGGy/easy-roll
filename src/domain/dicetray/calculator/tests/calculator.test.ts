@@ -20,6 +20,10 @@ describe('calculator module', () => {
     expect(calculator.compute('1d4-2+1d4-2+1d4-2+1d4-2')?.value).toBe(0)
 
     expect(calculator.compute('3d1d8')?.value).toBe(6)
+
+    expect(calculator.compute('1d4*2')?.value).toBe(4)
+    expect(calculator.compute('1d4+1%2')?.value).toBe(1)
+    expect(calculator.compute('-1 * 4d6/2')?.value).toBe(-6)
     
     // TODO: should consider one dice instead of zero in this case ?
     expect(calculator.compute('d8')?.value).toBe(0)
@@ -29,9 +33,11 @@ describe('calculator module', () => {
     // or should support it like 1d8*-1 instead ?
     expect(calculator.compute('1d-8')?.value).toBe(-8)
 
+    // TODO: interpreted as 4d6/2*0 - 1, how to improve this ?
+    expect(calculator.compute('4d6/2*-1')?.value).toBe(-1)
+
     // TODO: followin tests should be supported ?
     expect(calculator.compute('1D4')).toBe(null)
-    expect(calculator.compute('1d4*2')).toBe(null)
     expect(calculator.compute('1d100<75')).toBe(null)
 
     expect(calculator.compute('wtf')).toBe(null)

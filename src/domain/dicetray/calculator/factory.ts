@@ -1,5 +1,5 @@
 import { create as createParser } from './input/parser'
-import { Operator, addition, substraction, multiplication, division, exponentiation, diceRolls } from './core/operators'
+import { Operator, addition, substraction, multiplication, division, exponentiation, modulo, diceRolls } from './core/operators'
 import { createSolver } from './core/operation'
 
 const create = (supportedOperators: Array<Operator>) => {
@@ -28,7 +28,7 @@ const create = (supportedOperators: Array<Operator>) => {
 // NB: operator order is important: e.g. for BM01, this guaranty that multiplication and division will be evaluated first
 export const createBasic = () => create([addition, substraction])
 export const createBM01 = () => create([addition, substraction, multiplication, division, exponentiation])
-// TODO: support multiplication, division, modulo
 // TODO: support conditional evaluation with operators <, <=, >, >=, =, != (e.g. 1d100<75, 1d100%2=0)
+// TODO: support parentheses to alter priority sequence
 // TODO: support variables / references to character property somehow (e.g. 1d100<=force*5+10)
-export const createRPG01 = () => create([addition, substraction, diceRolls])
+export const createRPG01 = () => create([modulo, addition, substraction, multiplication, division, diceRolls])
