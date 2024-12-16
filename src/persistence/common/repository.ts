@@ -7,7 +7,7 @@ import { capitalize } from 'lodash'
 import { messageBus } from '../../domain/events/messageBus'
 import { EntityId, EntityWithState } from '../../domain/common/types'
 
-const EXPECTED_DATA_MODEL_VERSION = 1
+const EXPECTED_DATA_MODEL_VERSION = 2
 
 type LowdbShape<TState> = {
   version: number

@@ -78,9 +78,35 @@ const maybeUpdateFromFirstLowdbImplementation = () => {
   }
 }
 
+const maybeUpdateFromV1Repositories = () => {
+  const pathToNextStorageVersion = path.join(app.getPath('userData'), 'lowdb', 'v2')
+  const isMigrationRequired = !fs.existsSync(pathToNextStorageVersion)
+
+  if (isMigrationRequired) {
+    // NB: we do not really need to adapt the shape of the data
+    // we are just forcing the app to work on a new set of data
+    // in order to avoid crashes in case someone reverts to a previous version of the app
+    // which didn't handle new game types
+    const applyDumbMigrationOn = (fileName: string) => {
+      const pathToLookAt = path.join(app.getPath('userData'), 'lowdb', 'v1', fileName)
+      const data = readFileSync(pathToLookAt, 'utf8')
+      const oldLowdb = JSON.parse(data)
+      const newLowdb = { ...oldLowdb, version: 2 }
+  
+      fs.mkdirSync(pathToNextStorageVersion, { recursive: true })
+      const storagePath = path.join(pathToNextStorageVersion, fileName)
+      writeFileSync(storagePath, JSON.stringify(newLowdb, null, 2))
+    }
+
+    applyDumbMigrationOn('characters.json')
+    applyDumbMigrationOn('sessions.json')
+  }
+}
+
 const sequence: Array<() => void> = [
   maybeUpdateFromCharacterFiles,
-  maybeUpdateFromFirstLowdbImplementation
+  maybeUpdateFromFirstLowdbImplementation,
+  maybeUpdateFromV1Repositories,
 ]
 
 export type MigrationService = {
@@ -88,7 +114,6 @@ export type MigrationService = {
 }
 
 export const createMigrationService = (): MigrationService => {
-
   const maybeUpdateData = () => {
     sequence.forEach(f => f())
   }
