@@ -32,11 +32,16 @@ export const selectionSlice = createSlice({
     },
     pickCharacter: (state, action: PayloadAction<EntityId>) => {
       state.characterId = action.payload
-    }
+    },
+    forgetCharacter: (state, action: PayloadAction<EntityId>) => {
+      if (state.characterId === action.payload) {
+        state.characterId = null
+      }
+    },
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { openSession, closeSession, pickCharacter } = selectionSlice.actions
+export const { openSession, closeSession, pickCharacter, forgetCharacter } = selectionSlice.actions
 
 export default selectionSlice.reducer
