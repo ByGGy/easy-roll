@@ -60,3 +60,8 @@ NB: at the moment, it is not possible to delete a session or character.
   * Auth Token format: https://discord.com/developers/docs/reference#authentication
   * How to get a Bot Token: https://www.writebots.com/discord-bot-token/
   * How to find a ChannelId: https://geekrumor.com/how-to-enable-developer-mode-in-discord-1545/
+
+* Electron
+  * Signing: https://www.electronjs.org/docs/latest/tutorial/code-signing
+  * MacOS Notarize: https://shirker.medium.com/electronjs-sign-and-notarize-your-macos-application-6be5cf713053
+  * Notarize module: https://github.com/electron/notarize
