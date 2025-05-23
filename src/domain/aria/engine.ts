@@ -7,8 +7,9 @@ import { rollDice } from '../dicetray/roll'
 const checkAttribute = (character: CharacterData, attributeName: string, difficulty: number, modifier: number): RollResult | null => {
   const attribute = character.state.attributes.find((a) => a.name === attributeName)
   if (attribute !== undefined) {
-    const successThreshold = attribute.value * difficulty + modifier
     const diceValue = rollDice(100)
+    const successThreshold = attribute.value * difficulty + modifier
+    const isSuccess = diceValue <= successThreshold
 
     const checkDetails: RollCheckDetails = {
       factors: [
@@ -28,7 +29,8 @@ const checkAttribute = (character: CharacterData, attributeName: string, difficu
           value: modifier
         }
       ],
-      successThreshold
+      successThreshold,
+      isSuccess
     }
 
     const diceDetails: RollDiceDetails = {
@@ -57,8 +59,9 @@ const checkAttribute = (character: CharacterData, attributeName: string, difficu
 const checkAbility = (character: CharacterData, abilityName: string, modifier: number): RollResult | null => {
   const ability = character.state.abilities.find((a) => a.name === abilityName)
   if (ability !== undefined) {
-    const successThreshold = ability.value + modifier
     const diceValue = rollDice(100)
+    const successThreshold = ability.value + modifier
+    const isSuccess = diceValue <= successThreshold
 
     const checkDetails: RollCheckDetails = {
       factors: [
@@ -73,7 +76,8 @@ const checkAbility = (character: CharacterData, abilityName: string, modifier: n
           value: modifier
         }
       ],
-      successThreshold
+      successThreshold,
+      isSuccess
     }
 
     const diceDetails: RollDiceDetails = {

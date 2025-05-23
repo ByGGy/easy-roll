@@ -13,9 +13,10 @@ const findThreshold = (attributeValue: number, modifier: number): number => {
 const checkAttribute = (character: CharacterData, attributeName: string, abilityName: string, modifier: number): RollResult | null => {
   const attribute = character.state.attributes.find((a) => a.name === attributeName)
   if (attribute !== undefined) {
+    const diceValue = rollDice(100)
     const ability = character.state.abilities.find((a) => a.name === abilityName)
     const successThreshold = findThreshold(attribute.value, (ability !== undefined ? ability.value : 0) + modifier)
-    const diceValue = rollDice(100)
+    const isSuccess = diceValue <= successThreshold
 
     const checkDetails: RollCheckDetails = {
       factors: [
@@ -35,7 +36,8 @@ const checkAttribute = (character: CharacterData, attributeName: string, ability
           value: modifier
         },
       ],
-      successThreshold
+      successThreshold,
+      isSuccess
     }
 
     const diceDetails: RollDiceDetails = {

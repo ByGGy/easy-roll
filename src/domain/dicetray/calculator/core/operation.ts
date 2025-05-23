@@ -1,35 +1,41 @@
-import { Operator, OperatorResult } from './operators'
-
-export type Operation = {
-  operator: Operator
-  a: Operand
-  b: Operand
-}
-
-export type Operand = Operation | number
+import { Operand, IsOperation, InValue, OutValue, OperatorResult } from './types'
 
 export type SolverResult = {
-  value: number
+  value: OutValue
   details: Array<OperatorResult>
 }
 
+type SolverResultOperand = SolverResult & {
+  value: InValue
+}
+
+const isSolverResultOperand = (r: SolverResult | null): r is SolverResultOperand => {
+  return r !== null && typeof r.value === 'number'
+}
+
 export const createSolver = () => {
-  const solve = (op: Operand): SolverResult => {
-    if (typeof op === 'number') {
+  const solve = (op: Operand): SolverResult | null => {
+    if (!IsOperation(op)) {
       return {
         value: op,
-        details: []
+        details: [],
       }
     }
   
     const aResult = solve(op.a)
     const bResult = solve(op.b)
-    const opResult = op.operator.f(aResult.value, bResult.value)
 
-    return {
-      value: opResult.value,
-      details: [...aResult.details, ...bResult.details, opResult]
+    if (isSolverResultOperand(aResult) && isSolverResultOperand(bResult)) {
+      const opResult = op.operator.f(aResult.value, bResult.value)
+
+      return {
+        value: opResult.value,
+        details: [...aResult.details, ...bResult.details, opResult],
+      }
     }
+
+    // console.log(`invalid arguments for "${op.operator.name}": ${JSON.stringify(op.a)}, ${JSON.stringify(op.b)}`)
+    return null
   }
 
   return {

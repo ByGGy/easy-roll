@@ -1,5 +1,4 @@
-import { Operator } from '../core/operators'
-import { Operand } from '../core/operation'
+import { Operand, Operator } from '../core/types'
 
 export type ParserResult = {
   operand: Operand | null
@@ -21,18 +20,18 @@ export const create = (supportedOperators: Array<Operator>) => {
       // TODO: operator arity is not supported atm
       // TODO: we should already know the index of the symbol from the "find" above
       const position = input.indexOf(operator.symbol)
-      return { operator, a: atomize(input.substring(0, position)), b: atomize(input.substring(position+1, input.length)) }
+      return { operator, a: atomize(input.substring(0, position)), b: atomize(input.substring(position + operator.symbol.length, input.length)) }
     }
 
     throw new Error(`invalid expression at "${input}"`)
   }
 
-  const parse = (input: string): ParseResult => {
+  const parse = (input: string): ParserResult => {
     let result = null
     let errorMessage = ''
 
     try {
-      result = atomize(input.trim().replaceAll(' ', ''))      
+      result = atomize(input.trim().replaceAll(' ', ''))
     } catch (e) {
       console.log(`debug: ${e}`)
       errorMessage = e.toString()

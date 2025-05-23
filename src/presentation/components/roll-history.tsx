@@ -27,8 +27,6 @@ const RollItem = ({ roll, opacity }: RollItemProps) => {
 
   const title = roll.title
 
-  const isSuccess = roll.checkDetails !== null ? roll.diceDetails.total <= roll.checkDetails.successThreshold : null
-
   // TODO: duplicated code with /src/domain/discord/relay.handleRollResult function
   const details = []
   roll.diceDetails.groups.forEach(g => {
@@ -75,7 +73,7 @@ const RollItem = ({ roll, opacity }: RollItemProps) => {
           spacing={1}
           alignItems='center'
           sx={{
-            backgroundColor: isSuccess !== null ? isSuccess ? 'success.main' : 'error.main' : 'info.light',
+            backgroundColor: roll.checkDetails !== null ? roll.checkDetails.isSuccess ? 'success.main' : 'error.main' : 'info.light',
             color:'background.paper',
             borderRadius: 4
           }}

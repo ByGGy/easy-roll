@@ -1,10 +1,11 @@
 import { messageBus } from '../events/messageBus'
 
-import { RollDiceDetails, RollResult } from '../common/types'
+import { RollCheckDetails, RollDiceDetails, RollResult } from '../common/types'
 import { CharacterData } from '../character/character'
 import { rollDice } from './roll'
-import { createRPG01 } from './calculator/factory'
+import { createRPG02 } from './calculator/factory'
 import { diceRolls } from './calculator/core/operators'
+import { OperatorResult } from './calculator/core/types'
 
 const rollDices = (character: CharacterData, diceFaceQty: number, diceQty: number, modifier: number): RollResult => {
   const rolls = [...Array(diceQty)].map(_ => rollDice(diceFaceQty))
@@ -30,19 +31,46 @@ const rollDices = (character: CharacterData, diceFaceQty: number, diceQty: numbe
   return result
 }
 
+const calculator = createRPG02()
+
 const validate = (expression: string): boolean => {
-  const calculator = createRPG01()
   const result = calculator.validate(expression)
   
   messageBus.emit('Domain.DiceTray.validation', result)
   return result.operand !== null
 }
 
+type ComparisonResult = OperatorResult & { value: boolean }
+const isComparison = (operatorResult: OperatorResult): operatorResult is ComparisonResult => {
+  return typeof operatorResult.value === 'boolean'
+}
+
+const findComparison = (operatorResults: Array<OperatorResult>): ComparisonResult | undefined => {
+  return operatorResults.filter(isComparison)[0]
+}
+
+//TODO: cleanup this mess (should split in evaluateRoll and evaluateCheck ?)
+//TODO: threshold with < and > operators, but expectedValue with == and != ?
 const evaluate = (character: CharacterData, expression: string): RollResult | null => {
-  const calculator = createRPG01()
   const calcResult = calculator.compute(expression)
   if (calcResult !== null ) {
-    const rolls = calcResult.details.filter(d => d.name.includes(diceRolls.name))
+    const rolls = calcResult.details.filter(d => d.operatorInfo.name === diceRolls.name)
+    const condition = findComparison(calcResult.details)
+
+    const checkDetails: RollCheckDetails | null = condition
+      ? {
+        factors: [
+          {
+            type: 'base',
+            name: expression.split(condition.operatorInfo.symbol)[0],
+            value: condition.operands[0]
+          },
+        ],
+        successThreshold: condition.operands[1],
+        isSuccess: condition.value
+      }
+      : null
+
     const diceDetails: RollDiceDetails = {
       groups: rolls.map(r => (
         {
@@ -50,13 +78,13 @@ const evaluate = (character: CharacterData, expression: string): RollResult | nu
           diceFaceQty: r.operands[1],
           rolls: r.extra,
         })),
-      total: calcResult.value
+      total: condition ? condition.operands[0] : typeof calcResult.value === 'number' ? calcResult.value : NaN
     }
 
     const result: RollResult = {
       characterId: character.id,
       title: expression,
-      checkDetails: null,
+      checkDetails,
       diceDetails
     }
 

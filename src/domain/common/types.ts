@@ -43,6 +43,7 @@ export type RollCheckFactor = {
 
 export type RollCheckDetails = {
   factors: Array<RollCheckFactor>
+  isSuccess: boolean
   successThreshold: number
 }
 

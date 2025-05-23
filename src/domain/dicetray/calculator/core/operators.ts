@@ -1,117 +1,48 @@
+import { Operator, InValue, OutValue, OperatorInfo } from './types'
 import { rollDice } from '../../roll'
 
-export type OperatorResult = {
-  name: string
-  operands: Array<number>
-  value: number
-  extra: Array<number>
-}
+const createOperator = (name: string, symbol: string, compute: (a: number, b: number) => { value: OutValue, extra: Array<InValue> }): Operator => {
+  const info: OperatorInfo = {
+    name,
+    symbol,
+    arity: 2
+  }
 
-export type Operator = {
-  name: string
-  symbol: string
-  arity: number
-  f: (...operands: Array<number>) => OperatorResult
-}
-
-export const addition: Operator = {
-  name: 'addition',
-  symbol: '+',
-  arity: 2,
-  f: (a: number, b: number) => {
-    // TODO: name and operands should be automatically derived from the function call somehow
-    return {
-      name: 'addition',
-      operands: [a, b],
-      value: a+b,
-      extra: [],
+  return {
+    ...info,
+    f: (a: number, b: number) => {
+      const result = compute(a, b)
+      return {
+        operatorInfo: info,
+        operands: [a, b],
+        value: result.value,
+        extra: result.extra
+      }
     }
   }
 }
 
-export const substraction: Operator = {
-  name: 'substraction',
-  symbol: '-',
-  arity: 2,
-  f: (a: number, b: number) => {
-    return {
-      name: 'substraction',
-      operands: [a, b],
-      value: a-b,
-      extra: [],
-    }
-  }
-}
+export const addition = createOperator('addition', '+', (a, b) => ({ value: a+b, extra: [] }))
+export const substraction = createOperator('substraction', '-', (a, b) => ({ value: a-b, extra: [] }))
+export const multiplication = createOperator('multiplication', '*', (a, b) => ({ value: a*b, extra: [] }))
+export const division = createOperator('division', '/', (a, b) => ({ value: a/b, extra: [] }))
 
-export const multiplication: Operator = {
-  name: 'multiplication',
-  symbol: '*',
-  arity: 2,
-  f: (a: number, b: number) => {
-    return {
-      name: 'multiplication',
-      operands: [a, b],
-      value: a*b,
-      extra: [],
-    }
-  }
-}
+export const exponentiation = createOperator('exponentiation', '^', (a, b) => ({ value: a**b, extra: [] }))
+export const modulo = createOperator('modulo', '%', (a, b) => ({ value: a%b, extra: [] }))
 
-export const division: Operator = {
-  name: 'division',
-  symbol: '/',
-  arity: 2,
-  f: (a: number, b: number) => {
-    return {
-      name: 'division',
-      operands: [a, b],
-      value: a/b,
-      extra: [],
-    }
-  }
-}
+export const diceRolls = createOperator('diceRolls', 'd', (a, b) => {
+  const rolls = [...Array(a)].map(_ => rollDice(b))
+  const total = rolls.reduce((acc, value) => acc + value, 0)
 
-export const exponentiation: Operator = {
-  name: 'exponentiation',
-  symbol: '^',
-  arity: 2,
-  f: (a: number, b: number) => {
-    return {
-      name: 'exponentiation',
-      operands: [a, b],
-      value: a**b,
-      extra: [],
-    }
+  return {
+    value: total,
+    extra: rolls,
   }
-}
+})
 
-export const modulo: Operator = {
-  name: 'modulo',
-  symbol: '%',
-  arity: 2,
-  f: (a: number, b: number) => {
-    return {
-      name: 'modulo',
-      operands: [a, b],
-      value: a%b,
-      extra: [],
-    }
-  }
-}
-
-export const diceRolls: Operator = {
-  name: 'diceRolls',
-  symbol: 'd',
-  arity: 2,
-  f: (a: number, b: number) => {
-    const rolls = [...Array(a)].map(_ => rollDice(b))
-    const total = rolls.reduce((acc, value) => acc + value, 0)
-
-    return {
-      name: 'diceRolls',
-      operands: [a, b],
-      value: total,
-      extra: rolls,
-    }
-  }
-}
+export const lessThan = createOperator('lessThan', '<', (a, b) => ({ value: a<b, extra: [] }))
+export const lessThanOrEqualTo = createOperator('lessThanOrEqualTo', '<=', (a, b) => ({ value: a<=b, extra: [] }))
+export const greaterThan = createOperator('greaterThan', '>', (a, b) => ({ value: a>b, extra: [] }))
+export const greaterThanOrEqualTo = createOperator('greaterThanOrEqualTo', '>=', (a, b) => ({ value: a>=b, extra: [] }))
+export const equalTo = createOperator('equalTo', '==', (a, b) => ({ value: a===b, extra: [] }))
+export const notEqualTo = createOperator('notEqualTo', '!=', (a, b) => ({ value: a!==b, extra: [] }))
