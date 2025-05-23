@@ -50,7 +50,7 @@ const checkAttribute = (character: CharacterData, attributeName: string, ability
     const result: RollResult = {
       characterId: character.id,
       title: [attribute.name, ...(ability !== undefined ? [ability.name] : [])].join(' + '),
-      checkDetails: checkDetails,
+      checkDetails,
       diceDetails
     }
   

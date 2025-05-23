@@ -25,11 +25,11 @@ export const DiceTray = ({ character }: Props) => {
 
   useEffect(() => {
     window.electronAPI.onMessage('Domain.DiceTray.validation', (data: string) => {
-      const parseResult = JSON.parse(data)
+      const parserResult = JSON.parse(data)
       setValidationResult({
-        isExpressionValid: parseResult.operand !== null,
-        errorMessage: parseResult.errorMessage,
-        helpMessage: parseResult.helpMessage
+        isExpressionValid: parserResult.operand !== null,
+        errorMessage: parserResult.errorMessage,
+        helpMessage: parserResult.helpMessage
       })
     })
   }, [])

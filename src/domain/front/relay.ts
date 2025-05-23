@@ -4,7 +4,7 @@ import { messageBus } from '../events/messageBus'
 import { EntityId, RollResult } from '../common/types'
 import { Character } from '../character/character'
 import { Session } from '../session/session'
-import { ParseResult } from '../dicetray/calculator/input/parser'
+import { ParserResult } from '../dicetray/calculator/input/parser'
 
 export const createRelay = (window: BrowserWindow) => {
 
@@ -33,7 +33,7 @@ export const createRelay = (window: BrowserWindow) => {
 
   transfer('Domain.SessionRepository.update', handleSessionRepositoryUpdate)
 
-  const handleDiceTrayValidation = (eventName: string, validationResult: ParseResult) => {
+  const handleDiceTrayValidation = (eventName: string, validationResult: ParserResult) => {
     window.webContents.send(eventName, JSON.stringify(validationResult))
   }
 

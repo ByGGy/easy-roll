@@ -1,7 +1,7 @@
 import { Operator } from '../core/operators'
 import { Operand } from '../core/operation'
 
-export type ParseResult = {
+export type ParserResult = {
   operand: Operand | null
   errorMessage: string
   helpMessage: string

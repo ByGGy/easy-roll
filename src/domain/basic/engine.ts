@@ -43,7 +43,7 @@ const checkAttribute = (character: CharacterData, attributeName: string, modifie
     const result: RollResult = {
       characterId: character.id,
       title: attribute.name,
-      checkDetails: checkDetails,
+      checkDetails,
       diceDetails
     }
   
@@ -93,7 +93,7 @@ const checkAbility = (character: CharacterData, abilityName: string, difficulty:
     const result: RollResult = {
       characterId: character.id,
       title: ability.name,
-      checkDetails: checkDetails,
+      checkDetails,
       diceDetails
     }
   
