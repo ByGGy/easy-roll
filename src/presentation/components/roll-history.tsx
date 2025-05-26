@@ -73,7 +73,7 @@ const RollItem = ({ roll, opacity }: RollItemProps) => {
           spacing={1}
           alignItems='center'
           sx={{
-            backgroundColor: roll.checkDetails !== null ? roll.checkDetails.isSuccess ? 'success.main' : 'error.main' : 'info.light',
+            backgroundColor: roll.isSuccess !== null ? roll.isSuccess ? 'success.main' : 'error.main' : 'info.light',
             color:'background.paper',
             borderRadius: 4
           }}

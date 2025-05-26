@@ -1,8 +1,8 @@
 import { messageBus } from '../events/messageBus'
 
-import { RollCheckDetails, RollDiceDetails, RollResult } from '../common/types'
+import { RollCheckDetails, RollResult } from '../common/types'
 import { CharacterData } from '../character/character'
-import { rollDice } from '../dicetray/roll'
+import { engine as diceTrayEngine } from '../dicetray/engine'
 
 const findThreshold = (attributeValue: number, modifier: number): number => {
   // cf manual rules p16
@@ -13,10 +13,12 @@ const findThreshold = (attributeValue: number, modifier: number): number => {
 const checkAttribute = (character: CharacterData, attributeName: string, abilityName: string, modifier: number): RollResult | null => {
   const attribute = character.state.attributes.find((a) => a.name === attributeName)
   if (attribute !== undefined) {
-    const diceValue = rollDice(100)
     const ability = character.state.abilities.find((a) => a.name === abilityName)
+
+    const title = [attribute.name, ...(ability !== undefined ? [ability.name] : [])].join(' + ')
+
     const successThreshold = findThreshold(attribute.value, (ability !== undefined ? ability.value : 0) + modifier)
-    const isSuccess = diceValue <= successThreshold
+    const expression = `1d100<=${successThreshold}`
 
     const checkDetails: RollCheckDetails = {
       factors: [
@@ -36,28 +38,10 @@ const checkAttribute = (character: CharacterData, attributeName: string, ability
           value: modifier
         },
       ],
-      successThreshold,
-      isSuccess
+      successThreshold
     }
 
-    const diceDetails: RollDiceDetails = {
-      groups: [{
-        diceQty: 1,
-        diceFaceQty: 100,
-        rolls: [diceValue],
-      }],
-      total: diceValue
-    }
-  
-    const result: RollResult = {
-      characterId: character.id,
-      title: [attribute.name, ...(ability !== undefined ? [ability.name] : [])].join(' + '),
-      checkDetails,
-      diceDetails
-    }
-  
-    messageBus.emit('Domain.Rdd.check', result)
-    return result
+    return diceTrayEngine.evaluateCheck(character, title, checkDetails, expression)
   }
 
   return null

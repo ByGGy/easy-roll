@@ -35,7 +35,6 @@ const create = (supportedOperators: Array<Operator>) => {
 export const createBasic = () => create([addition, substraction])
 export const createBM01 = () => create([addition, substraction, multiplication, division, exponentiation])
 
-// TODO: support conditional evaluation with operators <, >, <=, >=, !=, == (e.g. 1d100<75, 1d100%2==0)
 // TODO: support parentheses to alter priority sequence
 // TODO: support variables / references to character property somehow (e.g. 1d100<=force*5+10)
 // TODO: look at https://lets-role.com/dice-tester for more ideas ?

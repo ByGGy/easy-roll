@@ -1,15 +1,16 @@
 import { messageBus } from '../events/messageBus'
 
-import { RollCheckDetails, RollDiceDetails, RollResult } from '../common/types'
+import { RollCheckDetails, RollResult } from '../common/types'
 import { CharacterData } from '../character/character'
-import { rollDice } from '../dicetray/roll'
+import { engine as diceTrayEngine } from '../dicetray/engine'
 
 const checkAttribute = (character: CharacterData, attributeName: string, modifier: number): RollResult | null => {
   const attribute = character.state.attributes.find((a) => a.name === attributeName)
   if (attribute !== undefined) {
-    const diceValue = rollDice(100)
+    const title = attribute.name
+
     const successThreshold = attribute.value * 5 + modifier
-    const isSuccess = diceValue <= successThreshold
+    const expression = `1d100<=${successThreshold}`
 
     const checkDetails: RollCheckDetails = {
       factors: [
@@ -29,28 +30,10 @@ const checkAttribute = (character: CharacterData, attributeName: string, modifie
           value: modifier
         }
       ],
-      successThreshold,
-      isSuccess
-    }
-
-    const diceDetails: RollDiceDetails = {
-      groups: [{
-        diceQty: 1,
-        diceFaceQty: 100,
-        rolls: [diceValue],
-      }],
-      total: diceValue
+      successThreshold
     }
   
-    const result: RollResult = {
-      characterId: character.id,
-      title: attribute.name,
-      checkDetails,
-      diceDetails
-    }
-  
-    messageBus.emit('Domain.Basic.check', result)
-    return result
+    return diceTrayEngine.evaluateCheck(character, title, checkDetails, expression)
   }
 
   return null
@@ -59,9 +42,10 @@ const checkAttribute = (character: CharacterData, attributeName: string, modifie
 const checkAbility = (character: CharacterData, abilityName: string, difficulty: number, modifier: number): RollResult | null => {
   const ability = character.state.abilities.find((a) => a.name === abilityName)
   if (ability !== undefined) {
-    const diceValue = rollDice(100)
+    const title = ability.name
+
     const successThreshold = ability.value * difficulty + modifier
-    const isSuccess = diceValue <= successThreshold
+    const expression = `1d100<=${successThreshold}`
 
     const checkDetails: RollCheckDetails = {
       factors: [
@@ -81,28 +65,10 @@ const checkAbility = (character: CharacterData, abilityName: string, difficulty:
           value: modifier
         }
       ],
-      successThreshold,
-      isSuccess
+      successThreshold
     }
 
-    const diceDetails: RollDiceDetails = {
-      groups: [{
-        diceQty: 1,
-        diceFaceQty: 100,
-        rolls: [diceValue],
-      }],   
-      total: diceValue
-    }
-  
-    const result: RollResult = {
-      characterId: character.id,
-      title: ability.name,
-      checkDetails,
-      diceDetails
-    }
-  
-    messageBus.emit('Domain.Basic.check', result)
-    return result
+    return diceTrayEngine.evaluateCheck(character, title, checkDetails, expression)
   }
 
   return null

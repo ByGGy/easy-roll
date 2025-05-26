@@ -43,7 +43,6 @@ export type RollCheckFactor = {
 
 export type RollCheckDetails = {
   factors: Array<RollCheckFactor>
-  isSuccess: boolean
   successThreshold: number
 }
 
@@ -61,6 +60,7 @@ export type RollDiceDetails = {
 export type RollResult = {
   characterId: EntityId
   title: string
-  checkDetails: RollCheckDetails | null
   diceDetails: RollDiceDetails
+  checkDetails: RollCheckDetails | null
+  isSuccess: boolean | null
 }

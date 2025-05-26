@@ -38,7 +38,8 @@ export const createRelay = (repository: Repository<Character, CharacterState>) =
       let content = ''
       const displayedRollValue = relevantCharacter.state.discordNotification.level === 'Strict' ? '**' : `${roll.diceDetails.total}`
       if (roll.checkDetails !== null) {
-        content = `\`\`\`diff\n${roll.checkDetails.isSuccess ? '+' : '-'} <${relevantCharacter.state.name}> ${roll.title} : ${roll.checkDetails.isSuccess ? 'success' : 'failure'} (${displayedRollValue})\n\`\`\``
+        const isSuccess = roll.isSuccess ?? false
+        content = `\`\`\`diff\n${isSuccess ? '+' : '-'} <${relevantCharacter.state.name}> ${roll.title} : ${isSuccess ? 'success' : 'failure'} (${displayedRollValue})\n\`\`\``
       } else {
         content = `<${relevantCharacter.state.name}> got \`${displayedRollValue}\` on his roll.`
       }
@@ -87,9 +88,6 @@ export const createRelay = (repository: Repository<Character, CharacterState>) =
   messageBus.on('Domain.Session.update', handleSessionUpdate)
 
   messageBus.on('Domain.DiceTray.roll', handleRollResult)
-  messageBus.on('Domain.Aria.check', handleRollResult)
-  messageBus.on('Domain.Rdd.check', handleRollResult)
-  messageBus.on('Domain.Basic.check', handleRollResult)
 
   return {}
 }

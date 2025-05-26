@@ -23,8 +23,9 @@ const rollDices = (character: CharacterData, diceFaceQty: number, diceQty: numbe
   const result: RollResult = {
     characterId: character.id,
     title: `${diceQty}d${diceFaceQty}${modifier !== 0 ? `${modifier > 0 ? '+' :''}${modifier}` : ''}`,
+    diceDetails,
     checkDetails: null,
-    diceDetails
+    isSuccess: null
   }
 
   messageBus.emit('Domain.DiceTray.roll', result)
@@ -50,13 +51,14 @@ const findComparison = (operatorResults: Array<OperatorResult>): ComparisonResul
 }
 
 //TODO: cleanup this mess (should split in evaluateRoll and evaluateCheck ?)
-//TODO: threshold with < and > operators, but expectedValue with == and != ?
+//TODO: "threshold" with < and > operators, but "expectedValue" with == and != ?
 const evaluate = (character: CharacterData, expression: string): RollResult | null => {
   const calcResult = calculator.compute(expression)
   if (calcResult !== null ) {
     const rolls = calcResult.details.filter(d => d.operatorInfo.name === diceRolls.name)
     const condition = findComparison(calcResult.details)
 
+    const title = expression
     const checkDetails: RollCheckDetails | null = condition
       ? {
         factors: [
@@ -67,7 +69,6 @@ const evaluate = (character: CharacterData, expression: string): RollResult | nu
           },
         ],
         successThreshold: condition.operands[1],
-        isSuccess: condition.value
       }
       : null
 
@@ -83,9 +84,41 @@ const evaluate = (character: CharacterData, expression: string): RollResult | nu
 
     const result: RollResult = {
       characterId: character.id,
-      title: expression,
+      title,
+      diceDetails,
       checkDetails,
-      diceDetails
+      isSuccess: condition?.value ?? null
+    }
+
+    messageBus.emit('Domain.DiceTray.roll', result)
+    return result
+  }
+
+  return null
+}
+
+const evaluateCheck = (character: CharacterData, title: string, checkDetails: RollCheckDetails, expression: string): RollResult | null => {
+  const calcResult = calculator.compute(expression)
+  if (calcResult !== null ) {
+    const rolls = calcResult.details.filter(d => d.operatorInfo.name === diceRolls.name)
+    const condition = findComparison(calcResult.details)
+
+    const diceDetails: RollDiceDetails = {
+      groups: rolls.map(r => (
+        {
+          diceQty: r.operands[0],
+          diceFaceQty: r.operands[1],
+          rolls: r.extra,
+        })),
+      total: condition ? condition.operands[0] : typeof calcResult.value === 'number' ? calcResult.value : NaN
+    }
+
+    const result: RollResult = {
+      characterId: character.id,
+      title,
+      diceDetails,
+      checkDetails,
+      isSuccess: condition?.value ?? null
     }
 
     messageBus.emit('Domain.DiceTray.roll', result)
@@ -99,4 +132,5 @@ export const engine = {
   rollDices,
   validate,
   evaluate,
+  evaluateCheck
 }

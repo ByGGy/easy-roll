@@ -44,9 +44,6 @@ export const createRelay = (window: BrowserWindow) => {
   }
 
   messageBus.on('Domain.DiceTray.roll', handleRollResult)
-  messageBus.on('Domain.Aria.check', handleRollResult)
-  messageBus.on('Domain.Rdd.check', handleRollResult)
-  messageBus.on('Domain.Basic.check', handleRollResult)
 
   return {}
 }
