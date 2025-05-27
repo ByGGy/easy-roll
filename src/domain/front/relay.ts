@@ -39,6 +39,7 @@ export const createRelay = (window: BrowserWindow) => {
 
   transfer('Domain.Aria.successRatio', handleNumber)
   transfer('Domain.Rdd.successRatio', handleNumber)
+  transfer('Domain.Basic.successRatio', handleNumber)
 
   const handleDiceTrayValidation = (eventName: string, validationResult: ParserResult) => {
     window.webContents.send(eventName, JSON.stringify(validationResult))

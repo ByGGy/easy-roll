@@ -265,10 +265,24 @@ const handleRddCheckAttribute = (event: unknown, characterId: EntityId, attribut
   }
 }
 
+const handleBasicEvaluateCheckAttributeRatio = (event: unknown, characterId: EntityId, attributeName: string, modifier: number) => {
+  const currentCharacter = characterRepository.getById(characterId)
+  if (currentCharacter) {
+    basicEngine.evaluateCheckAttributeRatio(currentCharacter, attributeName, modifier)
+  }
+}
+
 const handleBasicCheckAttribute = (event: unknown, characterId: EntityId, attributeName: string, modifier: number) => {
   const currentCharacter = characterRepository.getById(characterId)
   if (currentCharacter) {
     basicEngine.checkAttribute(currentCharacter, attributeName, modifier)
+  }
+}
+
+const handleBasicEvaluateCheckAbilityRatio = (event: unknown, characterId: EntityId, abilityName: string, difficulty: number, modifier: number) => {
+  const currentCharacter = characterRepository.getById(characterId)
+  if (currentCharacter) {
+    basicEngine.evaluateCheckAbilityRatio(currentCharacter, abilityName, difficulty, modifier)
   }
 }
 
@@ -308,6 +322,8 @@ app.whenReady().then(() => {
   ipcMain.handle('rddEvaluateCheckAttributeRatio', handleRddEvaluateCheckAttributeRatio)
   ipcMain.handle('rddCheckAttribute', handleRddCheckAttribute)
 
+  ipcMain.handle('basicEvaluateCheckAttributeRatio', handleBasicEvaluateCheckAttributeRatio)
   ipcMain.handle('basicCheckAttribute', handleBasicCheckAttribute)
+  ipcMain.handle('basicEvaluateCheckAbilityRatio', handleBasicEvaluateCheckAbilityRatio)
   ipcMain.handle('basicCheckAbility', handleBasicCheckAbility)
 })
