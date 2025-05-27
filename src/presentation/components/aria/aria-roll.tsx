@@ -88,7 +88,7 @@ export const AriaRoll = ({ characterId, rollStat, statName }: Props) => {
 
   return (
     <Card>
-      <Box padding={2} sx={{ minWidth: 300 }}>
+      <Box padding={2} sx={{ minWidth: 400 }}>
         <Grid container alignItems='center'>
           <Grid item xs>
             <Typography variant='h6' color='primary'>{statName}</Typography>
@@ -142,7 +142,7 @@ export const AriaRoll = ({ characterId, rollStat, statName }: Props) => {
                 </Box>
               </Stack>
             </Grid>
-            <Grid item xs ml={1}>
+            <Grid item xs='auto' ml={2}>
               <SuccessRate ratio={successRatio} />
             </Grid>
           </Grid>

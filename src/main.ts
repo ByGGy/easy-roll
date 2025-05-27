@@ -242,12 +242,19 @@ const handleAriaEvaluateCheckAbilityRatio = (event: unknown, characterId: Entity
   if (currentCharacter) {
     ariaEngine.evaluateCheckAbilityRatio(currentCharacter, abilityName, modifier)
   }
-  }
+}
 
 const handleAriaCheckAbility = (event: unknown, characterId: EntityId, abilityName: string, modifier: number) => {
   const currentCharacter = characterRepository.getById(characterId)
   if (currentCharacter) {
     ariaEngine.checkAbility(currentCharacter, abilityName, modifier)
+  }
+}
+
+const handleRddEvaluateCheckAttributeRatio = (event: unknown, characterId: EntityId, attributeName: string, abilityName: string, modifier: number) => {
+  const currentCharacter = characterRepository.getById(characterId)
+  if (currentCharacter) {
+    rddEngine.evaluateCheckAttributeRatio(currentCharacter, attributeName, abilityName, modifier)
   }
 }
 
@@ -298,6 +305,7 @@ app.whenReady().then(() => {
   ipcMain.handle('ariaEvaluateCheckAbilityRatio', handleAriaEvaluateCheckAbilityRatio)
   ipcMain.handle('ariaCheckAbility', handleAriaCheckAbility)
 
+  ipcMain.handle('rddEvaluateCheckAttributeRatio', handleRddEvaluateCheckAttributeRatio)
   ipcMain.handle('rddCheckAttribute', handleRddCheckAttribute)
 
   ipcMain.handle('basicCheckAttribute', handleBasicCheckAttribute)

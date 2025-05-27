@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import Card from '@mui/material/Card'
@@ -14,6 +14,7 @@ import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore
 
 import { evaluateModifierColor } from '../common/style-helpers'
 import { DiceIcon } from '../common/dice-icon'
+import { SuccessRate } from '../common/success-rate'
 
 import { Ability, EntityId } from '../../../domain/common/types'
 
@@ -41,6 +42,15 @@ type Props = {
 export const RddRoll = ({ characterId, attributeName, abilities }: Props) => {
   const [abilityName, setAbilityName] = useState('')
   const [modifier, setModifier] = useState(0)
+  const [successRatio, setSuccessRatio] = useState(0)
+
+  useEffect(() => {
+    window.electronAPI.rddEvaluateCheckAttributeRatio(characterId, attributeName, abilityName, modifier)
+  }, [abilityName, modifier])
+
+  useEffect(() => {
+    window.electronAPI.onMessage('Domain.Rdd.successRatio', setSuccessRatio)
+  }, [])
 
   const handleReset = () => {
     setAbilityName('')
@@ -63,7 +73,7 @@ export const RddRoll = ({ characterId, attributeName, abilities }: Props) => {
 
   return (
     <Card>
-      <Box padding={2} sx={{ minWidth: 400 }}>
+      <Box padding={2} sx={{ minWidth: 500 }}>
         <Grid container alignItems='center'>
           <Grid item xs>
             <Typography variant='h6' color='primary'>{attributeName}</Typography>
@@ -75,40 +85,47 @@ export const RddRoll = ({ characterId, attributeName, abilities }: Props) => {
           </Grid>
         </Grid>
         <CardContent>
-          <Stack gap={4}>
-            <FormControl fullWidth>
-              <InputLabel>Pick an ability</InputLabel>
-              <Select
-                value={abilityName}
-                label='Pick an ability'
-                onChange={handleAbilitySelection}
-              >
-                <MenuItem value=''>None</MenuItem>
-                {sortedAbilities.map((ability) =>
-                  <MenuItem key={ability.name} value={ability.name}>
-                    <AbilityItem ability={ability} />
-                  </MenuItem>
-                )}
-              </Select>
-            </FormControl>
-            <Box>
-              <Stack direction='row' spacing={2} sx={{ mb: 1 }} alignItems='baseline'>
-                <Typography color='text.secondary'>Modifier</Typography>
-                <Typography variant='body2'>{`${modifier > 0 ? '+' :''}${modifier}`}</Typography>
+          <Grid container alignItems='center'>
+            <Grid item xs>
+              <Stack gap={4}>
+                <FormControl fullWidth>
+                  <InputLabel>Pick an ability</InputLabel>
+                  <Select
+                    value={abilityName}
+                    label='Pick an ability'
+                    onChange={handleAbilitySelection}
+                  >
+                    <MenuItem value=''>None</MenuItem>
+                    {sortedAbilities.map((ability) =>
+                      <MenuItem key={ability.name} value={ability.name}>
+                        <AbilityItem ability={ability} />
+                      </MenuItem>
+                    )}
+                  </Select>
+                </FormControl>
+                <Box>
+                  <Stack direction='row' spacing={2} sx={{ mb: 1 }} alignItems='baseline'>
+                    <Typography color='text.secondary'>Modifier</Typography>
+                    <Typography variant='body2'>{`${modifier > 0 ? '+' :''}${modifier}`}</Typography>
+                  </Stack>
+                  <Slider
+                    value={modifier}
+                    onChange={handleModifierChange}
+                    min={-20}
+                    max={+20}
+                    step={1}
+                    marks
+                    sx={{
+                      color: evaluateModifierColor(modifier)
+                    }}
+                  />
+                </Box>
               </Stack>
-              <Slider
-                value={modifier}
-                onChange={handleModifierChange}
-                min={-20}
-                max={+20}
-                step={1}
-                marks
-                sx={{
-                  color: evaluateModifierColor(modifier)
-                }}
-              />
-            </Box>
-          </Stack>
+            </Grid>
+            <Grid item xs='auto' ml={2}>
+              <SuccessRate ratio={successRatio} />
+            </Grid>
+          </Grid>              
         </CardContent>
         <CardActions>
           <Button variant='contained' color='primary' startIcon={<DiceIcon />} onClick={handleRoll} fullWidth>

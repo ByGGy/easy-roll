@@ -72,7 +72,7 @@ export const SuccessRate = ({ ratio }: Props) => {
 
       <Stack direction='row' alignItems='baseline' margin={4} sx={{
           position: 'absolute',
-          top: '-10%',
+          top: '-5%',
           left: '10%',
         }}>
         <OutlinedText text={`${Math.round(ratio * 100)}`} variant='h3' color={targetColor} />
