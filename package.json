@@ -52,6 +52,7 @@
     "@mui/material": "^5.16.7",
     "@mui/x-data-grid": "^7.22.0",
     "@reduxjs/toolkit": "^2.3.0",
+    "color": "^5.0.0",
     "electron-squirrel-startup": "^1.0.0",
     "glob": "^11.0.0",
     "lodash": "^4.17.21",
