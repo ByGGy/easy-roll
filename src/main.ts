@@ -223,12 +223,26 @@ const handleDiceTrayEvaluate = (event: unknown, characterId: EntityId, expressio
   }
 }
 
+const handleAriaEvaluateCheckAttributeRatio = (event: unknown, characterId: EntityId, attributeName: string, difficulty: number, modifier: number) => {
+  const currentCharacter = characterRepository.getById(characterId)
+  if (currentCharacter) {
+    ariaEngine.evaluateCheckAttributeRatio(currentCharacter, attributeName, difficulty, modifier)
+  }
+  }
+
 const handleAriaCheckAttribute = (event: unknown, characterId: EntityId, attributeName: string, difficulty: number, modifier: number) => {
   const currentCharacter = characterRepository.getById(characterId)
   if (currentCharacter) {
     ariaEngine.checkAttribute(currentCharacter, attributeName, difficulty, modifier)
   }
 }
+
+const handleAriaEvaluateCheckAbilityRatio = (event: unknown, characterId: EntityId, abilityName: string, modifier: number) => {
+  const currentCharacter = characterRepository.getById(characterId)
+  if (currentCharacter) {
+    ariaEngine.evaluateCheckAbilityRatio(currentCharacter, abilityName, modifier)
+  }
+  }
 
 const handleAriaCheckAbility = (event: unknown, characterId: EntityId, abilityName: string, modifier: number) => {
   const currentCharacter = characterRepository.getById(characterId)
@@ -279,7 +293,9 @@ app.whenReady().then(() => {
   ipcMain.handle('diceTrayValidate', handleDiceTrayValidate)  
   ipcMain.handle('diceTrayEvaluate', handleDiceTrayEvaluate)  
 
+  ipcMain.handle('ariaEvaluateCheckAttributeRatio', handleAriaEvaluateCheckAttributeRatio)
   ipcMain.handle('ariaCheckAttribute', handleAriaCheckAttribute)
+  ipcMain.handle('ariaEvaluateCheckAbilityRatio', handleAriaEvaluateCheckAbilityRatio)
   ipcMain.handle('ariaCheckAbility', handleAriaCheckAbility)
 
   ipcMain.handle('rddCheckAttribute', handleRddCheckAttribute)

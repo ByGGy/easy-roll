@@ -51,14 +51,14 @@ const OutlinedText = ({ text, variant, color }: OutlinedTextProps) => {
 }
 
 type Props = {
-  successRatio: number
+  ratio: number
 }
 
-export const SuccessRate = ({ successRatio = 0.64 }: Props) => {
+export const SuccessRate = ({ ratio }: Props) => {
   const theme = useTheme()
   const warningColor = get(theme.palette, 'warning.main')
   const successColor = get(theme.palette, 'success.main')
-  const targetColor = Color(warningColor).mix(Color(successColor), successRatio).hex() as HexColor
+  const targetColor = Color(warningColor).mix(Color(successColor), ratio).hex() as HexColor
 
   return (
     <Box position="relative" width={120} height={120}>
@@ -75,7 +75,7 @@ export const SuccessRate = ({ successRatio = 0.64 }: Props) => {
           top: '-10%',
           left: '10%',
         }}>
-        <OutlinedText text={`${Math.round(successRatio * 100)}`} variant='h3' color={targetColor} />
+        <OutlinedText text={`${Math.round(ratio * 100)}`} variant='h3' color={targetColor} />
         <OutlinedText text='%' variant='h6' color={targetColor} />
       </Stack>
     </Box>

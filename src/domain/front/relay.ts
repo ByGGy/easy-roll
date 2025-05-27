@@ -33,6 +33,12 @@ export const createRelay = (window: BrowserWindow) => {
 
   transfer('Domain.SessionRepository.update', handleSessionRepositoryUpdate)
 
+  const handleNumber = (eventName: string, value: number) => {
+    window.webContents.send(eventName, value)
+  }
+
+  transfer('Domain.Aria.successRatio', handleNumber)
+
   const handleDiceTrayValidation = (eventName: string, validationResult: ParserResult) => {
     window.webContents.send(eventName, JSON.stringify(validationResult))
   }

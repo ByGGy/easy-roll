@@ -4,12 +4,23 @@ import { RollCheckDetails, RollResult } from '../common/types'
 import { CharacterData } from '../character/character'
 import { engine as diceTrayEngine } from '../dicetray/engine'
 
+const findCheckAttributeThreshold = (attributeValue: number, difficulty: number, modifier: number): number => {
+  return Math.max(0, Math.min(attributeValue * difficulty + modifier, 100))
+}
+
+const evaluateCheckAttributeRatio = (character: CharacterData, attributeName: string, difficulty: number, modifier: number) => {
+  const attribute = character.state.attributes.find((a) => a.name === attributeName)
+  if (attribute !== undefined) {
+    messageBus.emit('Domain.Aria.successRatio', (findCheckAttributeThreshold(attribute.value, difficulty, modifier) * 0.01).toFixed(2))
+  }
+}
+
 const checkAttribute = (character: CharacterData, attributeName: string, difficulty: number, modifier: number): RollResult | null => {
   const attribute = character.state.attributes.find((a) => a.name === attributeName)
   if (attribute !== undefined) {
     const title = attribute.name
 
-    const successThreshold = attribute.value * difficulty + modifier
+    const successThreshold = findCheckAttributeThreshold(attribute.value, difficulty, modifier)
     const expression = `1d100<=${successThreshold}`
 
     const checkDetails: RollCheckDetails = {
@@ -39,12 +50,23 @@ const checkAttribute = (character: CharacterData, attributeName: string, difficu
   return null
 }
 
+const findCheckAbilityThreshold = (abilityValue: number, modifier: number): number => {
+  return Math.max(0, Math.min(abilityValue + modifier, 100))
+}
+
+const evaluateCheckAbilityRatio = (character: CharacterData, abilityName: string, modifier: number) => {
+  const ability = character.state.abilities.find((a) => a.name === abilityName)
+  if (ability !== undefined) {
+    messageBus.emit('Domain.Aria.successRatio', (findCheckAbilityThreshold(ability.value, modifier) * 0.01).toFixed(2))
+  }
+}
+
 const checkAbility = (character: CharacterData, abilityName: string, modifier: number): RollResult | null => {
   const ability = character.state.abilities.find((a) => a.name === abilityName)
   if (ability !== undefined) {
     const title = ability.name
   
-    const successThreshold = ability.value + modifier
+    const successThreshold = findCheckAbilityThreshold(ability.value, modifier)
     const expression = `1d100<=${successThreshold}`
 
     const checkDetails: RollCheckDetails = {
@@ -70,6 +92,8 @@ const checkAbility = (character: CharacterData, abilityName: string, modifier: n
 }
 
 export const engine = {
+  evaluateCheckAttributeRatio,
   checkAttribute,
+  evaluateCheckAbilityRatio,
   checkAbility
 }
