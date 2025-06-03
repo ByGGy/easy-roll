@@ -1,6 +1,6 @@
 import { messageBus } from '../events/messageBus'
 
-import { RollCheckDetails, RollCheckOutcome, RollDiceDetails, RollOutcomeDetails, RollResult } from '../common/types'
+import { IsCheckOutcome, RollCheckDetails, RollCheckOutcome, RollDiceDetails, RollOutcomeDetails, RollResult } from '../common/types'
 import { CharacterData } from '../character/character'
 import { rollDice } from './roll'
 import { createRPG02 } from './calculator/factory'
@@ -91,8 +91,9 @@ const evaluate = (character: CharacterData, expression: string): RollResult | nu
     }
 
     const outcome = checkDetails?.evaluateOutcome(diceDetails.total, checkDetails.successThreshold) ?? 'value'
+    const quality = IsCheckOutcome(outcome) ? checkDetails?.evaluateQuality(outcome, diceDetails.total, checkDetails.successThreshold) ?? 'normal' : 'normal'
     const outcomeDetails: RollOutcomeDetails = {
-      quality: checkDetails?.evaluateQuality(outcome, diceDetails.total, checkDetails.successThreshold) ?? 'normal'
+      quality
     }
 
     const result: RollResult = {

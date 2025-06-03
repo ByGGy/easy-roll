@@ -2,7 +2,7 @@ import Box from '@mui/material/Box'
 import Typography, { TypographyOwnProps } from '@mui/material/Typography'
 import { darken } from '@mui/material/styles'
 
-type HexColor = `#${string}`
+export type HexColor = `#${string}`
 
 type Props = {
   text: string

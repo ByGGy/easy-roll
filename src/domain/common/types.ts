@@ -40,6 +40,10 @@ export type RollCheckQuality = 'critical' | 'particular' | 'significant' | 'norm
 
 export type RollOutcome = 'value' | RollCheckOutcome
 
+export const IsCheckOutcome = (outcome: RollOutcome): outcome is RollCheckOutcome => {
+  return outcome === 'success' || outcome === 'failure'
+}
+
 export type RollCheckFactor = {
   type: 'base' | 'offset' | 'multiplier'
   name: string

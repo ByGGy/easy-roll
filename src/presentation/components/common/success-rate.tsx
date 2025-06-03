@@ -5,14 +5,14 @@ import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
 import { useTheme, keyframes } from '@mui/material'
 
-import { OutlinedText } from './outlined-text'
+import { HexColor, OutlinedText } from './outlined-text'
 import { ShutterIcon } from './shutter-icon'
 
 type Props = {
   ratio: number
 }
 
-const shutterCloseKeyframes = keyframes`
+  const shutterCloseKeyframes = keyframes`
   0% {
     transform: rotate(0deg) scale(1);
     opacity: 0.15;
