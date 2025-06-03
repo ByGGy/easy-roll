@@ -3,53 +3,10 @@ import Color from 'color'
 import { useState, useEffect } from 'react'
 import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
-import Typography, { TypographyOwnProps } from '@mui/material/Typography'
 import { useTheme, keyframes } from '@mui/material'
-import { darken } from '@mui/material/styles'
 
+import { OutlinedText } from './outlined-text'
 import { ShutterIcon } from './shutter-icon'
-
-type HexColor = `#${string}`
-
-type OutlinedTextProps = {
-  text: string
-  variant?: TypographyOwnProps['variant']
-  color?: HexColor
-}
-
-const OutlinedText = ({ text, variant, color }: OutlinedTextProps) => {
-  return (
-    <Box position="relative" display="inline-block">
-      <Box
-        position="absolute"
-        top={0}
-        left={0}
-        sx={{ zIndex: 0 }}
-      >
-        <Typography variant={variant}
-          sx={{
-            color: 'transparent',
-            fontWeight: 'bold',
-            WebkitTextStrokeWidth: '0.25em',
-            WebkitTextStrokeColor: `${darken(color ?? '#000000', 0.65)}`,
-          }}
-        >
-          {text}
-        </Typography>
-      </Box>
-
-      <Typography variant={variant} color={color}
-        sx={{
-          position: 'relative',
-          fontWeight: 'bold',
-          zIndex: 1,
-        }}
-      >
-        {text}
-      </Typography>
-    </Box>
-  )
-}
 
 type Props = {
   ratio: number

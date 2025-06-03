@@ -1,6 +1,6 @@
 import { messageBus } from '../events/messageBus'
 
-import { RollCheckDetails, RollDiceDetails, RollResult } from '../common/types'
+import { RollCheckDetails, RollCheckOutcome, RollDiceDetails, RollOutcomeDetails, RollResult } from '../common/types'
 import { CharacterData } from '../character/character'
 import { rollDice } from './roll'
 import { createRPG02 } from './calculator/factory'
@@ -20,12 +20,17 @@ const rollDices = (character: CharacterData, diceFaceQty: number, diceQty: numbe
     total,
   }
 
+  const outcomeDetails: RollOutcomeDetails = {
+    quality: 'normal'
+  }
+
   const result: RollResult = {
     characterId: character.id,
     title: `${diceQty}d${diceFaceQty}${modifier !== 0 ? `${modifier > 0 ? '+' :''}${modifier}` : ''}`,
+    outcome: 'value',
+    outcomeDetails, 
     diceDetails,
     checkDetails: null,
-    isSuccess: null
   }
 
   messageBus.emit('Domain.DiceTray.roll', result)
@@ -69,6 +74,9 @@ const evaluate = (character: CharacterData, expression: string): RollResult | nu
           },
         ],
         successThreshold: condition.operands[1],
+        //TODO: a roll against 100 from the diceTray should use the quality evaluator from the current game ?
+        evaluateOutcome: (value: number, threshold: number) => condition.value ? 'success' : 'failure',
+        evaluateQuality: (outcome: RollCheckOutcome, value: number, threshold: number) => 'normal',
       }
       : null
 
@@ -82,12 +90,18 @@ const evaluate = (character: CharacterData, expression: string): RollResult | nu
       total: condition ? condition.operands[0] : typeof calcResult.value === 'number' ? calcResult.value : NaN
     }
 
+    const outcome = checkDetails?.evaluateOutcome(diceDetails.total, checkDetails.successThreshold) ?? 'value'
+    const outcomeDetails: RollOutcomeDetails = {
+      quality: checkDetails?.evaluateQuality(outcome, diceDetails.total, checkDetails.successThreshold) ?? 'normal'
+    }
+
     const result: RollResult = {
       characterId: character.id,
       title,
+      outcome,
+      outcomeDetails,
       diceDetails,
       checkDetails,
-      isSuccess: condition?.value ?? null
     }
 
     messageBus.emit('Domain.DiceTray.roll', result)
@@ -113,12 +127,18 @@ const evaluateCheck = (character: CharacterData, title: string, checkDetails: Ro
       total: condition ? condition.operands[0] : typeof calcResult.value === 'number' ? calcResult.value : NaN
     }
 
+    const outcome = checkDetails.evaluateOutcome(diceDetails.total, checkDetails.successThreshold)
+    const outcomeDetails: RollOutcomeDetails = {
+      quality: checkDetails.evaluateQuality(outcome, diceDetails.total, checkDetails.successThreshold)
+    }
+
     const result: RollResult = {
       characterId: character.id,
       title,
+      outcome,
+      outcomeDetails,      
       diceDetails,
       checkDetails,
-      isSuccess: condition?.value ?? null
     }
 
     messageBus.emit('Domain.DiceTray.roll', result)

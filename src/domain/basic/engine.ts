@@ -1,8 +1,24 @@
 import { messageBus } from '../events/messageBus'
 
-import { RollCheckDetails, RollResult } from '../common/types'
+import { RollCheckDetails, RollCheckOutcome, RollCheckQuality, RollResult } from '../common/types'
 import { CharacterData } from '../character/character'
 import { engine as diceTrayEngine } from '../dicetray/engine'
+
+export const evaluateOutcome = (value: number, threshold: number): RollCheckOutcome => {
+  if (value <= 5) {
+    return 'success'
+  }
+
+  if (value >= 96) {
+    return 'failure'
+  }
+  
+  return value <= threshold ? 'success' : 'failure'   
+}
+
+export const evaluateQuality = (outcome: 'success' | 'failure', value: number, threshold: number): RollCheckQuality => {
+  return value <= 5 || value >= 96 ? 'critical' : 'normal'
+}
 
 const findCheckAttributeThreshold = (attributeValue: number, modifier: number): number => {
   return Math.max(0, Math.min(attributeValue * 5 + modifier, 100))
@@ -41,7 +57,9 @@ const checkAttribute = (character: CharacterData, attributeName: string, modifie
           value: modifier
         }
       ],
-      successThreshold
+      successThreshold,
+      evaluateOutcome,
+      evaluateQuality,
     }
   
     return diceTrayEngine.evaluateCheck(character, title, checkDetails, expression)
@@ -87,7 +105,9 @@ const checkAbility = (character: CharacterData, abilityName: string, difficulty:
           value: modifier
         }
       ],
-      successThreshold
+      successThreshold,
+      evaluateOutcome,
+      evaluateQuality,
     }
 
     return diceTrayEngine.evaluateCheck(character, title, checkDetails, expression)

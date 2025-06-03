@@ -35,6 +35,11 @@ export type DiscordNotification = {
 
 //--
 
+export type RollCheckOutcome = 'success' | 'failure'
+export type RollCheckQuality = 'critical' | 'particular' | 'significant' | 'normal'
+
+export type RollOutcome = 'value' | RollCheckOutcome
+
 export type RollCheckFactor = {
   type: 'base' | 'offset' | 'multiplier'
   name: string
@@ -44,6 +49,8 @@ export type RollCheckFactor = {
 export type RollCheckDetails = {
   factors: Array<RollCheckFactor>
   successThreshold: number
+  evaluateOutcome: (value: number, threshold: number) => RollCheckOutcome
+  evaluateQuality: (outcome: RollCheckOutcome, value: number, threshold: number) => RollCheckQuality
 }
 
 export type RollDiceGroup = {
@@ -57,10 +64,15 @@ export type RollDiceDetails = {
   total: number
 }
 
+export type RollOutcomeDetails = {
+  quality: RollCheckQuality
+}
+
 export type RollResult = {
   characterId: EntityId
   title: string
+  outcome: RollOutcome
+  outcomeDetails: RollOutcomeDetails
   diceDetails: RollDiceDetails
   checkDetails: RollCheckDetails | null
-  isSuccess: boolean | null
 }

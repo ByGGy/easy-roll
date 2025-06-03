@@ -1,6 +1,7 @@
 import { useSelector } from 'react-redux'
 import { RootState } from '../store/store'
 
+import { styled } from '@mui/material/styles'
 import Stack from '@mui/material/Stack'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
@@ -9,11 +10,21 @@ import Avatar from '@mui/material/Avatar'
 // @ts-ignore
 import Jdenticon from 'react-jdenticon'
 import Divider from '@mui/material/Divider'
+import Badge, { BadgeProps } from '@mui/material/Badge'
 
 import { RollResult } from '../../domain/common/types'
 import { unreachable } from '../../domain/common/tools'
 import { DarkTooltip } from './common/style-helpers'
 import { DiceIcon } from './common/dice-icon'
+
+const QualityBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
+  '& .MuiBadge-badge': {
+    // right: '-0.5em',
+    // top:'0em',
+    backgroundColor: `${theme.palette.background.paper}`,
+    border: `2px solid ${theme.palette.background.paper}`,
+  },
+}));
 
 type RollItemProps = {
   roll: RollResult
@@ -55,6 +66,7 @@ const RollItem = ({ roll, opacity }: RollItemProps) => {
     })
 
     details.push(`threshold: ${roll.checkDetails.successThreshold}`)
+    details.push(`quality: ${roll.outcomeDetails.quality}`)
   }
 
   return (
@@ -67,20 +79,39 @@ const RollItem = ({ roll, opacity }: RollItemProps) => {
         <Typography variant='body1'>{title}</Typography>
       </Stack>
       <DarkTooltip title={<span style={{ whiteSpace: 'pre-line' }}>{details.join('\n')}</span>} placement='right'>
-        <Stack
-          direction='row'
-          padding={0.5}
-          spacing={1}
-          alignItems='center'
-          sx={{
-            backgroundColor: roll.isSuccess !== null ? roll.isSuccess ? 'success.main' : 'error.main' : 'info.light',
-            color:'background.paper',
-            borderRadius: 4
+        <QualityBadge
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right',
           }}
+          badgeContent={
+            <Typography variant='caption' fontWeight='bold' color={roll.outcome === 'success' ? 'success.main' : 'error.main'}>
+              {roll.outcomeDetails.quality[0].toUpperCase()}
+            </Typography>
+          }
+          invisible={roll.outcomeDetails.quality === 'normal'}
         >
-          <DiceIcon color='inherit' />
-          <Typography variant='h6' color='inherit' fontWeight='bold'>{roll.diceDetails.total}</Typography>
-        </Stack>
+          <Stack
+            direction='row'
+            padding={0.5}
+            spacing={1}
+            alignItems='center'
+            sx={{
+              backgroundColor: roll.outcome === 'value' ? 'info.light' : roll.outcome === 'success' ? 'success.main' : 'error.main',
+              color:'background.paper',
+              borderRadius: 4
+            }}
+          >
+            <DiceIcon color='inherit' strokeWidth={roll.outcomeDetails.quality === 'normal' ? 1 : 2} />
+            <Typography variant='h6' pr={1}
+              sx={{
+                fontWeight: roll.outcomeDetails.quality === 'normal' ? '' : 'bold',
+                color: 'inherit',
+              }}>
+              {roll.diceDetails.total}
+            </Typography>
+          </Stack>
+        </QualityBadge>
       </DarkTooltip>
     </Stack>
   )
