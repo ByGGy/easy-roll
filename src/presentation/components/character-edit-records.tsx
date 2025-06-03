@@ -75,6 +75,48 @@ const CharacterEditRecords = ({ title, onChange, records }: CharacterEditRecords
     onChange(newRecords)
   }, [rows])
 
+  const waitForScrollToSettle = (container: HTMLElement, callback: () => void, timeout = 100) => {
+    let lastScrollTop = container.scrollTop
+    let elapsed = 0
+    const interval = 25
+
+    const checkScroll = () => {
+      const currentScrollTop = container.scrollTop
+
+      if (currentScrollTop !== lastScrollTop) {
+        lastScrollTop = currentScrollTop
+        elapsed = 0
+      } else {
+        elapsed += interval
+      }
+
+      if (elapsed >= timeout) {
+        callback()
+      } else {
+        setTimeout(checkScroll, interval)
+      }
+    }
+
+    checkScroll()
+  }
+
+  const scrollThenFocusRow = (id: string) => {
+    const virtualScroller = document.querySelector<HTMLElement>('.MuiDataGrid-virtualScroller')
+    if (virtualScroller !== null) {
+      virtualScroller.scrollTo({
+        top: virtualScroller.scrollHeight,
+        behavior: 'smooth',
+      })
+
+      waitForScrollToSettle(virtualScroller, () => {
+        const cell = document.querySelector<HTMLElement>(`[data-id="${id}"] [data-field="name"]`)
+        if (cell) {
+          cell.focus()
+        }
+      })
+    }
+  }
+
   const handleAddNewRecord = () => {
     const newName = 'New'
     const newId = `${newName}_${lastCount}`
@@ -84,6 +126,7 @@ const CharacterEditRecords = ({ title, onChange, records }: CharacterEditRecords
     ])
 
     setLastCount((oldValue) => oldValue +1)
+    scrollThenFocusRow(newId)
   }
 
   const handleDeleteClick = (id: GridRowId) => () => {
@@ -134,6 +177,10 @@ const CharacterEditRecords = ({ title, onChange, records }: CharacterEditRecords
 
   return (
     <DataGrid sx={{ border: 'none' }}
+      initialState={{
+        pagination: { paginationModel: { pageSize: -1 } }
+      }}
+      pageSizeOptions={[]}
       rows={rows}
       columns={columns}
       editMode='row'
