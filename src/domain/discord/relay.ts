@@ -87,6 +87,9 @@ export const createRelay = (repository: Repository<Character, CharacterState>) =
   messageBus.on('Domain.Session.update', handleSessionUpdate)
 
   messageBus.on('Domain.DiceTray.roll', handleRollResult)
+  messageBus.on('Domain.Aria.check', handleRollResult)
+  messageBus.on('Domain.Basic.check', handleRollResult)
+  messageBus.on('Domain.Rdd.check', handleRollResult)
 
   return {}
 }

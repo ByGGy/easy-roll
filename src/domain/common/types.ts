@@ -53,8 +53,6 @@ export type RollCheckFactor = {
 export type RollCheckDetails = {
   factors: Array<RollCheckFactor>
   successThreshold: number
-  evaluateOutcome: (value: number, threshold: number) => RollCheckOutcome
-  evaluateQuality: (outcome: RollCheckOutcome, value: number, threshold: number) => RollCheckQuality
 }
 
 export type RollDiceGroup = {

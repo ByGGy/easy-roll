@@ -1,8 +1,8 @@
 import { messageBus } from '../events/messageBus'
 
-import { RollCheckDetails, RollCheckOutcome, RollCheckQuality, RollResult } from '../common/types'
+import { RollCheckDetails, RollCheckOutcome, RollCheckQuality, RollDiceDetails, RollResult } from '../common/types'
 import { CharacterData } from '../character/character'
-import { engine as diceTrayEngine } from '../dicetray/engine'
+import { rollDice } from '../dicetray/roll'
 
 export const evaluateOutcome = (value: number, threshold: number): RollCheckOutcome => {
   if (value === 100) {
@@ -55,8 +55,10 @@ const checkAttribute = (character: CharacterData, attributeName: string, ability
 
     const title = [attribute.name, ...(ability !== undefined ? [ability.name] : [])].join(' + ')
 
+    const diceValue = rollDice(100)
     const successThreshold = findThreshold(attribute.value, (ability !== undefined ? ability.value : 0) + modifier)
-    const expression = `1d100<=${successThreshold}`
+    const outcome = evaluateOutcome(diceValue, successThreshold)
+    const quality = evaluateQuality(outcome, diceValue, successThreshold)
 
     const checkDetails: RollCheckDetails = {
       factors: [
@@ -77,11 +79,28 @@ const checkAttribute = (character: CharacterData, attributeName: string, ability
         },
       ],
       successThreshold,
-      evaluateOutcome,
-      evaluateQuality,
     }
 
-    return diceTrayEngine.evaluateCheck(character, title, checkDetails, expression)
+    const diceDetails: RollDiceDetails = {
+      groups: [{
+        diceQty: 1,
+        diceFaceQty: 100,
+        rolls: [diceValue],
+      }],   
+      total: diceValue
+    }
+
+    const result: RollResult = {
+      characterId: character.id,
+      title,
+      outcome,
+      outcomeDetails: { quality },
+      checkDetails,
+      diceDetails,
+    }
+  
+    messageBus.emit('Domain.Rdd.check', result)
+    return result
   }
 
   return null

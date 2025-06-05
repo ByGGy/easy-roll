@@ -1,8 +1,8 @@
 import { messageBus } from '../events/messageBus'
 
-import { RollCheckDetails, RollCheckOutcome, RollCheckQuality, RollResult } from '../common/types'
+import { RollCheckDetails, RollCheckOutcome, RollCheckQuality, RollDiceDetails, RollResult } from '../common/types'
 import { CharacterData } from '../character/character'
-import { engine as diceTrayEngine } from '../dicetray/engine'
+import { rollDice } from '../dicetray/roll'
 
 export const evaluateOutcome = (value: number, threshold: number): RollCheckOutcome => {
   if (value <= 5) {
@@ -36,8 +36,10 @@ const checkAttribute = (character: CharacterData, attributeName: string, difficu
   if (attribute !== undefined) {
     const title = attribute.name
 
+    const diceValue = rollDice(100)
     const successThreshold = findCheckAttributeThreshold(attribute.value, difficulty, modifier)
-    const expression = `1d100<=${successThreshold}`
+    const outcome = evaluateOutcome(diceValue, successThreshold)
+    const quality = evaluateQuality(outcome, diceValue, successThreshold)
 
     const checkDetails: RollCheckDetails = {
       factors: [
@@ -58,11 +60,28 @@ const checkAttribute = (character: CharacterData, attributeName: string, difficu
         }
       ],
       successThreshold,
-      evaluateOutcome,
-      evaluateQuality,
     }
 
-    return diceTrayEngine.evaluateCheck(character, title, checkDetails, expression)
+    const diceDetails: RollDiceDetails = {
+      groups: [{
+        diceQty: 1,
+        diceFaceQty: 100,
+        rolls: [diceValue],
+      }],
+      total: diceValue
+    }
+
+    const result: RollResult = {
+      characterId: character.id,
+      title,
+      outcome,
+      outcomeDetails: { quality },
+      checkDetails,
+      diceDetails,
+    }
+  
+    messageBus.emit('Domain.Aria.check', result)
+    return result
   }
 
   return null
@@ -84,8 +103,10 @@ const checkAbility = (character: CharacterData, abilityName: string, modifier: n
   if (ability !== undefined) {
     const title = ability.name
   
+    const diceValue = rollDice(100)
     const successThreshold = findCheckAbilityThreshold(ability.value, modifier)
-    const expression = `1d100<=${successThreshold}`
+    const outcome = evaluateOutcome(diceValue, successThreshold)
+    const quality = evaluateQuality(outcome, diceValue, successThreshold)
 
     const checkDetails: RollCheckDetails = {
       factors: [
@@ -101,11 +122,28 @@ const checkAbility = (character: CharacterData, abilityName: string, modifier: n
         }
       ],
       successThreshold,
-      evaluateOutcome,
-      evaluateQuality,
     }
 
-    return diceTrayEngine.evaluateCheck(character, title, checkDetails, expression)
+    const diceDetails: RollDiceDetails = {
+      groups: [{
+        diceQty: 1,
+        diceFaceQty: 100,
+        rolls: [diceValue],
+      }],   
+      total: diceValue
+    }
+
+    const result: RollResult = {
+      characterId: character.id,
+      title,
+      outcome,
+      outcomeDetails: { quality },
+      checkDetails,
+      diceDetails,
+    }
+  
+    messageBus.emit('Domain.Aria.check', result)
+    return result
   }
 
   return null

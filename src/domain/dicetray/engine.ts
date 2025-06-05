@@ -74,9 +74,6 @@ const evaluate = (character: CharacterData, expression: string): RollResult | nu
           },
         ],
         successThreshold: condition.operands[1],
-        //TODO: a roll against 100 from the diceTray should use the quality evaluator from the current game ?
-        evaluateOutcome: (value: number, threshold: number) => condition.value ? 'success' : 'failure',
-        evaluateQuality: (outcome: RollCheckOutcome, value: number, threshold: number) => 'normal',
       }
       : null
 
@@ -90,10 +87,9 @@ const evaluate = (character: CharacterData, expression: string): RollResult | nu
       total: condition ? condition.operands[0] : typeof calcResult.value === 'number' ? calcResult.value : NaN
     }
 
-    const outcome = checkDetails?.evaluateOutcome(diceDetails.total, checkDetails.successThreshold) ?? 'value'
-    const quality = IsCheckOutcome(outcome) ? checkDetails?.evaluateQuality(outcome, diceDetails.total, checkDetails.successThreshold) ?? 'normal' : 'normal'
+    const outcome = condition ? (condition.value ? 'success' : 'failure') : 'value'
     const outcomeDetails: RollOutcomeDetails = {
-      quality
+      quality: 'normal'
     }
 
     const result: RollResult = {
@@ -112,46 +108,8 @@ const evaluate = (character: CharacterData, expression: string): RollResult | nu
   return null
 }
 
-const evaluateCheck = (character: CharacterData, title: string, checkDetails: RollCheckDetails, expression: string): RollResult | null => {
-  const calcResult = calculator.compute(expression)
-  if (calcResult !== null ) {
-    const rolls = calcResult.details.filter(d => d.operatorInfo.name === diceRolls.name)
-    const condition = findComparison(calcResult.details)
-
-    const diceDetails: RollDiceDetails = {
-      groups: rolls.map(r => (
-        {
-          diceQty: r.operands[0],
-          diceFaceQty: r.operands[1],
-          rolls: r.extra,
-        })),
-      total: condition ? condition.operands[0] : typeof calcResult.value === 'number' ? calcResult.value : NaN
-    }
-
-    const outcome = checkDetails.evaluateOutcome(diceDetails.total, checkDetails.successThreshold)
-    const outcomeDetails: RollOutcomeDetails = {
-      quality: checkDetails.evaluateQuality(outcome, diceDetails.total, checkDetails.successThreshold)
-    }
-
-    const result: RollResult = {
-      characterId: character.id,
-      title,
-      outcome,
-      outcomeDetails,      
-      diceDetails,
-      checkDetails,
-    }
-
-    messageBus.emit('Domain.DiceTray.roll', result)
-    return result
-  }
-
-  return null
-}
-
 export const engine = {
   rollDices,
   validate,
-  evaluate,
-  evaluateCheck
+  evaluate
 }
