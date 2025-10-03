@@ -2,7 +2,7 @@ import { readFileSync } from 'fs'
 import { get } from 'lodash'
 
 import { unreachable } from '../common/tools'
-import { Game, Attribute, Ability, DiscordNotification } from '../common/types'
+import { Game, Attribute, Ability, DiscordNotification, DiceAction } from '../common/types'
 import { Character, create } from './character'
 import { createDefaultAttributes as createAriaDefaultAttributes, createDefaultAbilities as createAriaDefaultAbilities } from '../aria/characterTemplate'
 import { createDefaultAttributes as createRddDefaultAttributes, createDefaultAbilities as  createRddDefaultAbilities } from '../rdd/characterTemplate'
@@ -35,6 +35,16 @@ const createDefaultAbilitiesFor = (game: Game): Array<Ability> => {
   }
 }
 
+const createDefaultDiceActionsFor = (game: Game): Array<DiceAction> => {
+  switch (game) {
+    default: return unreachable(game)
+    case 'Aria':
+    case 'Rêve de Dragon':
+    case 'BaSIC':
+      return []
+  }
+}
+
 const createDefaultDiscordConfiguration = (): DiscordNotification => ({ enable: false, level: 'Standard', channelId: '' })
 
 export const createCharacterService = (): CharacterService => {
@@ -45,6 +55,7 @@ export const createCharacterService = (): CharacterService => {
       tags: [game], 
       attributes: createDefaultAttributesFor(game),
       abilities: createDefaultAbilitiesFor(game),
+      diceActions: createDefaultDiceActionsFor(game),
       discordNotification: createDefaultDiscordConfiguration()
     }
 
@@ -91,6 +102,8 @@ export const createCharacterService = (): CharacterService => {
         }
       })
 
+      const diceActions = createDefaultDiceActionsFor(game)
+
       const discordNotification = createDefaultDiscordConfiguration()
 
       // from v0.3.0 CharacterSheet shape..
@@ -111,6 +124,7 @@ export const createCharacterService = (): CharacterService => {
         tags: [game], 
         attributes,
         abilities,
+        diceActions,
         discordNotification,
       }
 

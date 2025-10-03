@@ -3,7 +3,7 @@
 
 import { contextBridge, ipcRenderer } from 'electron'
 
-import { EntityId, Game, Attribute, Ability, NotificationLevel } from './domain/common/types'
+import { EntityId, Game, Attribute, Ability, NotificationLevel, DiceAction } from './domain/common/types'
 
 declare global {
   interface Window {
@@ -29,6 +29,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   renameCharacter: (id: EntityId, newName: string) => ipcRenderer.invoke('renameCharacter', id, newName),
   changeCharacterAttributes: (id: EntityId, newAttributes: Array<Attribute>) => ipcRenderer.invoke('changeCharacterAttributes', id, newAttributes),
   changeCharacterAbilities: (id: EntityId, newAbilities: Array<Ability>) => ipcRenderer.invoke('changeCharacterAbilities', id, newAbilities),
+  changeCharacterDiceActions: (id: EntityId, newDiceActions: Array<DiceAction>) => ipcRenderer.invoke('changeCharacterDiceActions', id, newDiceActions),
   changeCharacterDiscordNotification: (id: EntityId, enable: boolean, level: NotificationLevel, channelId: string) => ipcRenderer.invoke('changeCharacterDiscordNotification', id, enable, level, channelId),
   toggleCharacterDiscordNotification: (id: EntityId) => ipcRenderer.invoke('toggleCharacterDiscordNotification', id),
 

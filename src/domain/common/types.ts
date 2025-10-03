@@ -25,6 +25,11 @@ export type Ability = Nominal<'Ability', Readonly<{
   value: number
 }>>
 
+export type DiceAction = Nominal<'DiceAction', Readonly<{
+  name: string
+  expression: string
+}>>
+
 export type NotificationLevel = 'Strict' | 'Standard' | 'Verbose'
 
 export type DiscordNotification = {

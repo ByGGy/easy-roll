@@ -37,17 +37,17 @@ const EditToolbar = ({ title, addNewRecord }: EditToolbarProps) => {
 
 //--
 
-type SimpleModel = {
+type SimpleModel<T> = {
   name: string
-  value: number
+  value: T
 }
 
-type GridRowData = SimpleModel & {
+type GridRowData<T> = SimpleModel<T> & {
   id: string
   isNew: boolean
 }
 
-const createRows = (data: Array<SimpleModel>): Array<GridRowData> => {
+const createRows = <T,>(data: Array<SimpleModel<T>>): Array<GridRowData<T>> => {
   return data.toSorted((aA, aB) => aA.name.localeCompare(aB.name)).map(a =>({
     id: a.name,
     name: a.name,
@@ -58,20 +58,21 @@ const createRows = (data: Array<SimpleModel>): Array<GridRowData> => {
 
 //--
 
-type CharacterEditRecordsProps = {
+type CharacterEditRecordsProps<T> = {
   title: string
-  onChange: (newRecords: Array<SimpleModel>) => void
-  records: Array<SimpleModel>
+  getDefaultValue: () => T
+  onChange: (newRecords: Array<SimpleModel<T>>) => void
+  records: Array<SimpleModel<T>>
 }
 
 // TODO: look at https://mui.com/x/react-data-grid/editing/
 // need some work on data validation, error reporting
-const CharacterEditRecords = ({ title, onChange, records }: CharacterEditRecordsProps) => {
+const CharacterEditRecords = <T,>({ title, getDefaultValue, onChange, records }: CharacterEditRecordsProps<T>) => {
   const [lastCount, setLastCount] = useState(records.length +1)
   const [rows, setRows] = useState(createRows(records))
 
   useEffect(() => {
-    const newRecords: Array<SimpleModel> = rows.map(r => ({ name: r.name, value: r.value }))
+    const newRecords: Array<SimpleModel<T>> = rows.map(r => ({ name: r.name, value: r.value }))
     onChange(newRecords)
   }, [rows])
 
@@ -122,7 +123,7 @@ const CharacterEditRecords = ({ title, onChange, records }: CharacterEditRecords
     const newId = `${newName}_${lastCount}`
     setRows((oldRows) => [
       ...oldRows,
-      { id: newId, name: newName, value: 0, isNew: true },
+      { id: newId, name: newName, value: getDefaultValue(), isNew: true },
     ])
 
     setLastCount((oldValue) => oldValue +1)
@@ -133,7 +134,7 @@ const CharacterEditRecords = ({ title, onChange, records }: CharacterEditRecords
     setRows(rows.filter((row) => row.id !== id))
   }
 
-  const processRowUpdate = (newRow: GridRowData) => {
+  const processRowUpdate = (newRow: GridRowData<T>) => {
     const updatedRow = { ...newRow, isNew: false }
     setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)))
     return updatedRow
@@ -148,8 +149,8 @@ const CharacterEditRecords = ({ title, onChange, records }: CharacterEditRecords
     },
     {
       field: 'value',
-      headerName: 'Value',
-      type: 'number',
+      headerName: typeof getDefaultValue() === 'number' ? 'Value' : 'Expression',
+      type: typeof getDefaultValue() === 'number' ? 'number' : 'string',
       align: 'left',
       headerAlign: 'left',
       editable: true,
@@ -205,7 +206,7 @@ type CharacterEditDialogProps = {
 
 // TODO: refactor with a common CharacterEditRecordsDialog ?
 export const CharacterEditAttributesDialog = ({ open, onClose, character }: CharacterEditDialogProps) => {
-  const [lastRecords, setLastRecords] = useState<Array<SimpleModel>>([])
+  const [lastRecords, setLastRecords] = useState<Array<SimpleModel<number>>>([])
 
   const handleCancel = () => {
     onClose()
@@ -216,7 +217,7 @@ export const CharacterEditAttributesDialog = ({ open, onClose, character }: Char
     onClose()
   }
 
-  const handleChange = (newRecords: Array<SimpleModel>) => {
+  const handleChange = (newRecords: Array<SimpleModel<number>>) => {
     setLastRecords(newRecords)
   }
 
@@ -230,6 +231,7 @@ export const CharacterEditAttributesDialog = ({ open, onClose, character }: Char
       <DialogContent>
         <CharacterEditRecords
           title='Edit Attributes'
+          getDefaultValue={() => 0}
           onChange={handleChange}
           records={character.state.attributes}
         />
@@ -243,7 +245,7 @@ export const CharacterEditAttributesDialog = ({ open, onClose, character }: Char
 }
 
 export const CharacterEditAbilitiesDialog = ({ open, onClose, character }: CharacterEditDialogProps) => {
-  const [lastRecords, setLastRecords] = useState<Array<SimpleModel>>([])
+  const [lastRecords, setLastRecords] = useState<Array<SimpleModel<number>>>([])
 
   const handleCancel = () => {
     onClose()
@@ -254,7 +256,7 @@ export const CharacterEditAbilitiesDialog = ({ open, onClose, character }: Chara
     onClose()
   }
 
-  const handleChange = (newRecords: Array<SimpleModel>) => {
+  const handleChange = (newRecords: Array<SimpleModel<number>>) => {
     setLastRecords(newRecords)
   }
 
@@ -268,8 +270,56 @@ export const CharacterEditAbilitiesDialog = ({ open, onClose, character }: Chara
       <DialogContent>
         <CharacterEditRecords
           title='Edit Abilities'
+          getDefaultValue={() => 0}
           onChange={handleChange}
           records={character.state.abilities}
+        />
+      </DialogContent>
+      <DialogActions>
+        <Button variant='text' onClick={handleCancel}>Cancel</Button>
+        <Button variant='contained' onClick={handleApply}>Apply</Button>
+      </DialogActions>
+    </Dialog>
+  )
+}
+
+export const CharacterEditDiceActionsDialog = ({ open, onClose, character }: CharacterEditDialogProps) => {
+  const [lastRecords, setLastRecords] = useState<Array<SimpleModel<string>>>([])
+
+  const convertedRecords = character.state.diceActions.map((action) => { 
+    return { name: action.name, value: action.expression }
+   })
+
+  const handleCancel = () => {
+    onClose()
+  }
+
+  const handleApply = () => {
+    const newActions = lastRecords.map((record) => { 
+      return { name: record.name, expression: record.value } 
+    })
+
+    window.electronAPI.changeCharacterDiceActions(character.id, newActions)
+    onClose()
+  }
+
+  const handleChange = (newRecords: Array<SimpleModel<string>>) => {
+    setLastRecords(newRecords)
+  }
+
+  return (
+    <Dialog fullWidth maxWidth='xl' open={open} sx={{
+      '& .MuiDialog-paper': {
+        height: '100%',
+        maxHeight: '80vh',
+      }
+    }}>
+      <DialogContent>
+        <CharacterEditRecords
+          title='Edit Dice Actions'
+          getDefaultValue={() => '1d20'}
+          onChange={handleChange}
+          records={convertedRecords}
         />
       </DialogContent>
       <DialogActions>

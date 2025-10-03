@@ -1,5 +1,5 @@
 import { randomUUID } from 'crypto'
-import { EntityId, EntityWithState, Attribute, Ability, DiscordNotification } from '../common/types'
+import { EntityId, EntityWithState, Attribute, Ability, DiscordNotification, DiceAction } from '../common/types'
 import { createState } from '../events/stateEmitter'
 
 // TODO: should have a creation date ?
@@ -9,6 +9,7 @@ export type CharacterState = {
   tags: Array<string>
   attributes: Array<Attribute>
   abilities: Array<Ability>
+  diceActions: Array<DiceAction>
   discordNotification: DiscordNotification
 }
 
@@ -18,6 +19,7 @@ export type Character = CharacterData & {
   rename: (newName: string) => void
   changeAttributes: (newAttributes: Array<Attribute>) => void
   changeAbilities: (newAbilities: Array<Ability>) => void
+  changeDiceActions: (newDiceActions: Array<DiceAction>) => void
   changeDiscordConfiguration: (newConfiguration: DiscordNotification) => void
 }
 
@@ -38,6 +40,10 @@ const createModel = (id: EntityId, state: CharacterState): Character => {
     emitterState.update('abilities', newAbilities)
   }
 
+  const changeDiceActions = (newDiceActions: Array<DiceAction>) => {
+    emitterState.update('diceActions', newDiceActions)
+  }
+
   const changeDiscordConfiguration = (newConfiguration: DiscordNotification) => {
     emitterState.update('discordNotification', newConfiguration)
   }
@@ -48,6 +54,7 @@ const createModel = (id: EntityId, state: CharacterState): Character => {
     rename,
     changeAttributes,
     changeAbilities,
+    changeDiceActions,
     changeDiscordConfiguration
   }
 }

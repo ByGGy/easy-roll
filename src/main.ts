@@ -1,7 +1,7 @@
 import { app, BrowserWindow, ipcMain, dialog } from 'electron'
 import path from 'path'
 
-import { EntityId, Game, Attribute, Ability, NotificationLevel } from './domain/common/types'
+import { EntityId, Game, Attribute, Ability, NotificationLevel, DiceAction } from './domain/common/types'
 import { isNotNull } from './domain/common/tools'
 import { createMigrationService } from './persistence/migrationService'
 import { createRepository } from './persistence/common/repository'
@@ -56,7 +56,7 @@ const createWindow = () => {
   }
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools();
+  mainWindow.webContents.openDevTools();
 
   frontRelay = createFrontRelay(mainWindow)
 
@@ -190,6 +190,13 @@ const handleChangeCharacterAbilities = (event: unknown, id: EntityId, newAbiliti
   }
 }
 
+const handleChangeCharacterDiceActions = (event: unknown, id: EntityId, newDiceActions: Array<DiceAction>) => {
+  const targetCharacter = characterRepository.getById(id)
+  if (targetCharacter) {
+    targetCharacter.changeDiceActions(newDiceActions)
+  }
+}
+
 const handleChangeCharacterDiscordNotification = (event: unknown, id: EntityId, enable: boolean, level: NotificationLevel, channelId: string) => {
   const targetCharacter = characterRepository.getById(id)
   if (targetCharacter) {
@@ -307,6 +314,7 @@ app.whenReady().then(() => {
   ipcMain.handle('renameCharacter', handleRenameCharacter)
   ipcMain.handle('changeCharacterAttributes', handleChangeCharacterAttributes)
   ipcMain.handle('changeCharacterAbilities', handleChangeCharacterAbilities)
+  ipcMain.handle('changeCharacterDiceActions', handleChangeCharacterDiceActions)
   ipcMain.handle('changeCharacterDiscordNotification', handleChangeCharacterDiscordNotification)
   ipcMain.handle('toggleCharacterDiscordNotification', handleToggleCharacterDiscordNotification)
 
