@@ -5,18 +5,17 @@ import Typography from '@mui/material/Typography'
 import IconButton from '@mui/material/IconButton'
 import EditIcon from '@mui/icons-material/Edit'
 
-import { CharacterEditDiceActionsDialog } from '../character-edit-records'
-import { DiceIcon } from '../common/dice-icon'
+import { CharacterEditDiceActionsDialog } from './character-edit-records'
+import { DiceIcon } from './common/dice-icon'
 
-import { CharacterData } from '../../../domain/character/character'
+import { CharacterData } from '../../domain/character/character'
 
 type Props = {
   character: CharacterData
 }
 
-//TODO: move it, this is not aria specific
 //TODO: should be able to provide a label / title when evaluating the expression, used for displaying the result
-export const NewDiceTray = ({ character }: Props) => {
+export const DiceTray = ({ character }: Props) => {
   const [openEditDialog, setOpenEditDialog] = useState(false)
 
   const handleEdit = () => {

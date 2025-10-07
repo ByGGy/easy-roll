@@ -7,7 +7,7 @@ import Tab from '@mui/material/Tab'
 import { CharacterHeader } from '../character-header'
 import { AriaAttributes } from './aria-attributes'
 import { AriaAbilities } from './aria-abilities'
-import { NewDiceTray } from './new-dice-tray'
+import { DiceTray } from '../dice-tray'
 
 import { CharacterData } from '../../../domain/character/character'
 
@@ -62,7 +62,7 @@ export const AriaPage = ({ character }: Props) => {
             <AriaAbilities character={character} />
           </TabPanel>
           <TabPanel value={currentTab} index={2}>
-            <NewDiceTray character={character} />
+            <DiceTray character={character} />
           </TabPanel>
         </Stack>
       </Paper>
