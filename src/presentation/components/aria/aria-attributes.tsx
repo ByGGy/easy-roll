@@ -51,7 +51,7 @@ export const AriaAttributes = ({ character }: Props) => {
               <Typography variant='body1'>{attribute.value}</Typography>
             </Grid>
             <Grid item xs='auto'>
-              <BasicPopover size='small' triggerContent={<DiceIcon fontSize='small' color='primary' />} popoverContent={<AriaRoll characterId={character.id} rollStat='Attribute' statName={attribute.name} />} />
+              <BasicPopover direction='right' size='small' triggerContent={<DiceIcon fontSize='small' color='primary' />} popoverContent={<AriaRoll characterId={character.id} rollStat='Attribute' statName={attribute.name} />} />
             </Grid>
           </Grid>
         )}

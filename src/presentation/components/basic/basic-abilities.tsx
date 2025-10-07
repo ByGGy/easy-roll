@@ -51,7 +51,7 @@ export const BasicAbilities = ({ character }: Props) => {
               <Typography variant='body1'>{`${ability.value}%`}</Typography>
             </Grid>
             <Grid item xs='auto'>
-              <BasicPopover size='small' triggerContent={<DiceIcon fontSize='small' color='primary' />} popoverContent={<BasicRoll characterId={character.id} rollStat='Ability' statName={ability.name} />} />
+              <BasicPopover direction='right' size='small' triggerContent={<DiceIcon fontSize='small' color='primary' />} popoverContent={<BasicRoll characterId={character.id} rollStat='Ability' statName={ability.name} />} />
             </Grid>
           </Grid>
         )}

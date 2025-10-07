@@ -3,8 +3,11 @@ import Avatar from '@mui/material/Avatar'
 // @ts-ignore
 import Jdenticon from 'react-jdenticon'
 
+import { BasicPopover } from './common/pop-over'
 import { EditValue } from './common/edit-value'
 import { DiscordConfiguration } from './discord-configuration'
+import { DiceTray } from './dice-tray'
+import { DiceIcon } from './common/dice-icon'
 
 import { CharacterData } from '../../domain/character/character'
 
@@ -19,7 +22,7 @@ export const CharacterHeader = ({ character }: Props) => {
   }
 
   return (
-    <Grid container alignItems='center' mb={1}>
+    <Grid container alignItems='center' mb={1} spacing={1}>
       <Grid item xs='auto'>        
         <Avatar sx={{ bgcolor: 'text.primary' }}>
           <Jdenticon value={character.state.name} />
@@ -30,6 +33,9 @@ export const CharacterHeader = ({ character }: Props) => {
       </Grid>
       <Grid item xs='auto'>
         <DiscordConfiguration character={character} />
+      </Grid>
+      <Grid item xs='auto'>
+        <BasicPopover triggerContent={<DiceIcon color='secondary' />} popoverContent={<DiceTray character={character} />} />
       </Grid>
     </Grid>
   )

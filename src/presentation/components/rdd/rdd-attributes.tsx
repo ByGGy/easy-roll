@@ -51,7 +51,7 @@ export const RddAttributes = ({ character }: Props) => {
               <Typography variant='body1'>{attribute.value}</Typography>
             </Grid>
             <Grid item xs='auto'>
-              <BasicPopover size='small' triggerContent={<DiceIcon fontSize='small' color='primary' />} popoverContent={<RddRoll characterId={character.id} attributeName={attribute.name} abilities={character.state.abilities} />} />
+              <BasicPopover direction='right' size='small' triggerContent={<DiceIcon fontSize='small' color='primary' />} popoverContent={<RddRoll characterId={character.id} attributeName={attribute.name} abilities={character.state.abilities} />} />
             </Grid>
           </Grid>
         )}
