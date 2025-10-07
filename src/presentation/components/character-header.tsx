@@ -6,7 +6,7 @@ import Jdenticon from 'react-jdenticon'
 import { BasicPopover } from './common/pop-over'
 import { EditValue } from './common/edit-value'
 import { DiscordConfiguration } from './discord-configuration'
-import { DiceTray } from './dice-tray'
+import { QuickRoll } from './quick-roll'
 import { DiceIcon } from './common/dice-icon'
 
 import { CharacterData } from '../../domain/character/character'
@@ -35,7 +35,7 @@ export const CharacterHeader = ({ character }: Props) => {
         <DiscordConfiguration character={character} />
       </Grid>
       <Grid item xs='auto'>
-        <BasicPopover triggerContent={<DiceIcon color='secondary' />} popoverContent={<DiceTray character={character} />} />
+        <BasicPopover triggerContent={<DiceIcon color='secondary' />} popoverContent={<QuickRoll character={character} />} />
       </Grid>
     </Grid>
   )

@@ -14,6 +14,8 @@ type Props = {
   character: CharacterData
 }
 
+//TODO: move it, this is not aria specific
+//TODO: should be able to provide a label / title when evaluating the expression, used for displaying the result
 export const NewDiceTray = ({ character }: Props) => {
   const [openEditDialog, setOpenEditDialog] = useState(false)
 

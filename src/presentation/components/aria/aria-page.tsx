@@ -33,6 +33,7 @@ type Props = {
   character: CharacterData
 }
 
+//TODO: make a generic CharacterPage (they all have the same layout)
 export const AriaPage = ({ character }: Props) => {
   const [currentTab, setCurrentTab] = useState(0)
 
@@ -53,7 +54,7 @@ export const AriaPage = ({ character }: Props) => {
         <Tab label='Dice Tray' />
       </Tabs>
       <Paper elevation={4} sx={{ height: "100%", overflow:'hidden', minWidth: 400 }}>
-        <Stack spacing={1} height='100%' overflow='hidden'>
+        <Stack height='100%' overflow='hidden'>
           <TabPanel value={currentTab} index={0}>
             <AriaAttributes character={character} />
           </TabPanel>

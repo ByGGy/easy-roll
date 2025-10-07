@@ -4,7 +4,6 @@ import Paper from '@mui/material/Paper'
 import { CharacterHeader } from '../character-header'
 import { BasicAttributes } from './basic-attributes'
 import { BasicAbilities } from './basic-abilities'
-import { DiceTray } from '../dice-tray'
 
 import { CharacterData } from '../../../domain/character/character'
 
@@ -24,9 +23,6 @@ export const BasicPage = ({ character }: Props) => {
           <BasicAbilities character={character} />
         </Paper>
       </Stack>
-      <Paper elevation={4}>
-        <DiceTray character={character} />
-      </Paper>
     </Stack>
   )
 }
