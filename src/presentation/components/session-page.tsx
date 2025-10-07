@@ -9,9 +9,7 @@ import Typography from '@mui/material/Typography'
 
 import { SessionHeader } from './session-header'
 import { CharacterSelection } from './character-selection'
-import { AriaPage } from './aria/aria-page'
-import { RddPage } from './rdd/rdd-page'
-import { BasicPage } from './basic/basic-page'
+import { CharacterPage } from './character-page'
 import { RollHistory } from './roll-history'
 
 export const SessionPage = () => {
@@ -33,9 +31,7 @@ export const SessionPage = () => {
               <CharacterSelection session={session} />
             </Paper>
             <Paper elevation={2}>
-              {character && session.state.game === 'Aria' && <AriaPage character={character} />}
-              {character && session.state.game === 'Rêve de Dragon' && <RddPage character={character} />}
-              {character && session.state.game === 'BaSIC' && <BasicPage character={character} />}
+              {character && <CharacterPage game={session.state.game} character={character} />}
               {!character &&
                 <Stack direction='row' padding={2} spacing={2} sx={{ minWidth: 300 }} alignItems='center'>
                   <Avatar sx={{ bgcolor: 'info.dark' }}>
