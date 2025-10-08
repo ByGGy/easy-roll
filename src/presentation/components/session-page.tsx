@@ -41,9 +41,9 @@ export const SessionPage = () => {
                 </Stack>
               }
             </Paper>
+            <RollHistory />
           </Stack>
         </Stack>
-        <RollHistory />
       </Stack>
     )
   }
