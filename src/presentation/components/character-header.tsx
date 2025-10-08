@@ -22,7 +22,7 @@ export const CharacterHeader = ({ character }: Props) => {
   }
 
   return (
-    <Grid container alignItems='center' mb={1} spacing={1}>
+    <Grid container alignItems='center' mb={1} columnSpacing={1}>
       <Grid item xs='auto'>        
         <Avatar sx={{ bgcolor: 'text.primary' }}>
           <Jdenticon value={character.state.name} />
