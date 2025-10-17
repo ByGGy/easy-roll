@@ -55,8 +55,8 @@ const findComparison = (operatorResults: Array<OperatorResult>): ComparisonResul
   return operatorResults.filter(isComparison)[0]
 }
 
-//TODO: cleanup this mess (should split in evaluateRoll and evaluateCheck ?)
-//TODO: "threshold" with < and > operators, but "expectedValue" with == and != ?
+// TODO: cleanup this mess (should split in evaluateRoll and evaluateCheck ?)
+// TODO: "threshold" with < and > operators, but "expectedValue" with == and != ?
 const evaluate = (character: CharacterData, expression: string): RollResult | null => {
   const calcResult = calculator.compute(expression)
   if (calcResult !== null ) {

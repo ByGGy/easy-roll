@@ -14,7 +14,7 @@ type Props = {
   character: CharacterData
 }
 
-//TODO: should be able to provide a label / title when evaluating the expression, used for displaying the result
+// TODO: should be able to provide a label / title when evaluating the expression, used for displaying the result
 export const DiceTray = ({ character }: Props) => {
   const [openEditDialog, setOpenEditDialog] = useState(false)
 
