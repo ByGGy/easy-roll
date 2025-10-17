@@ -1,6 +1,6 @@
 import { messageBus } from '../events/messageBus'
 
-import { IsCheckOutcome, RollCheckDetails, RollCheckOutcome, RollDiceDetails, RollOutcomeDetails, RollResult } from '../common/types'
+import { DiceAction, RollCheckDetails, RollDiceDetails, RollOutcomeDetails, RollResult } from '../common/types'
 import { CharacterData } from '../character/character'
 import { rollDice } from './roll'
 import { createRPG02 } from './calculator/factory'
@@ -57,13 +57,13 @@ const findComparison = (operatorResults: Array<OperatorResult>): ComparisonResul
 
 // TODO: cleanup this mess (should split in evaluateRoll and evaluateCheck ?)
 // TODO: "threshold" with < and > operators, but "expectedValue" with == and != ?
-const evaluate = (character: CharacterData, expression: string): RollResult | null => {
+const evaluate = (character: CharacterData, { name, expression } : DiceAction): RollResult | null => {
   const calcResult = calculator.compute(expression)
   if (calcResult !== null ) {
     const rolls = calcResult.details.filter(d => d.operatorInfo.name === diceRolls.name)
     const condition = findComparison(calcResult.details)
 
-    const title = expression
+    const title = name
     const checkDetails: RollCheckDetails | null = condition
       ? {
         factors: [

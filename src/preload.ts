@@ -36,6 +36,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   diceTrayRoll: (characterId: EntityId, diceFaceQty: number, diceQty: number, modifier: number) => ipcRenderer.invoke('diceTrayRoll', characterId, diceFaceQty, diceQty, modifier),
   diceTrayValidate: (expression: string) => ipcRenderer.invoke('diceTrayValidate', expression),
   diceTrayEvaluate: (characterId: EntityId, expression: string) => ipcRenderer.invoke('diceTrayEvaluate', characterId, expression),
+  diceActionExecute: (characterId: EntityId, actionName: string) => ipcRenderer.invoke('diceActionExecute', characterId, actionName),
 
   // TODO: reduce code duplication (same for presentation components, e.g. BaSIC is very similar to Aria)
   ariaEvaluateCheckAttributeRatio: (characterId: EntityId, attributeName: string, difficulty: number, modifier: number) => ipcRenderer.invoke('ariaEvaluateCheckAttributeRatio', characterId, attributeName, difficulty, modifier),

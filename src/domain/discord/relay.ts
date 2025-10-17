@@ -38,7 +38,7 @@ export const createRelay = (repository: Repository<Character, CharacterState>) =
       let content = ''
       const displayedRollValue = relevantCharacter.state.discordNotification.level === 'Strict' ? '**' : `${roll.diceDetails.total}`
       if (roll.outcome === 'value') {
-        content = `<${relevantCharacter.state.name}> got \`${displayedRollValue}\` on his roll.`
+        content = `<${relevantCharacter.state.name}> got \`${displayedRollValue}\` on his \`${roll.title}\` roll.`
       } else {
         content = `\`\`\`diff\n${roll.outcome === 'success' ? '+' : '-'} <${relevantCharacter.state.name}> ${roll.title} : ${roll.outcomeDetails.quality !== 'normal' ? `${roll.outcomeDetails.quality} ` : ''}${roll.outcome} (${displayedRollValue})\n\`\`\``
       }

@@ -8,6 +8,7 @@ import EditIcon from '@mui/icons-material/Edit'
 import { CharacterEditDiceActionsDialog } from './character-edit-records'
 import { DiceIcon } from './common/dice-icon'
 
+import { DiceAction } from '../../domain/common/types'
 import { CharacterData } from '../../domain/character/character'
 
 type Props = {
@@ -26,8 +27,8 @@ export const DiceTray = ({ character }: Props) => {
     setOpenEditDialog(false)
   }
 
-  const handleRoll = (expression: string) => {
-    window.electronAPI.diceTrayEvaluate(character.id, expression)
+  const handleRoll = (action: DiceAction) => {
+    window.electronAPI.diceActionExecute(character.id, action.name)
   }
 
   const sortedActions = character.state.diceActions.toSorted((aA, aB) => aA.name.localeCompare(aB.name))
@@ -54,7 +55,7 @@ export const DiceTray = ({ character }: Props) => {
               <Typography variant='body1'>{action.expression}</Typography>
             </Grid>
             <Grid item xs='auto'>
-              <IconButton size='small' onClick={() => handleRoll(action.expression)} >
+              <IconButton size='small' onClick={() => handleRoll(action)} >
                 <DiceIcon fontSize='small' color='primary' />
               </IconButton>
             </Grid>

@@ -30,6 +30,10 @@ export type DiceAction = Nominal<'DiceAction', Readonly<{
   expression: string
 }>>
 
+export const createDiceAction = (name: string, expression: string): DiceAction => {
+  return { name, expression } as DiceAction
+}
+
 export type NotificationLevel = 'Strict' | 'Standard' | 'Verbose'
 
 export type DiscordNotification = {

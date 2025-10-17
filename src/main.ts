@@ -1,7 +1,7 @@
 import { app, BrowserWindow, ipcMain, dialog } from 'electron'
 import path from 'path'
 
-import { EntityId, Game, Attribute, Ability, NotificationLevel, DiceAction } from './domain/common/types'
+import { EntityId, Game, Attribute, Ability, NotificationLevel, DiceAction, createDiceAction } from './domain/common/types'
 import { isNotNull } from './domain/common/tools'
 import { createMigrationService } from './persistence/migrationService'
 import { createRepository } from './persistence/common/repository'
@@ -226,7 +226,17 @@ const handleDiceTrayValidate = (event: unknown, expression: string) => {
 const handleDiceTrayEvaluate = (event: unknown, characterId: EntityId, expression: string) => {
   const currentCharacter = characterRepository.getById(characterId)
   if (currentCharacter) {
-    diceTrayEngine.evaluate(currentCharacter, expression)
+    diceTrayEngine.evaluate(currentCharacter, createDiceAction(expression, expression))
+  }
+}
+
+const handleDiceActionExecute = (event: unknown, characterId: EntityId, actionName: string) => {
+  const currentCharacter = characterRepository.getById(characterId)
+  if (currentCharacter) {
+    const actionToExecute = currentCharacter.state.diceActions.find(action => action.name === actionName)
+    if (actionToExecute) {
+      diceTrayEngine.evaluate(currentCharacter, actionToExecute)
+    }
   }
 }
 
@@ -320,7 +330,8 @@ app.whenReady().then(() => {
 
   ipcMain.handle('diceTrayRoll', handleDiceTrayRoll)
   ipcMain.handle('diceTrayValidate', handleDiceTrayValidate)  
-  ipcMain.handle('diceTrayEvaluate', handleDiceTrayEvaluate)  
+  ipcMain.handle('diceTrayEvaluate', handleDiceTrayEvaluate)
+  ipcMain.handle('diceActionExecute', handleDiceActionExecute)
 
   ipcMain.handle('ariaEvaluateCheckAttributeRatio', handleAriaEvaluateCheckAttributeRatio)
   ipcMain.handle('ariaCheckAttribute', handleAriaCheckAttribute)
