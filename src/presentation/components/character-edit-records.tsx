@@ -150,6 +150,7 @@ const CharacterEditRecords = <T,>({ title, getDefaultValue, onChange, records }:
     {
       field: 'value',
       headerName: typeof getDefaultValue() === 'number' ? 'Value' : 'Expression',
+      width: 200,
       type: typeof getDefaultValue() === 'number' ? 'number' : 'string',
       align: 'left',
       headerAlign: 'left',
