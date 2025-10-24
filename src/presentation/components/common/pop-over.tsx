@@ -7,12 +7,11 @@ type Direction = 'down' | 'right'
 
 type Props = {
   direction?: Direction
-  size?: IconButtonOwnProps['size']
-  triggerContent: React.ReactNode
+  triggerComponent: React.ReactElement
   popoverContent: React.ReactNode
 }
 
-export const BasicPopover = ({ direction ='down', size, triggerContent, popoverContent }: Props) => {
+export const CustomPopover = ({ direction ='down', triggerComponent, popoverContent }: Props) => {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null)
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -56,9 +55,7 @@ export const BasicPopover = ({ direction ='down', size, triggerContent, popoverC
 
   return (
     <>
-      <IconButton size={size} aria-describedby={id} onClick={handleClick}>
-        {triggerContent}
-      </IconButton>
+      {React.cloneElement(triggerComponent, { onClick: handleClick })}
       <Popover
         id={id}
         open={open}
@@ -70,4 +67,23 @@ export const BasicPopover = ({ direction ='down', size, triggerContent, popoverC
       </Popover>
     </>
   )
+}
+
+type IconPopoverProps = {
+  direction?: Direction
+  size?: IconButtonOwnProps['size']
+  triggerContent: React.ReactNode
+  popoverContent: React.ReactNode
+}
+
+export const IconPopover = ({ direction ='down', size, triggerContent, popoverContent }: IconPopoverProps) => {
+  return <CustomPopover
+    direction={direction}
+    triggerComponent={
+      <IconButton size={size}>
+        {triggerContent}
+      </IconButton>
+    }
+    popoverContent={popoverContent}
+  />
 }

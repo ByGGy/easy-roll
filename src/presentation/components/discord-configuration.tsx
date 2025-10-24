@@ -11,7 +11,7 @@ import Fab from '@mui/material/Fab'
 import Typography from '@mui/material/Typography'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 
-import { BasicPopover } from './common/pop-over'
+import { IconPopover } from './common/pop-over'
 import { PrimaryToggleButton } from './common/style-helpers'
 import { DiscordIcon } from './common/discord-icon'
 import { EditValue } from './common/edit-value'
@@ -124,7 +124,7 @@ export const DiscordConfiguration = ({ character }: Props) => {
           ON AIR
         </Typography>
       </Fab>
-      <BasicPopover triggerContent={<MoreVertIcon color='secondary' fontSize='small' />} popoverContent={<DiscordEdit character={character} />} />
+      <IconPopover triggerContent={<MoreVertIcon color='secondary' fontSize='small' />} popoverContent={<DiscordEdit character={character} />} />
     </Stack>
   )
 }

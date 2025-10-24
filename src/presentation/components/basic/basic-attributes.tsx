@@ -6,7 +6,7 @@ import IconButton from '@mui/material/IconButton'
 import EditIcon from '@mui/icons-material/Edit'
 
 import { CharacterEditAttributesDialog } from '../character-edit-records'
-import { BasicPopover } from '../common/pop-over'
+import { IconPopover } from '../common/pop-over'
 import { BasicRoll } from './basic-roll'
 import { DiceIcon } from '../common/dice-icon'
 
@@ -51,7 +51,7 @@ export const BasicAttributes = ({ character }: Props) => {
               <Typography variant='body1'>{attribute.value}</Typography>
             </Grid>
             <Grid item xs='auto'>
-              <BasicPopover direction='right' size='small' triggerContent={<DiceIcon fontSize='small' color='primary' />} popoverContent={<BasicRoll characterId={character.id} rollStat='Attribute' statName={attribute.name} />} />
+              <IconPopover direction='right' size='small' triggerContent={<DiceIcon fontSize='small' color='primary' />} popoverContent={<BasicRoll characterId={character.id} rollStat='Attribute' statName={attribute.name} />} />
             </Grid>
           </Grid>
         )}

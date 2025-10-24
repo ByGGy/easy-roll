@@ -3,7 +3,7 @@ import Avatar from '@mui/material/Avatar'
 // @ts-ignore
 import Jdenticon from 'react-jdenticon'
 
-import { BasicPopover } from './common/pop-over'
+import { IconPopover } from './common/pop-over'
 import { EditValue } from './common/edit-value'
 import { DiscordConfiguration } from './discord-configuration'
 import { QuickRoll } from './quick-roll'
@@ -35,7 +35,7 @@ export const CharacterHeader = ({ character }: Props) => {
         <DiscordConfiguration character={character} />
       </Grid>
       <Grid item xs='auto'>
-        <BasicPopover triggerContent={<DiceIcon color='secondary' />} popoverContent={<QuickRoll character={character} />} />
+        <IconPopover triggerContent={<DiceIcon color='secondary' />} popoverContent={<QuickRoll character={character} />} />
       </Grid>
     </Grid>
   )
