@@ -23,7 +23,7 @@ import Jdenticon from 'react-jdenticon'
 import PlaylistRemoveIcon from '@mui/icons-material/PlaylistRemove'
 import ListItemText from '@mui/material/ListItemText'
 
-import { BasicPopover } from './common/pop-over'
+import { IconPopover } from './common/pop-over'
 import { DarkTooltip } from './common/style-helpers'
 
 import { isNotUndefined } from '../../domain/common/tools'
@@ -121,7 +121,7 @@ export const CharacterSelection = ({ session }: Props) => {
                 <NoteAddIcon />
               </IconButton>
             </DarkTooltip>
-            <BasicPopover
+            <IconPopover
               triggerContent={
                 <DarkTooltip title='Pick an existing character'>
                   <Badge badgeContent={availableCharactersToPick.length} color='secondary'

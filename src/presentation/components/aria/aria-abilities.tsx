@@ -6,7 +6,7 @@ import IconButton from '@mui/material/IconButton'
 import EditIcon from '@mui/icons-material/Edit'
 
 import { CharacterEditAbilitiesDialog } from '../character-edit-records'
-import { BasicPopover } from '../common/pop-over'
+import { IconPopover } from '../common/pop-over'
 import { AriaRoll } from './aria-roll'
 import { DiceIcon } from '../common/dice-icon'
 
@@ -51,7 +51,7 @@ export const AriaAbilities = ({ character }: Props) => {
               <Typography variant='body1'>{`${ability.value}%`}</Typography>
             </Grid>
             <Grid item xs='auto'>
-              <BasicPopover direction='right' size='small' triggerContent={<DiceIcon fontSize='small' color='primary' />} popoverContent={<AriaRoll characterId={character.id} rollStat='Ability' statName={ability.name} />} />
+              <IconPopover direction='right' size='small' triggerContent={<DiceIcon fontSize='small' color='primary' />} popoverContent={<AriaRoll characterId={character.id} rollStat='Ability' statName={ability.name} />} />
             </Grid>
           </Grid>
         )}

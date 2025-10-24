@@ -54,7 +54,7 @@ export const QuickRoll = ({ character }: Props) => {
     window.electronAPI.diceTrayEvaluate(character.id, expression)
   }
 
-  // TODO: Card / CardContent should be added from BasicPopover component instead of repeated
+  // TODO: Card / CardContent should be added from Popover component instead of repeated
   return (
     <Card>
       <Box padding={2} sx={{ minWidth: 400 }}>
