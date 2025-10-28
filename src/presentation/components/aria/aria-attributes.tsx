@@ -44,7 +44,7 @@ export const AriaAttributes = ({ character }: Props) => {
           </IconButton>
         </Grid>
       </Grid>
-      <List dense>
+      <List dense sx={{ flex: 1, overflow: 'auto' }}>
         {sortedAttributes.map((attribute) =>
           <ListItem
             key={attribute.name}
@@ -64,7 +64,7 @@ export const AriaAttributes = ({ character }: Props) => {
               direction='down'
               triggerComponent={
                 <ListItemButton>
-                  <Grid key={attribute.name} container alignItems='center' columnSpacing={1}>
+                  <Grid key={attribute.name} container alignItems='center' columnSpacing={2}>
                     <Grid item xs='auto'>
                       <DiceIcon className='dice-action' fontSize='small' color='primary' sx={{ display: 'block' }} />
                     </Grid>

@@ -1,12 +1,15 @@
 import { useState } from 'react'
 import Stack from '@mui/material/Stack'
 import Grid from '@mui/material/Grid'
+import List from '@mui/material/List'
+import ListItem from '@mui/material/ListItem'
+import ListItemButton from '@mui/material/ListItemButton'
 import Typography from '@mui/material/Typography'
 import IconButton from '@mui/material/IconButton'
 import EditIcon from '@mui/icons-material/Edit'
 
 import { CharacterEditAbilitiesDialog } from '../character-edit-records'
-import { IconPopover } from '../common/pop-over'
+import { CustomPopover } from '../common/pop-over'
 import { AriaRoll } from './aria-roll'
 import { DiceIcon } from '../common/dice-icon'
 
@@ -41,22 +44,51 @@ export const AriaAbilities = ({ character }: Props) => {
           </IconButton>
         </Grid>
       </Grid>
-      <Stack padding={1} sx={{ flex: 1, overflow: 'auto' }}>
+      <List dense sx={{ flex: 1, overflow: 'auto' }}>
         {sortedAbilities.map((ability) =>
-          <Grid key={ability.name} container alignItems='center' spacing={4}>
-            <Grid item xs>
-              <Typography variant='body1' color='text.secondary'>{ability.name}</Typography>
-            </Grid>
-            <Grid item xs='auto'>
-              <Typography variant='body1'>{`${ability.value}%`}</Typography>
-            </Grid>
-            <Grid item xs='auto'>
-              <IconPopover direction='right' size='small' triggerContent={<DiceIcon fontSize='small' color='primary' />} popoverContent={<AriaRoll characterId={character.id} rollStat='Ability' statName={ability.name} />} />
-            </Grid>
-          </Grid>
+          <ListItem
+            key={ability.name}
+            disablePadding
+            sx={{
+              '& .dice-action': {
+                opacity: 0.25,
+                color: (theme) => theme.palette.text.secondary,
+                transition: 'all 0.2s',
+              },
+              '&:hover .dice-action': {
+                opacity: 1,
+                color: (theme) => theme.palette.primary.main,
+              },
+            }}>
+            <CustomPopover
+              direction='down'
+              triggerComponent={
+                <ListItemButton>
+                  <Grid key={ability.name} container alignItems='center' columnSpacing={2}>
+                    <Grid item xs='auto'>
+                      <DiceIcon className='dice-action' fontSize='small' color='primary' sx={{ display: 'block' }} />
+                    </Grid>
+                    <Grid item xs>
+                      <Typography variant='body1'>{ability.name}</Typography>
+                    </Grid>
+                    <Grid item xs='auto'>
+                      <Typography variant='body1' color='text.secondary'>{ability.value}</Typography>
+                    </Grid>
+                  </Grid>
+                </ListItemButton>
+              }
+              popoverContent={
+                <AriaRoll
+                  characterId={character.id}
+                  rollStat='Ability'
+                  statName={ability.name}
+                />
+              }
+            />
+          </ListItem>
         )}
-        <CharacterEditAbilitiesDialog open={openEditDialog} onClose={handleEditClose} character={character} />
-      </Stack>
+      </List>
+      <CharacterEditAbilitiesDialog open={openEditDialog} onClose={handleEditClose} character={character} />
     </Stack>
   )
 }

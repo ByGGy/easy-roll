@@ -1,12 +1,15 @@
 import { useState } from 'react'
 import Stack from '@mui/material/Stack'
 import Grid from '@mui/material/Grid'
+import List from '@mui/material/List'
+import ListItem from '@mui/material/ListItem'
+import ListItemButton from '@mui/material/ListItemButton'
 import Typography from '@mui/material/Typography'
 import IconButton from '@mui/material/IconButton'
 import EditIcon from '@mui/icons-material/Edit'
 
 import { CharacterEditAttributesDialog } from '../character-edit-records'
-import { IconPopover } from '../common/pop-over'
+import { CustomPopover } from '../common/pop-over'
 import { RddRoll } from './rdd-roll'
 import { DiceIcon } from '../common/dice-icon'
 
@@ -41,22 +44,51 @@ export const RddAttributes = ({ character }: Props) => {
           </IconButton>
         </Grid>
       </Grid>
-      <Stack padding={1} sx={{ flex: 1, overflow: 'auto' }}>
+      <List dense sx={{ flex: 1, overflow: 'auto' }}>
         {sortedAttributes.map((attribute) =>
-          <Grid key={attribute.name} container alignItems='center' spacing={4}>
-            <Grid item xs>
-              <Typography variant='body1' color='text.secondary'>{attribute.name}</Typography>
-            </Grid>
-            <Grid item xs='auto'>
-              <Typography variant='body1'>{attribute.value}</Typography>
-            </Grid>
-            <Grid item xs='auto'>
-              <IconPopover direction='right' size='small' triggerContent={<DiceIcon fontSize='small' color='primary' />} popoverContent={<RddRoll characterId={character.id} attributeName={attribute.name} abilities={character.state.abilities} />} />
-            </Grid>
-          </Grid>
+          <ListItem
+            key={attribute.name}
+            disablePadding
+            sx={{
+              '& .dice-action': {
+                opacity: 0.25,
+                color: (theme) => theme.palette.text.secondary,
+                transition: 'all 0.2s',
+              },
+              '&:hover .dice-action': {
+                opacity: 1,
+                color: (theme) => theme.palette.primary.main,
+              },
+            }}>
+            <CustomPopover
+              direction='down'
+              triggerComponent={
+                <ListItemButton>
+                  <Grid key={attribute.name} container alignItems='center' columnSpacing={2}>
+                    <Grid item xs='auto'>
+                      <DiceIcon className='dice-action' fontSize='small' color='primary' sx={{ display: 'block' }} />
+                    </Grid>
+                    <Grid item xs>
+                      <Typography variant='body1'>{attribute.name}</Typography>
+                    </Grid>
+                    <Grid item xs='auto'>
+                      <Typography variant='body1' color='text.secondary'>{attribute.value}</Typography>
+                    </Grid>
+                  </Grid>
+                </ListItemButton>
+              }
+              popoverContent={
+                <RddRoll
+                  characterId={character.id}
+                  attributeName={attribute.name}
+                  abilities={character.state.abilities}
+                />
+              }
+            />
+          </ListItem>
         )}
-        <CharacterEditAttributesDialog open={openEditDialog} onClose={handleEditClose} character={character} />
-      </Stack>
+      </List>
+      <CharacterEditAttributesDialog open={openEditDialog} onClose={handleEditClose} character={character} />      
     </Stack>
   )
 }

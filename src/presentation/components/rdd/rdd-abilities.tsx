@@ -1,6 +1,9 @@
 import { useState } from 'react'
 import Stack from '@mui/material/Stack'
 import Grid from '@mui/material/Grid'
+import List from '@mui/material/List'
+import ListItem from '@mui/material/ListItem'
+import ListItemButton from '@mui/material/ListItemButton'
 import Typography from '@mui/material/Typography'
 import IconButton from '@mui/material/IconButton'
 import EditIcon from '@mui/icons-material/Edit'
@@ -39,21 +42,27 @@ export const RddAbilities = ({ character }: Props) => {
           </IconButton>
         </Grid>
       </Grid>
-      <Stack padding={1} sx={{ flex: 1, overflow: 'auto' }}>
+      <List dense sx={{ flex: 1, overflow: 'auto' }}>
         {sortedAbilities.map((ability) =>
-          <Grid key={ability.name} container alignItems='center' mb={1} spacing={4}>
-            <Grid item xs>
-              <Typography variant='body1' color='text.secondary'>{ability.name}</Typography>
-            </Grid>
-            <Grid item xs='auto'>
-              <Typography variant='body1' color={evaluateModifierColor(ability.value)}>
-                {ability.value > 0 ? `+${ability.value}`: ability.value}
-              </Typography>
-            </Grid>
-          </Grid>
+          <ListItem
+            key={ability.name}
+            disablePadding>
+            <ListItemButton>
+              <Grid key={ability.name} container alignItems='center' columnSpacing={2}>
+                <Grid item xs>
+                  <Typography variant='body1'>{ability.name}</Typography>
+                </Grid>
+                <Grid item xs='auto'>
+                  <Typography variant='body1' color={evaluateModifierColor(ability.value)}>
+                    {ability.value > 0 ? `+${ability.value}`: ability.value}
+                  </Typography>
+                </Grid>
+              </Grid>
+            </ListItemButton>
+          </ListItem>
         )}
-        <CharacterEditAbilitiesDialog open={openEditDialog} onClose={handleEditClose} character={character} />
-      </Stack>
+      </List>
+      <CharacterEditAbilitiesDialog open={openEditDialog} onClose={handleEditClose} character={character} />      
     </Stack>
   )
 }

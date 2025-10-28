@@ -1,6 +1,9 @@
 import { useState } from 'react'
 import Stack from '@mui/material/Stack'
 import Grid from '@mui/material/Grid'
+import List from '@mui/material/List'
+import ListItem from '@mui/material/ListItem'
+import ListItemButton from '@mui/material/ListItemButton'
 import Typography from '@mui/material/Typography'
 import IconButton from '@mui/material/IconButton'
 import EditIcon from '@mui/icons-material/Edit'
@@ -37,7 +40,7 @@ export const DiceTray = ({ character }: Props) => {
     <Stack padding={2} height='100%' overflow='hidden'>
       <Grid container alignItems='center'>
         <Grid item xs>
-          <Typography variant='h6' color='primary'>New Dice Tray</Typography>
+          <Typography variant='h6' color='primary'>Dice Tray</Typography>
         </Grid>
         <Grid item xs='auto'>
           <IconButton color='secondary' onClick={handleEdit}>
@@ -45,24 +48,39 @@ export const DiceTray = ({ character }: Props) => {
           </IconButton>
         </Grid>
       </Grid>
-      <Stack padding={1} sx={{ flex: 1, overflow: 'auto' }}>
+      <List dense sx={{ flex: 1, overflow: 'auto' }}>
         {sortedActions.map((action) =>
-          <Grid key={action.name} container alignItems='center' spacing={4}>
-            <Grid item xs>
-              <Typography variant='body1' color='text.secondary'>{action.name}</Typography>
-            </Grid>
-            <Grid item xs='auto'>
-              <Typography variant='body1'>{action.expression}</Typography>
-            </Grid>
-            <Grid item xs='auto'>
-              <IconButton size='small' onClick={() => handleRoll(action)} >
-                <DiceIcon fontSize='small' color='primary' />
-              </IconButton>
-            </Grid>
-          </Grid>
+          <ListItem
+            key={action.name}
+            disablePadding
+            sx={{
+              '& .dice-action': {
+                opacity: 0.25,
+                color: (theme) => theme.palette.text.secondary,
+                transition: 'all 0.2s',
+              },
+              '&:hover .dice-action': {
+                opacity: 1,
+                color: (theme) => theme.palette.primary.main,
+              },
+            }}>
+            <ListItemButton onClick={() => handleRoll(action)}>
+              <Grid key={action.name} container alignItems='center' columnSpacing={2}>
+                <Grid item xs='auto'>
+                  <DiceIcon className='dice-action' fontSize='small' color='primary' sx={{ display: 'block' }} />
+                </Grid>
+                <Grid item xs>
+                  <Typography variant='body1'>{action.name}</Typography>
+                </Grid>
+                <Grid item xs='auto'>
+                  <Typography variant='body1' color='text.secondary'>{action.expression}</Typography>
+                </Grid>
+              </Grid>
+            </ListItemButton>
+          </ListItem>
         )}
-        <CharacterEditDiceActionsDialog open={openEditDialog} onClose={handleEditClose} character={character} />
-      </Stack>
+      </List>      
+      <CharacterEditDiceActionsDialog open={openEditDialog} onClose={handleEditClose} character={character} />
     </Stack>
   )
 }
