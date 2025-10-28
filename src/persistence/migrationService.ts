@@ -3,7 +3,10 @@ import path from 'path'
 import fs, { readFileSync, writeFileSync } from 'fs'
 import { globSync } from 'glob'
 import { randomUUID } from 'crypto'
-import { get } from 'lodash'
+import { get, identity } from 'lodash'
+
+import { Character } from '../domain/character/character'
+import { Session } from '../domain/session/session'
 
 // TODO: might have some duplicated code with characterService.tryCreateFromFile
 // although characterService only cares about latest dataModel version
@@ -78,6 +81,25 @@ const maybeUpdateFromFirstLowdbImplementation = () => {
   }
 }
 
+const updateRepository = (fileName: string, fromVersion: number, updateItem: (oldItem: unknown) => unknown) => {
+  const pathToLookAt = path.join(app.getPath('userData'), 'lowdb', `v${fromVersion}`, fileName)
+  if (fs.existsSync(pathToLookAt)) {
+    const data = readFileSync(pathToLookAt, 'utf8')
+    const oldLowdb = JSON.parse(data)
+
+    const newLowdb = {
+      version: fromVersion +1,
+      items: oldLowdb.items.map(updateItem)
+    }
+
+    const pathToNextStorageVersion = path.join(app.getPath('userData'), 'lowdb', `v${fromVersion +1}`)
+    fs.mkdirSync(pathToNextStorageVersion, { recursive: true })
+
+    const storagePath = path.join(pathToNextStorageVersion, fileName)
+    writeFileSync(storagePath, JSON.stringify(newLowdb, null, 2))
+  }
+}
+
 const maybeUpdateFromV1Repositories = () => {
   const pathToNextStorageVersion = path.join(app.getPath('userData'), 'lowdb', 'v2')
   const isMigrationRequired = !fs.existsSync(pathToNextStorageVersion)
@@ -87,19 +109,23 @@ const maybeUpdateFromV1Repositories = () => {
     // we are just forcing the app to work on a new set of data
     // in order to avoid crashes in case someone reverts to a previous version of the app
     // which didn't handle new game types
-    const applyDumbMigrationOn = (fileName: string) => {
-      const pathToLookAt = path.join(app.getPath('userData'), 'lowdb', 'v1', fileName)
-      const data = readFileSync(pathToLookAt, 'utf8')
-      const oldLowdb = JSON.parse(data)
-      const newLowdb = { ...oldLowdb, version: 2 }
-  
-      fs.mkdirSync(pathToNextStorageVersion, { recursive: true })
-      const storagePath = path.join(pathToNextStorageVersion, fileName)
-      writeFileSync(storagePath, JSON.stringify(newLowdb, null, 2))
-    }
+    updateRepository('characters.json', 1, identity)
+    updateRepository('sessions.json', 1, identity)
+  }
+}
 
-    applyDumbMigrationOn('characters.json')
-    applyDumbMigrationOn('sessions.json')
+const maybeUpdateFromV2Repositories = () => {
+  const pathToNextStorageVersion = path.join(app.getPath('userData'), 'lowdb', 'v3')
+  const isMigrationRequired = !fs.existsSync(pathToNextStorageVersion)
+
+  if (isMigrationRequired) {
+    updateRepository('characters.json', 2, (oldCharacter: Character) => {
+      const newCharacter = { ...oldCharacter }
+      newCharacter.state.diceActions = []
+      return newCharacter 
+    })
+
+    updateRepository('sessions.json', 2, identity)
   }
 }
 
@@ -107,6 +133,7 @@ const sequence: Array<() => void> = [
   maybeUpdateFromCharacterFiles,
   maybeUpdateFromFirstLowdbImplementation,
   maybeUpdateFromV1Repositories,
+  maybeUpdateFromV2Repositories,
 ]
 
 export type MigrationService = {

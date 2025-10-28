@@ -8,7 +8,7 @@ import { messageBus } from '../../domain/events/messageBus'
 import { EntityId, EntityWithState } from '../../domain/common/types'
 
 // TODO: need to increase cause of new Character.diceActions ?!
-const EXPECTED_DATA_MODEL_VERSION = 2
+const EXPECTED_DATA_MODEL_VERSION = 3
 
 type LowdbShape<TState> = {
   version: number
