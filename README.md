@@ -18,13 +18,15 @@ $ xattr -c <path/to/application.app>
 
 ### @ Users
 
-<img src='./EasyRoll_UI_Start.png' width=600>
-
 At the moment, three games are "supported":  
 <img src='./public/images/Aria_Cover.jpg' width=75> <img src='./public/images/Reve-de-Dragon_Cover.jpg' width=75> <img src='./public/images/BaSIC_Cover.jpg' width=75>
 
 You should first create a new `Session` for the game relevant to you.  
-Once a new session has been created, you can use it and add some characters to it:  
+<img src='./EasyRoll_UI_Start.png' width=600>
+
+---
+
+Once a new session has been created, you can select it and add some characters to it:  
 <img src='./EasyRoll_UI_AddCharacter.png' width=600>
 
 There is 3 options:
@@ -34,15 +36,29 @@ _(or if you want to reuse a character from another session)_
 3. import a character from a JSON file  
 _(probably not needed anymore, kinda deprecated..)_
 
+---
+
 Once a character has been added, select it and click one of the `pen` or `more` icons to edit its:  
 * name
 * attributes
 * abilities
+* dice tray
 * discord configuration
 
 <img src='./EasyRoll_UI_EditCharacter.png' width=600>
 
+NB: at the moment, each character has its own discord configuration.
+
+---
+
+On the character page, you also have access to a quick / custom roll via the dice shorcut:
+<img src='./EasyRoll_UI_QuickRoll.png' width=600>
+
+---
+
 NB: at the moment, it is not possible to delete a session or character.
+
+---
 
 ### Links
 
