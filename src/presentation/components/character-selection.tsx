@@ -109,7 +109,7 @@ export const CharacterSelection = ({ session }: Props) => {
   }
 
   return (
-    <Stack padding={2} height='100%' overflow='hidden'>
+    <Stack height='100%' overflow='hidden'>
       <Grid container alignItems='center'>
         <Grid item xs>
           <Typography variant='h6' color='primary' mr={2}>Characters</Typography>

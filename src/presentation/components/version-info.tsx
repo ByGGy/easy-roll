@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react'
 
-import Paper from '@mui/material/Paper'
-import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 
 export const VersionInfo = () => {
@@ -17,10 +15,6 @@ export const VersionInfo = () => {
   }, [])
 
   return (
-    <Paper elevation={1}>
-      <Box display='flex' justifyContent='flex-end' padding={1}>
-        <Typography variant='caption' color='secondary'>{`v${version}`}</Typography>
-      </Box>
-    </Paper>
+    <Typography variant='caption' color='text.disabled'>{`v${version}`}</Typography>
   )
 }

@@ -23,27 +23,25 @@ export const SessionPage = () => {
 
   if (session) {
     return (
-      <Stack direction='row' spacing={2} height='100%' overflow='hidden'>
-        <Stack height='100%' overflow='hidden'>
-          <SessionHeader session={session} />
-          <Stack flex={1} overflow='hidden' spacing={1} direction={'row'}>
-            <Paper elevation={2}>
-              <CharacterSelection session={session} />
-            </Paper>
-            <Paper elevation={2}>
-              {character && <CharacterPage game={session.state.game} character={character} />}
-              {!character &&
-                <Stack direction='row' padding={2} spacing={2} sx={{ minWidth: 300 }} alignItems='center'>
-                  <Avatar sx={{ bgcolor: 'info.dark' }}>
-                    <QuestionMarkIcon />
-                  </Avatar>
-                  <Typography color='text.disabled'>No character selected.</Typography>
-                </Stack>
-              }
-            </Paper>
-            <RollHistory />
+      <Stack direction={'row'} spacing={1} height='100%' overflow='hidden'>
+        <Paper elevation={2}>
+          <Stack spacing={1} padding={2} height='100%' overflow='hidden' sx={{ minWidth: 400 }}>
+            <SessionHeader session={session} />
+            <CharacterSelection session={session} />
           </Stack>
-        </Stack>
+        </Paper>
+        <Paper elevation={2}>
+          {character && <CharacterPage game={session.state.game} character={character} />}
+          {!character &&
+            <Stack direction='row' padding={2} spacing={2} sx={{ minWidth: 400 }} alignItems='center'>
+              <Avatar sx={{ bgcolor: 'info.dark' }}>
+                <QuestionMarkIcon />
+              </Avatar>
+              <Typography color='text.disabled'>No character selected.</Typography>
+            </Stack>
+          }
+        </Paper>
+        <RollHistory />
       </Stack>
     )
   }

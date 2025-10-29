@@ -6,7 +6,7 @@ import { Provider } from 'react-redux'
 import Box from '@mui/material/Box'
 import Paper from '@mui/material/Paper'
 
-import { VersionInfo } from './components/version-info'
+import { AppHeader } from './components/app-header'
 import { CheapRouter } from './components/cheap-router'
 
 const primaryColor = '#b95a34'
@@ -58,10 +58,10 @@ const App = () => {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Box sx={{ height: '100vh', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+          <AppHeader />
           <Paper elevation={1} sx={{ flex: '1', overflow:'auto', padding: 2 }}>
             <CheapRouter />
           </Paper>
-          <VersionInfo />
         </Box>
       </ThemeProvider>
     </Provider>
