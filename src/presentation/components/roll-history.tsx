@@ -167,7 +167,7 @@ export const RollHistory = () => {
       <List dense sx={{ flex: 1, overflow: 'auto' }}>
         {rolls.slice(0, maxVisibleQty).map((roll, index) =>
           <ListItem
-            key={index}
+            key={roll.id}
             disablePadding
             sx={{
               '& .dice-action': {

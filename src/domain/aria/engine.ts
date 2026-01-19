@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto'
 import { messageBus } from '../events/messageBus'
 
 import { AriaCheckAbilityRequest, AriaCheckAttributeRequest, RollCheckDetails, RollCheckOutcome, RollCheckQuality, RollDiceDetails, RollResult } from '../common/types'
@@ -72,6 +73,7 @@ const checkAttribute = (character: CharacterData, request: AriaCheckAttributeReq
     }
 
     const result: RollResult = {
+      id: randomUUID(),
       request,
       title,
       outcome,
@@ -134,6 +136,7 @@ const checkAbility = (character: CharacterData, request: AriaCheckAbilityRequest
     }
 
     const result: RollResult = {
+      id: randomUUID(),
       request,
       title,
       outcome,

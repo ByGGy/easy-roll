@@ -139,7 +139,7 @@ export type RollOutcomeDetails = {
   quality: RollCheckQuality
 }
 
-export type RollResult = {
+export type RollResult = Entity & {
   request: CharacterRollRequest
   title: string
   outcome: RollOutcome
