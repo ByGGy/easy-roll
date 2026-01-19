@@ -33,7 +33,7 @@ export const createRelay = (repository: Repository<Character, CharacterState>) =
   }
 
   const handleRollResult = (roll: RollResult) => {
-    const relevantCharacter = repository.getById(roll.characterId)
+    const relevantCharacter = repository.getById(roll.request.characterId)
     if (relevantCharacter && relevantCharacter.state.discordNotification.enable) {
       let content = ''
       const displayedRollValue = relevantCharacter.state.discordNotification.level === 'Strict' ? '**' : `${roll.diceDetails.total}`

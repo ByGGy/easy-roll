@@ -44,6 +44,66 @@ export type DiscordNotification = {
 
 //--
 
+type CharacterRollKind = 'diceTray'
+  | 'diceAction'
+  | 'ariaCheckAttribute'
+  | 'ariaCheckAbility'
+  | 'rddCheckAttribute'
+  | 'basicCheckAttribute'
+  | 'basicCheckAbility'
+
+export type BaseCharacterRollRequest<T extends CharacterRollKind> = Readonly<{
+  game: Game
+  characterId: EntityId
+  kind: T
+}>
+
+export type DiceTrayRequest = BaseCharacterRollRequest<'diceTray'> & Readonly<{
+  expression: string
+}>
+
+export type DiceActionRequest = BaseCharacterRollRequest<'diceAction'> & Readonly<{
+  actionName: string
+}>
+
+export type AriaCheckAttributeRequest = BaseCharacterRollRequest<'ariaCheckAttribute'> & Readonly<{
+  attributeName: string
+  difficulty: number
+  modifier: number
+}>
+
+export type AriaCheckAbilityRequest = BaseCharacterRollRequest<'ariaCheckAbility'> & Readonly<{
+  abilityName: string
+  modifier: number
+}>
+
+export type RDDCheckAttributeRequest = BaseCharacterRollRequest<'rddCheckAttribute'> & Readonly<{
+  attributeName: string
+  abilityName: string
+  modifier: number
+}>
+
+export type BasicCheckAttributeRequest = BaseCharacterRollRequest<'basicCheckAttribute'> & Readonly<{
+  attributeName: string
+  modifier: number
+}>
+
+export type BasicCheckAbilityRequest = BaseCharacterRollRequest<'basicCheckAbility'> & Readonly<{
+  abilityName: string
+  difficulty: number
+  modifier: number
+}>
+
+export type CharacterRollRequest = DiceTrayRequest
+  | DiceActionRequest
+  | AriaCheckAttributeRequest
+  | AriaCheckAbilityRequest
+  | RDDCheckAttributeRequest
+  | BasicCheckAttributeRequest
+  | BasicCheckAbilityRequest
+
+//--
+
 export type RollCheckOutcome = 'success' | 'failure'
 export type RollCheckQuality = 'critical' | 'particular' | 'significant' | 'normal'
 
@@ -80,7 +140,7 @@ export type RollOutcomeDetails = {
 }
 
 export type RollResult = {
-  characterId: EntityId
+  request: CharacterRollRequest
   title: string
   outcome: RollOutcome
   outcomeDetails: RollOutcomeDetails

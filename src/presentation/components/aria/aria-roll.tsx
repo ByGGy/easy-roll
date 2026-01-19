@@ -24,11 +24,13 @@ type Props = {
   characterId: EntityId
   rollStat: AriaRollStat
   statName: string
+  defaultDifficulty?: number
+  defaultModifier?: number
 }
 
-export const AriaRoll = ({ characterId, rollStat, statName }: Props) => {
-  const [difficulty, setDifficulty] = useState(3)
-  const [modifier, setModifier] = useState(0)
+export const AriaRoll = ({ characterId, rollStat, statName, defaultDifficulty= 3, defaultModifier= 0 }: Props) => {
+  const [difficulty, setDifficulty] = useState(defaultDifficulty)
+  const [modifier, setModifier] = useState(defaultModifier)
   const [successRatio, setSuccessRatio] = useState(0)
 
   useEffect(() => {
@@ -38,11 +40,24 @@ export const AriaRoll = ({ characterId, rollStat, statName }: Props) => {
         break
 
       case 'Attribute': 
-        window.electronAPI.ariaEvaluateCheckAttributeRatio(characterId, statName, difficulty, modifier)
+        window.electronAPI.evaluateCharacterSuccessRatio({
+          game: 'Aria',
+          characterId,
+          kind: 'ariaCheckAttribute',
+          attributeName: statName,
+          difficulty,
+          modifier
+        })
         break
       
       case 'Ability':
-        window.electronAPI.ariaEvaluateCheckAbilityRatio(characterId, statName, modifier)
+        window.electronAPI.evaluateCharacterSuccessRatio({
+          game: 'Aria',
+          characterId,
+          kind: 'ariaCheckAbility',
+          abilityName: statName,
+          modifier
+        })
         break
     }
   }, [difficulty, modifier])
@@ -76,12 +91,25 @@ export const AriaRoll = ({ characterId, rollStat, statName }: Props) => {
         unreachable(rollStat)
         break
 
-      case 'Attribute': 
-        window.electronAPI.ariaCheckAttribute(characterId, statName, difficulty, modifier)
+      case 'Attribute':
+        window.electronAPI.checkCharacter({
+          game: 'Aria',
+          characterId,
+          kind: 'ariaCheckAttribute',
+          attributeName: statName,
+          difficulty,
+          modifier
+        })
         break
       
       case 'Ability':
-        window.electronAPI.ariaCheckAbility(characterId, statName, modifier)
+        window.electronAPI.checkCharacter({
+          game: 'Aria',
+          characterId,
+          kind: 'ariaCheckAbility',
+          abilityName: statName,
+          modifier
+        })
         break
     }
   }

@@ -1,7 +1,7 @@
 import { app, BrowserWindow, ipcMain, dialog } from 'electron'
 import path from 'path'
 
-import { EntityId, Game, Attribute, Ability, NotificationLevel, DiceAction, createDiceAction } from './domain/common/types'
+import { EntityId, Game, Attribute, Ability, NotificationLevel, DiceAction, createDiceAction, CharacterRollRequest } from './domain/common/types'
 import { isNotNull } from './domain/common/tools'
 import { createMigrationService } from './persistence/migrationService'
 import { createRepository } from './persistence/common/repository'
@@ -212,6 +212,44 @@ const handleToggleCharacterDiscordNotification = (event: unknown, id: EntityId) 
   }
 }
 
+const handleEvaluateCharacterSuccessRatio = (event: unknown, request: CharacterRollRequest) => {
+  const currentCharacter = characterRepository.getById(request.characterId)
+  if (currentCharacter) {
+    switch (request.kind) {
+      case 'ariaCheckAttribute':
+        ariaEngine.evaluateCheckAttributeRatio(currentCharacter, request)
+        break
+
+      case 'ariaCheckAbility':
+        ariaEngine.evaluateCheckAbilityRatio(currentCharacter, request)
+        break
+
+      default:
+        console.log(JSON.stringify(request))
+        break
+    }
+  }
+}
+
+const handleCheckCharacter = (event: unknown, request: CharacterRollRequest) => {
+  const currentCharacter = characterRepository.getById(request.characterId)
+  if (currentCharacter) {
+    switch (request.kind) {
+      case 'ariaCheckAttribute':
+        ariaEngine.checkAttribute(currentCharacter, request)
+        break
+
+      case 'ariaCheckAbility':
+        ariaEngine.checkAbility(currentCharacter, request)
+        break
+
+      default:
+        console.log(JSON.stringify(request))
+        break
+    }
+  }
+}
+
 const handleDiceTrayRoll = (event: unknown, characterId: EntityId, diceFaceQty: number, diceQty: number, modifier: number) => {
   const currentCharacter = characterRepository.getById(characterId)
   if (currentCharacter) {
@@ -237,34 +275,6 @@ const handleDiceActionExecute = (event: unknown, characterId: EntityId, actionNa
     if (actionToExecute) {
       diceTrayEngine.evaluate(currentCharacter, actionToExecute)
     }
-  }
-}
-
-const handleAriaEvaluateCheckAttributeRatio = (event: unknown, characterId: EntityId, attributeName: string, difficulty: number, modifier: number) => {
-  const currentCharacter = characterRepository.getById(characterId)
-  if (currentCharacter) {
-    ariaEngine.evaluateCheckAttributeRatio(currentCharacter, attributeName, difficulty, modifier)
-  }
-  }
-
-const handleAriaCheckAttribute = (event: unknown, characterId: EntityId, attributeName: string, difficulty: number, modifier: number) => {
-  const currentCharacter = characterRepository.getById(characterId)
-  if (currentCharacter) {
-    ariaEngine.checkAttribute(currentCharacter, attributeName, difficulty, modifier)
-  }
-}
-
-const handleAriaEvaluateCheckAbilityRatio = (event: unknown, characterId: EntityId, abilityName: string, modifier: number) => {
-  const currentCharacter = characterRepository.getById(characterId)
-  if (currentCharacter) {
-    ariaEngine.evaluateCheckAbilityRatio(currentCharacter, abilityName, modifier)
-  }
-}
-
-const handleAriaCheckAbility = (event: unknown, characterId: EntityId, abilityName: string, modifier: number) => {
-  const currentCharacter = characterRepository.getById(characterId)
-  if (currentCharacter) {
-    ariaEngine.checkAbility(currentCharacter, abilityName, modifier)
   }
 }
 
@@ -328,15 +338,13 @@ app.whenReady().then(() => {
   ipcMain.handle('changeCharacterDiscordNotification', handleChangeCharacterDiscordNotification)
   ipcMain.handle('toggleCharacterDiscordNotification', handleToggleCharacterDiscordNotification)
 
+  ipcMain.handle('evaluateCharacterSuccessRatio', handleEvaluateCharacterSuccessRatio)
+  ipcMain.handle('checkCharacter', handleCheckCharacter)
+
   ipcMain.handle('diceTrayRoll', handleDiceTrayRoll)
   ipcMain.handle('diceTrayValidate', handleDiceTrayValidate)  
   ipcMain.handle('diceTrayEvaluate', handleDiceTrayEvaluate)
   ipcMain.handle('diceActionExecute', handleDiceActionExecute)
-
-  ipcMain.handle('ariaEvaluateCheckAttributeRatio', handleAriaEvaluateCheckAttributeRatio)
-  ipcMain.handle('ariaCheckAttribute', handleAriaCheckAttribute)
-  ipcMain.handle('ariaEvaluateCheckAbilityRatio', handleAriaEvaluateCheckAbilityRatio)
-  ipcMain.handle('ariaCheckAbility', handleAriaCheckAbility)
 
   ipcMain.handle('rddEvaluateCheckAttributeRatio', handleRddEvaluateCheckAttributeRatio)
   ipcMain.handle('rddCheckAttribute', handleRddCheckAttribute)

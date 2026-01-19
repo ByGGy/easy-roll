@@ -5,17 +5,20 @@ import { styled } from '@mui/material/styles'
 import Stack from '@mui/material/Stack'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
-import Box from '@mui/material/Box'
+import List from '@mui/material/List'
+import ListItem from '@mui/material/ListItem'
+import ListItemButton from '@mui/material/ListItemButton'
 import Avatar from '@mui/material/Avatar'
 // @ts-ignore
 import Jdenticon from 'react-jdenticon'
-import Divider from '@mui/material/Divider'
 import Badge, { BadgeProps } from '@mui/material/Badge'
 
 import { RollResult } from '../../domain/common/types'
 import { unreachable } from '../../domain/common/tools'
+import { CustomPopover } from './common/pop-over'
 import { DarkTooltip } from './common/style-helpers'
 import { DiceIcon } from './common/dice-icon'
+import { AriaRoll } from './aria/aria-roll'
 
 const QualityBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
   '& .MuiBadge-badge': {
@@ -33,7 +36,7 @@ type RollItemProps = {
 
 const RollItem = ({ roll, opacity }: RollItemProps) => {
   const allCharacters = useSelector((state: RootState) => state.characterCollection.characters)
-  const characterName = allCharacters.find(c => c.id === roll.characterId)?.state.name ?? 'Unknown'
+  const characterName = allCharacters.find(c => c.id === roll.request.characterId)?.state.name ?? 'Unknown'
   const selectedCharacterId = useSelector((state: RootState) => state.selection.characterId)
 
   const title = roll.title
@@ -71,12 +74,14 @@ const RollItem = ({ roll, opacity }: RollItemProps) => {
 
   return (
     <Stack padding={2} spacing={2} direction='row' sx={{ opacity }} alignItems='flex-start'>
-      <Avatar sx={{ bgcolor: roll.characterId === selectedCharacterId ? 'text.primary' : '' }}>
-        <Jdenticon value={characterName} />
-      </Avatar>
       <Stack sx={{ width: 200 }}>
-        <Typography variant='subtitle2' color={roll.characterId === selectedCharacterId ? 'text.primary' : 'text.secondary'}>{characterName}</Typography>
         <Typography variant='body1'>{title}</Typography>
+        <Stack spacing={1} direction='row' alignItems='center'>
+          <Avatar sx={{ width: '1rem', height: '1rem', bgcolor: roll.request.characterId === selectedCharacterId ? 'text.primary' : '' }}>
+            <Jdenticon value={characterName} />
+          </Avatar>
+          <Typography variant='subtitle2' color={roll.request.characterId === selectedCharacterId ? 'text.primary' : 'text.secondary'}>{characterName}</Typography>
+        </Stack>
       </Stack>
       <DarkTooltip title={<span style={{ whiteSpace: 'pre-line' }}>{details.join('\n')}</span>} placement='right'>
         <QualityBadge
@@ -117,11 +122,39 @@ const RollItem = ({ roll, opacity }: RollItemProps) => {
   )
 }
 
+type ReRollProps = {
+  roll: RollResult
+}
+
+const ReRoll = ({ roll }: ReRollProps) => {
+  switch (roll.request.kind) {
+    case 'ariaCheckAttribute':
+      return <AriaRoll
+        characterId={roll.request.characterId}
+        rollStat='Attribute'
+        statName={roll.request.attributeName}
+        defaultDifficulty={roll.request.difficulty}
+        defaultModifier={roll.request.modifier}
+      />
+
+    case 'ariaCheckAbility':
+      return <AriaRoll
+        characterId={roll.request.characterId}
+        rollStat='Ability'
+        statName={roll.request.abilityName}
+        defaultModifier={roll.request.modifier}
+      />
+
+    default:
+      return <p>tmp</p>
+  }
+}
+
 export const RollHistory = () => {
   const rolls = useSelector((state: RootState) => state.rollHistory.rolls)
 
   const maxVisibleQty = rolls.length
-  const fadedOutThreshold = 10 //Math.round(maxVisibleQty / 2)
+  const fadedOutThreshold = 10
   const fadedOutOpacity = 0.25
 
   return (
@@ -131,14 +164,43 @@ export const RollHistory = () => {
           <Typography variant='h6' color='primary'>{`${maxVisibleQty} Most Recent Rolls`}</Typography>
         </Grid>
       </Grid>
-      <Box sx={{ flex: 1, overflow: 'auto' }}>
+      <List dense sx={{ flex: 1, overflow: 'auto' }}>
         {rolls.slice(0, maxVisibleQty).map((roll, index) =>
-          <Box key={index}>
-            <RollItem roll={roll} opacity={index > fadedOutThreshold ? fadedOutOpacity : 1 - index * (1 - fadedOutOpacity) / fadedOutThreshold} />
-            <Divider variant='inset'/>
-          </Box>
+          <ListItem
+            key={index}
+            disablePadding
+            sx={{
+              '& .dice-action': {
+                opacity: 0.25,
+                color: (theme) => theme.palette.text.secondary,
+                transition: 'all 0.2s',
+              },
+              '&:hover .dice-action': {
+                opacity: 1,
+                color: (theme) => theme.palette.primary.main,
+              },
+            }}>
+            <CustomPopover
+              direction='down'
+              triggerComponent={
+                <ListItemButton sx={{ width: '100%' }}>
+                  <Grid container alignItems='center' columnSpacing={1} wrap="nowrap">
+                    <Grid item xs='auto'>
+                      <DiceIcon className='dice-action' fontSize='large' color='primary' sx={{ display: 'block' }} />
+                    </Grid>
+                    <Grid item xs>
+                      <RollItem roll={roll} opacity={index > fadedOutThreshold ? fadedOutOpacity : 1 - index * (1 - fadedOutOpacity) / fadedOutThreshold} />
+                    </Grid>
+                  </Grid>
+                </ListItemButton>
+              }
+              popoverContent={
+                <ReRoll roll={roll} />
+              }
+            />
+          </ListItem>          
         )}
-      </Box>
+      </List>
     </Stack>
   )
 }
