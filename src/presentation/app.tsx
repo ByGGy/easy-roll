@@ -8,6 +8,7 @@ import Paper from '@mui/material/Paper'
 
 import { AppHeader } from './components/app-header'
 import { CheapRouter } from './components/cheap-router'
+import { TorchOverlay } from './components/common/torch-overlay'
 
 const primaryColor = '#b95a34'
 const secondaryColor = '#3493b9'
@@ -63,6 +64,7 @@ const App = () => {
             <CheapRouter />
           </Paper>
         </Box>
+        <TorchOverlay />
       </ThemeProvider>
     </Provider>
   )

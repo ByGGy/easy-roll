@@ -5,6 +5,7 @@ import selectionReducer from './selectionSlice'
 import characterCollectionReducer from './characterCollectionSlice'
 import sessionCollectionReducer from './sessionCollectionSlice'
 import rollHistoryReducer from './rollHistorySlice'
+import uiOptionsReducer from './uiOptionsSlice'
 
 // TODO: use https://www.npmjs.com/package/redux-persist to keep the store state event when reloading the window ?
 export const store = configureStore({
@@ -13,6 +14,7 @@ export const store = configureStore({
     characterCollection: characterCollectionReducer,
     sessionCollection: sessionCollectionReducer,
     rollHistory: rollHistoryReducer,
+    uiOptions: uiOptionsReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(ipcMiddleware),
