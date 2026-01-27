@@ -1,6 +1,7 @@
+import { randomUUID } from 'crypto'
 import { messageBus } from '../events/messageBus'
 
-import { RollCheckDetails, RollCheckOutcome, RollCheckQuality, RollDiceDetails, RollResult } from '../common/types'
+import { RDDCheckAttributeRequest, RollCheckDetails, RollCheckOutcome, RollCheckQuality, RollDiceDetails, RollResult } from '../common/types'
 import { CharacterData } from '../character/character'
 import { rollDice } from '../dicetray/roll'
 
@@ -40,23 +41,23 @@ const findThreshold = (attributeValue: number, modifier: number): number => {
   return Math.max(0, Math.min(Math.floor(attributeValue * multiplier), 100))
 }
 
-const evaluateCheckAttributeRatio = (character: CharacterData, attributeName: string, abilityName: string, modifier: number) => {
-  const attribute = character.state.attributes.find((a) => a.name === attributeName)
+const evaluateCheckAttributeRatio = (character: CharacterData, request: RDDCheckAttributeRequest) => {
+  const attribute = character.state.attributes.find((a) => a.name === request.attributeName)
   if (attribute !== undefined) {
-    const ability = character.state.abilities.find((a) => a.name === abilityName)
-    messageBus.emit('Domain.Rdd.successRatio', (findThreshold(attribute.value, (ability !== undefined ? ability.value : 0) + modifier) * 0.01).toFixed(2))
+    const ability = character.state.abilities.find((a) => a.name === request.abilityName)
+    messageBus.emit('Domain.Rdd.successRatio', (findThreshold(attribute.value, (ability !== undefined ? ability.value : 0) + request.modifier) * 0.01).toFixed(2))
   }
 }
 
-const checkAttribute = (character: CharacterData, attributeName: string, abilityName: string, modifier: number): RollResult | null => {
-  const attribute = character.state.attributes.find((a) => a.name === attributeName)
+const checkAttribute = (character: CharacterData, request: RDDCheckAttributeRequest): RollResult | null => {
+  const attribute = character.state.attributes.find((a) => a.name === request.attributeName)
   if (attribute !== undefined) {
-    const ability = character.state.abilities.find((a) => a.name === abilityName)
+    const ability = character.state.abilities.find((a) => a.name === request.abilityName)
 
     const title = [attribute.name, ...(ability !== undefined ? [ability.name] : [])].join(' + ')
 
     const diceValue = rollDice(100)
-    const successThreshold = findThreshold(attribute.value, (ability !== undefined ? ability.value : 0) + modifier)
+    const successThreshold = findThreshold(attribute.value, (ability !== undefined ? ability.value : 0) + request.modifier)
     const outcome = evaluateOutcome(diceValue, successThreshold)
     const quality = evaluateQuality(outcome, diceValue, successThreshold)
 
@@ -75,7 +76,7 @@ const checkAttribute = (character: CharacterData, attributeName: string, ability
         {
           type: 'offset',
           name: 'difficulty',
-          value: modifier
+          value: request.modifier
         },
       ],
       successThreshold,
@@ -91,7 +92,8 @@ const checkAttribute = (character: CharacterData, attributeName: string, ability
     }
 
     const result: RollResult = {
-      characterId: character.id,
+      id: randomUUID(),
+      request,
       title,
       outcome,
       outcomeDetails: { quality },

@@ -1,4 +1,7 @@
 import { useState, useEffect } from 'react'
+import { useSelector } from 'react-redux'
+import { RootState } from '../../store/store'
+
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import Card from '@mui/material/Card'
@@ -18,6 +21,9 @@ import { SuccessRate } from '../common/success-rate'
 
 import { Ability, EntityId } from '../../../domain/common/types'
 
+const DEFAULT_ABILITY_NAME = ''
+const DEFAULT_MODIDIFER = 0
+
 type AbilityItemProps = {
   ability: Ability
 }
@@ -36,16 +42,24 @@ const AbilityItem = ({ ability }: AbilityItemProps) => {
 type Props = {
   characterId: EntityId
   attributeName: string
-  abilities: Readonly<Array<Ability>>
+  initAbilityName?: string
+  initModifier?: number
 }
 
-export const RddRoll = ({ characterId, attributeName, abilities }: Props) => {
-  const [abilityName, setAbilityName] = useState('')
-  const [modifier, setModifier] = useState(0)
+export const RddRoll = ({ characterId, attributeName, initAbilityName= DEFAULT_ABILITY_NAME, initModifier= DEFAULT_MODIDIFER }: Props) => {
+  const [abilityName, setAbilityName] = useState(initAbilityName)
+  const [modifier, setModifier] = useState(initModifier)
   const [successRatio, setSuccessRatio] = useState(0)
 
   useEffect(() => {
-    window.electronAPI.rddEvaluateCheckAttributeRatio(characterId, attributeName, abilityName, modifier)
+    window.electronAPI.evaluateCharacterSuccessRatio({
+      game: 'Rêve de Dragon',
+      characterId,
+      kind: 'rddCheckAttribute',
+      attributeName,
+      abilityName,
+      modifier
+    })
   }, [abilityName, modifier])
 
   useEffect(() => {
@@ -53,8 +67,8 @@ export const RddRoll = ({ characterId, attributeName, abilities }: Props) => {
   }, [])
 
   const handleReset = () => {
-    setAbilityName('')
-    setModifier(0)
+    setAbilityName(DEFAULT_ABILITY_NAME)
+    setModifier(DEFAULT_MODIDIFER)
   }
 
   const handleAbilitySelection = (event: SelectChangeEvent) => {
@@ -66,10 +80,19 @@ export const RddRoll = ({ characterId, attributeName, abilities }: Props) => {
   }
 
   const handleRoll = () => {
-    window.electronAPI.rddCheckAttribute(characterId, attributeName, abilityName, modifier)
+    window.electronAPI.checkCharacter({
+      game: 'Rêve de Dragon',
+      characterId,
+      kind: 'rddCheckAttribute',
+      attributeName,
+      abilityName,
+      modifier
+    })
   }
 
-  const sortedAbilities = abilities.toSorted((aA, aB) => aA.name.localeCompare(aB.name))
+  const characters = useSelector((state: RootState) => state.characterCollection.characters)
+  const targetCharacter = characters.find(c => c.id === characterId)
+  const sortedAbilities = targetCharacter?.state.abilities.toSorted((aA, aB) => aA.name.localeCompare(aB.name)) ?? []
 
   return (
     <Card>

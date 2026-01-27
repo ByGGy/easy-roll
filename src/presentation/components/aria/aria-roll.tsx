@@ -20,17 +20,20 @@ import { EntityId } from '../../../domain/common/types'
 
 type AriaRollStat = 'Attribute' | 'Ability'
 
+const DEFAULT_DIFFICULTY = 3
+const DEFAULT_MODIFIER = 0
+
 type Props = {
   characterId: EntityId
   rollStat: AriaRollStat
   statName: string
-  defaultDifficulty?: number
-  defaultModifier?: number
+  initDifficulty?: number
+  initModifier?: number
 }
 
-export const AriaRoll = ({ characterId, rollStat, statName, defaultDifficulty= 3, defaultModifier= 0 }: Props) => {
-  const [difficulty, setDifficulty] = useState(defaultDifficulty)
-  const [modifier, setModifier] = useState(defaultModifier)
+export const AriaRoll = ({ characterId, rollStat, statName, initDifficulty= DEFAULT_DIFFICULTY, initModifier= DEFAULT_MODIFIER }: Props) => {
+  const [difficulty, setDifficulty] = useState(initDifficulty)
+  const [modifier, setModifier] = useState(initModifier)
   const [successRatio, setSuccessRatio] = useState(0)
 
   useEffect(() => {
@@ -67,8 +70,8 @@ export const AriaRoll = ({ characterId, rollStat, statName, defaultDifficulty= 3
   }, [])
 
   const handleReset = () => {
-    setDifficulty(3)
-    setModifier(0)
+    setDifficulty(DEFAULT_DIFFICULTY)
+    setModifier(DEFAULT_MODIFIER)
   }
 
   const handleDifficultyChange = (

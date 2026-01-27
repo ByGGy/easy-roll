@@ -42,9 +42,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
   diceActionExecute: (characterId: EntityId, actionName: string) => ipcRenderer.invoke('diceActionExecute', characterId, actionName),
 
   // TODO: reduce code duplication (same for presentation components, e.g. BaSIC is very similar to Aria)
-  rddEvaluateCheckAttributeRatio: (characterId: EntityId, attributeName: string, abilityName: string, modifier: number) => ipcRenderer.invoke('rddEvaluateCheckAttributeRatio', characterId, attributeName, abilityName, modifier),
-  rddCheckAttribute: (characterId: EntityId, attributeName: string, abilityName: string, modifier: number) => ipcRenderer.invoke('rddCheckAttribute', characterId, attributeName, abilityName, modifier),
-
   basicEvaluateCheckAttributeRatio: (characterId: EntityId, attributeName: string, modifier: number) => ipcRenderer.invoke('basicEvaluateCheckAttributeRatio', characterId, attributeName, modifier),
   basicCheckAttribute: (characterId: EntityId, attributeName: string, modifier: number) => ipcRenderer.invoke('basicCheckAttribute', characterId, attributeName, modifier),
   basicEvaluateCheckAbilityRatio: (characterId: EntityId, abilityName: string, difficulty: number, modifier: number) => ipcRenderer.invoke('basicEvaluateCheckAbilityRatio', characterId, abilityName, difficulty, modifier),

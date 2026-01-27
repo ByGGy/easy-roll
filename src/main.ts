@@ -224,6 +224,10 @@ const handleEvaluateCharacterSuccessRatio = (event: unknown, request: CharacterR
         ariaEngine.evaluateCheckAbilityRatio(currentCharacter, request)
         break
 
+      case 'rddCheckAttribute':
+        rddEngine.evaluateCheckAttributeRatio(currentCharacter, request)
+        break
+
       default:
         console.log(JSON.stringify(request))
         break
@@ -241,6 +245,10 @@ const handleCheckCharacter = (event: unknown, request: CharacterRollRequest) => 
 
       case 'ariaCheckAbility':
         ariaEngine.checkAbility(currentCharacter, request)
+        break
+
+      case 'rddCheckAttribute':
+        rddEngine.checkAttribute(currentCharacter, request)
         break
 
       default:
@@ -275,20 +283,6 @@ const handleDiceActionExecute = (event: unknown, characterId: EntityId, actionNa
     if (actionToExecute) {
       diceTrayEngine.evaluate(currentCharacter, actionToExecute)
     }
-  }
-}
-
-const handleRddEvaluateCheckAttributeRatio = (event: unknown, characterId: EntityId, attributeName: string, abilityName: string, modifier: number) => {
-  const currentCharacter = characterRepository.getById(characterId)
-  if (currentCharacter) {
-    rddEngine.evaluateCheckAttributeRatio(currentCharacter, attributeName, abilityName, modifier)
-  }
-}
-
-const handleRddCheckAttribute = (event: unknown, characterId: EntityId, attributeName: string, abilityName: string, modifier: number) => {
-  const currentCharacter = characterRepository.getById(characterId)
-  if (currentCharacter) {
-    rddEngine.checkAttribute(currentCharacter, attributeName, abilityName, modifier)
   }
 }
 
@@ -345,9 +339,6 @@ app.whenReady().then(() => {
   ipcMain.handle('diceTrayValidate', handleDiceTrayValidate)  
   ipcMain.handle('diceTrayEvaluate', handleDiceTrayEvaluate)
   ipcMain.handle('diceActionExecute', handleDiceActionExecute)
-
-  ipcMain.handle('rddEvaluateCheckAttributeRatio', handleRddEvaluateCheckAttributeRatio)
-  ipcMain.handle('rddCheckAttribute', handleRddCheckAttribute)
 
   ipcMain.handle('basicEvaluateCheckAttributeRatio', handleBasicEvaluateCheckAttributeRatio)
   ipcMain.handle('basicCheckAttribute', handleBasicCheckAttribute)

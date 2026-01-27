@@ -19,6 +19,7 @@ import { CustomPopover } from './common/pop-over'
 import { DarkTooltip } from './common/style-helpers'
 import { DiceIcon } from './common/dice-icon'
 import { AriaRoll } from './aria/aria-roll'
+import { RddRoll } from './rdd/rdd-roll'
 
 const QualityBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
   '& .MuiBadge-badge': {
@@ -133,8 +134,8 @@ const ReRoll = ({ roll }: ReRollProps) => {
         characterId={roll.request.characterId}
         rollStat='Attribute'
         statName={roll.request.attributeName}
-        defaultDifficulty={roll.request.difficulty}
-        defaultModifier={roll.request.modifier}
+        initDifficulty={roll.request.difficulty}
+        initModifier={roll.request.modifier}
       />
 
     case 'ariaCheckAbility':
@@ -142,7 +143,15 @@ const ReRoll = ({ roll }: ReRollProps) => {
         characterId={roll.request.characterId}
         rollStat='Ability'
         statName={roll.request.abilityName}
-        defaultModifier={roll.request.modifier}
+        initModifier={roll.request.modifier}
+      />
+
+    case 'rddCheckAttribute':
+      return <RddRoll
+        characterId={roll.request.characterId}
+        attributeName={roll.request.attributeName}
+        initAbilityName={roll.request.abilityName}
+        initModifier={roll.request.modifier}
       />
 
     default:
@@ -155,7 +164,7 @@ export const RollHistory = () => {
 
   const maxVisibleQty = rolls.length
   const fadedOutThreshold = 10
-  const fadedOutOpacity = 0.25
+  const fadedOutOpacity = 0.15
 
   return (
     <Stack padding={2} height='100%' overflow='hidden'>

@@ -81,7 +81,6 @@ export const RddAttributes = ({ character }: Props) => {
                 <RddRoll
                   characterId={character.id}
                   attributeName={attribute.name}
-                  abilities={character.state.abilities}
                 />
               }
             />
