@@ -228,6 +228,14 @@ const handleEvaluateCharacterSuccessRatio = (event: unknown, request: CharacterR
         rddEngine.evaluateCheckAttributeRatio(currentCharacter, request)
         break
 
+      case 'basicCheckAttribute':
+        basicEngine.evaluateCheckAttributeRatio(currentCharacter, request)
+        break
+      
+      case 'basicCheckAbility':
+        basicEngine.evaluateCheckAbilityRatio(currentCharacter, request)
+        break
+
       default:
         console.log(JSON.stringify(request))
         break
@@ -249,6 +257,14 @@ const handleCheckCharacter = (event: unknown, request: CharacterRollRequest) => 
 
       case 'rddCheckAttribute':
         rddEngine.checkAttribute(currentCharacter, request)
+        break
+
+      case 'basicCheckAttribute':
+        basicEngine.checkAttribute(currentCharacter, request)
+        break
+
+      case 'basicCheckAbility':
+        basicEngine.checkAbility(currentCharacter, request)
         break
 
       default:
@@ -286,34 +302,6 @@ const handleDiceActionExecute = (event: unknown, characterId: EntityId, actionNa
   }
 }
 
-const handleBasicEvaluateCheckAttributeRatio = (event: unknown, characterId: EntityId, attributeName: string, modifier: number) => {
-  const currentCharacter = characterRepository.getById(characterId)
-  if (currentCharacter) {
-    basicEngine.evaluateCheckAttributeRatio(currentCharacter, attributeName, modifier)
-  }
-}
-
-const handleBasicCheckAttribute = (event: unknown, characterId: EntityId, attributeName: string, modifier: number) => {
-  const currentCharacter = characterRepository.getById(characterId)
-  if (currentCharacter) {
-    basicEngine.checkAttribute(currentCharacter, attributeName, modifier)
-  }
-}
-
-const handleBasicEvaluateCheckAbilityRatio = (event: unknown, characterId: EntityId, abilityName: string, difficulty: number, modifier: number) => {
-  const currentCharacter = characterRepository.getById(characterId)
-  if (currentCharacter) {
-    basicEngine.evaluateCheckAbilityRatio(currentCharacter, abilityName, difficulty, modifier)
-  }
-}
-
-const handleBasicCheckAbility = (event: unknown, characterId: EntityId, abilityName: string, difficulty: number, modifier: number) => {
-  const currentCharacter = characterRepository.getById(characterId)
-  if (currentCharacter) {
-    basicEngine.checkAbility(currentCharacter, abilityName, difficulty, modifier)
-  }
-}
-
 app.whenReady().then(() => {
   // TODO: should put all those subscriptions, handlers and domain initialization in separate files
   ipcMain.handle('getAppVersion', handleGetAppVersion)
@@ -339,9 +327,4 @@ app.whenReady().then(() => {
   ipcMain.handle('diceTrayValidate', handleDiceTrayValidate)  
   ipcMain.handle('diceTrayEvaluate', handleDiceTrayEvaluate)
   ipcMain.handle('diceActionExecute', handleDiceActionExecute)
-
-  ipcMain.handle('basicEvaluateCheckAttributeRatio', handleBasicEvaluateCheckAttributeRatio)
-  ipcMain.handle('basicCheckAttribute', handleBasicCheckAttribute)
-  ipcMain.handle('basicEvaluateCheckAbilityRatio', handleBasicEvaluateCheckAbilityRatio)
-  ipcMain.handle('basicCheckAbility', handleBasicCheckAbility)
 })

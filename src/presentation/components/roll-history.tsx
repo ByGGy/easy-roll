@@ -20,6 +20,7 @@ import { DarkTooltip } from './common/style-helpers'
 import { DiceIcon } from './common/dice-icon'
 import { AriaRoll } from './aria/aria-roll'
 import { RddRoll } from './rdd/rdd-roll'
+import { BasicRoll } from './basic/basic-roll'
 
 const QualityBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
   '& .MuiBadge-badge': {
@@ -154,8 +155,25 @@ const ReRoll = ({ roll }: ReRollProps) => {
         initModifier={roll.request.modifier}
       />
 
+    case 'basicCheckAttribute':
+      return <BasicRoll
+        characterId={roll.request.characterId}
+        rollStat='Attribute'
+        statName={roll.request.attributeName}
+        initModifier={roll.request.modifier}
+      />
+
+    case 'basicCheckAbility':
+      return <BasicRoll
+        characterId={roll.request.characterId}
+        rollStat='Ability'
+        statName={roll.request.abilityName}
+        initDifficulty={roll.request.difficulty}
+        initModifier={roll.request.modifier}
+      />
+
     default:
-      return <p>tmp</p>
+      return <p>{`${roll.request.kind} not supported yet`}</p>
   }
 }
 

@@ -20,15 +20,20 @@ import { EntityId } from '../../../domain/common/types'
 
 type BasicRollStat = 'Attribute' | 'Ability'
 
+const DEFAULT_DIFFICULTY = 1
+const DEFAULT_MODIFIER = 0
+
 type Props = {
   characterId: EntityId
   rollStat: BasicRollStat
   statName: string
+  initDifficulty?: number
+  initModifier?: number
 }
 
-export const BasicRoll = ({ characterId, rollStat, statName }: Props) => {
-  const [difficulty, setDifficulty] = useState(1)
-  const [modifier, setModifier] = useState(0)
+export const BasicRoll = ({ characterId, rollStat, statName, initDifficulty= DEFAULT_DIFFICULTY, initModifier= DEFAULT_MODIFIER }: Props) => {
+  const [difficulty, setDifficulty] = useState(initDifficulty)
+  const [modifier, setModifier] = useState(initModifier)
   const [successRatio, setSuccessRatio] = useState(0)
 
   useEffect(() => {
@@ -37,12 +42,25 @@ export const BasicRoll = ({ characterId, rollStat, statName }: Props) => {
         unreachable(rollStat)
         break
 
-      case 'Attribute': 
-        window.electronAPI.basicEvaluateCheckAttributeRatio(characterId, statName, modifier)
+      case 'Attribute':
+        window.electronAPI.evaluateCharacterSuccessRatio({
+          game: 'BaSIC',
+          characterId,
+          kind: 'basicCheckAttribute',
+          attributeName: statName,
+          modifier
+        })
         break
       
       case 'Ability':
-        window.electronAPI.basicEvaluateCheckAbilityRatio(characterId, statName, difficulty, modifier)
+        window.electronAPI.evaluateCharacterSuccessRatio({
+          game: 'BaSIC',
+          characterId,
+          kind: 'basicCheckAbility',
+          abilityName: statName,
+          difficulty,
+          modifier
+        })
         break
     }
   }, [difficulty, modifier])
@@ -52,8 +70,8 @@ export const BasicRoll = ({ characterId, rollStat, statName }: Props) => {
   }, [])
 
   const handleReset = () => {
-    setDifficulty(1)
-    setModifier(0)
+    setDifficulty(DEFAULT_DIFFICULTY)
+    setModifier(DEFAULT_MODIFIER)
   }
 
   const handleDifficultyChange = (
@@ -76,12 +94,25 @@ export const BasicRoll = ({ characterId, rollStat, statName }: Props) => {
         unreachable(rollStat)
         break
 
-      case 'Attribute': 
-        window.electronAPI.basicCheckAttribute(characterId, statName, modifier)
+      case 'Attribute':
+        window.electronAPI.checkCharacter({
+          game: 'BaSIC',
+          characterId,
+          kind: 'basicCheckAttribute',
+          attributeName: statName,
+          modifier
+        })
         break
       
       case 'Ability':
-        window.electronAPI.basicCheckAbility(characterId, statName, difficulty, modifier)
+        window.electronAPI.checkCharacter({
+          game: 'BaSIC',
+          characterId,
+          kind: 'basicCheckAbility',
+          abilityName: statName,
+          difficulty,
+          modifier
+        })
         break
     }
   }
