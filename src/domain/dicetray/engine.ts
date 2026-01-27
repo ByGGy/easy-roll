@@ -1,41 +1,11 @@
+import { randomUUID } from 'crypto'
 import { messageBus } from '../events/messageBus'
 
-import { DiceAction, RollCheckDetails, RollDiceDetails, RollOutcomeDetails, RollResult } from '../common/types'
+import { DiceActionRequest, DiceTrayRequest, RollCheckDetails, RollDiceDetails, RollOutcomeDetails, RollResult } from '../common/types'
 import { CharacterData } from '../character/character'
-import { rollDice } from './roll'
 import { createRPG02 } from './calculator/factory'
 import { diceRolls } from './calculator/core/operators'
 import { OperatorResult } from './calculator/core/types'
-
-const rollDices = (character: CharacterData, diceFaceQty: number, diceQty: number, modifier: number): RollResult => {
-  const rolls = [...Array(diceQty)].map(_ => rollDice(diceFaceQty))
-  const total = rolls.reduce((acc, value) => acc + value, modifier)
-
-  const diceDetails: RollDiceDetails = {
-    groups: [{
-      diceQty,
-      diceFaceQty,
-      rolls
-    }],
-    total,
-  }
-
-  const outcomeDetails: RollOutcomeDetails = {
-    quality: 'normal'
-  }
-
-  const result: RollResult = {
-    characterId: character.id,
-    title: `${diceQty}d${diceFaceQty}${modifier !== 0 ? `${modifier > 0 ? '+' :''}${modifier}` : ''}`,
-    outcome: 'value',
-    outcomeDetails, 
-    diceDetails,
-    checkDetails: null,
-  }
-
-  messageBus.emit('Domain.DiceTray.roll', result)
-  return result
-}
 
 const calculator = createRPG02()
 
@@ -55,9 +25,8 @@ const findComparison = (operatorResults: Array<OperatorResult>): ComparisonResul
   return operatorResults.filter(isComparison)[0]
 }
 
-// TODO: cleanup this mess (should split in evaluateRoll and evaluateCheck ?)
 // TODO: "threshold" with < and > operators, but "expectedValue" with == and != ?
-const evaluate = (character: CharacterData, { name, expression } : DiceAction): RollResult | null => {
+const evaluate = (name: string, expression: string): Omit<RollResult, 'id' | 'request'> | null => {
   const calcResult = calculator.compute(expression)
   if (calcResult !== null ) {
     const rolls = calcResult.details.filter(d => d.operatorInfo.name === diceRolls.name)
@@ -92,13 +61,25 @@ const evaluate = (character: CharacterData, { name, expression } : DiceAction): 
       quality: 'normal'
     }
 
-    const result: RollResult = {
-      characterId: character.id,
+    return {
       title,
       outcome,
       outcomeDetails,
       diceDetails,
       checkDetails,
+    }
+  }
+
+  return null
+}
+
+const checkCustomRoll = (character: CharacterData, request: DiceTrayRequest): RollResult | null => {
+  const partialResult = evaluate(request.expression, request.expression)
+  if (partialResult !== null) {
+    const result: RollResult = {
+      id: randomUUID(),
+      request,
+      ...partialResult
     }
 
     messageBus.emit('Domain.DiceTray.roll', result)
@@ -108,8 +89,27 @@ const evaluate = (character: CharacterData, { name, expression } : DiceAction): 
   return null
 }
 
+const checkAction = (character: CharacterData, request: DiceActionRequest): RollResult | null => {
+  const action = character.state.diceActions.find((a) => a.name === request.actionName)
+  if (action !== undefined) {
+    const partialResult = evaluate(action.name, action.expression)
+    if (partialResult !== null) {
+      const result: RollResult = {
+        id: randomUUID(),
+        request,
+        ...partialResult
+      }
+
+      messageBus.emit('Domain.DiceTray.roll', result)
+      return result
+    }
+  }
+
+  return null
+}
+
 export const engine = {
-  rollDices,
   validate,
-  evaluate
+  checkCustomRoll,
+  checkAction
 }

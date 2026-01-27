@@ -31,7 +31,12 @@ export const DiceTray = ({ character }: Props) => {
   }
 
   const handleRoll = (action: DiceAction) => {
-    window.electronAPI.diceActionExecute(character.id, action.name)
+    window.electronAPI.checkCharacter({
+      game: 'Aria',
+      characterId: character.id,
+      kind: 'diceAction',
+      actionName: action.name,
+    })
   }
 
   const sortedActions = character.state.diceActions.toSorted((aA, aB) => aA.name.localeCompare(aB.name))

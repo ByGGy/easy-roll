@@ -2,7 +2,7 @@ import { app, BrowserWindow, ipcMain, dialog } from 'electron'
 import path from 'path'
 
 import { EntityId, Game, Attribute, Ability, NotificationLevel, DiceAction, createDiceAction, CharacterRollRequest } from './domain/common/types'
-import { isNotNull } from './domain/common/tools'
+import { isNotNull, unreachable } from './domain/common/tools'
 import { createMigrationService } from './persistence/migrationService'
 import { createRepository } from './persistence/common/repository'
 import { rehydrate as rehydrateCharacter } from './domain/character/character'
@@ -267,39 +267,23 @@ const handleCheckCharacter = (event: unknown, request: CharacterRollRequest) => 
         basicEngine.checkAbility(currentCharacter, request)
         break
 
+      case 'diceAction':
+        diceTrayEngine.checkAction(currentCharacter, request)
+        break
+
+      case 'diceTray':
+        diceTrayEngine.checkCustomRoll(currentCharacter, request)
+        break
+
       default:
-        console.log(JSON.stringify(request))
+        unreachable(request)
         break
     }
   }
 }
 
-const handleDiceTrayRoll = (event: unknown, characterId: EntityId, diceFaceQty: number, diceQty: number, modifier: number) => {
-  const currentCharacter = characterRepository.getById(characterId)
-  if (currentCharacter) {
-    diceTrayEngine.rollDices(currentCharacter, diceFaceQty, diceQty, modifier)
-  }
-}
-
 const handleDiceTrayValidate = (event: unknown, expression: string) => {
   diceTrayEngine.validate(expression)
-}
-
-const handleDiceTrayEvaluate = (event: unknown, characterId: EntityId, expression: string) => {
-  const currentCharacter = characterRepository.getById(characterId)
-  if (currentCharacter) {
-    diceTrayEngine.evaluate(currentCharacter, createDiceAction(expression, expression))
-  }
-}
-
-const handleDiceActionExecute = (event: unknown, characterId: EntityId, actionName: string) => {
-  const currentCharacter = characterRepository.getById(characterId)
-  if (currentCharacter) {
-    const actionToExecute = currentCharacter.state.diceActions.find(action => action.name === actionName)
-    if (actionToExecute) {
-      diceTrayEngine.evaluate(currentCharacter, actionToExecute)
-    }
-  }
 }
 
 app.whenReady().then(() => {
@@ -323,8 +307,5 @@ app.whenReady().then(() => {
   ipcMain.handle('evaluateCharacterSuccessRatio', handleEvaluateCharacterSuccessRatio)
   ipcMain.handle('checkCharacter', handleCheckCharacter)
 
-  ipcMain.handle('diceTrayRoll', handleDiceTrayRoll)
-  ipcMain.handle('diceTrayValidate', handleDiceTrayValidate)  
-  ipcMain.handle('diceTrayEvaluate', handleDiceTrayEvaluate)
-  ipcMain.handle('diceActionExecute', handleDiceActionExecute)
+  ipcMain.handle('diceTrayValidate', handleDiceTrayValidate)
 })

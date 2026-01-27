@@ -36,8 +36,5 @@ contextBridge.exposeInMainWorld('electronAPI', {
   evaluateCharacterSuccessRatio : (request: CharacterRollRequest) => ipcRenderer.invoke('evaluateCharacterSuccessRatio', request),
   checkCharacter: (request: CharacterRollRequest) => ipcRenderer.invoke('checkCharacter', request),
 
-  diceTrayRoll: (characterId: EntityId, diceFaceQty: number, diceQty: number, modifier: number) => ipcRenderer.invoke('diceTrayRoll', characterId, diceFaceQty, diceQty, modifier),
   diceTrayValidate: (expression: string) => ipcRenderer.invoke('diceTrayValidate', expression),
-  diceTrayEvaluate: (characterId: EntityId, expression: string) => ipcRenderer.invoke('diceTrayEvaluate', characterId, expression),
-  diceActionExecute: (characterId: EntityId, actionName: string) => ipcRenderer.invoke('diceActionExecute', characterId, actionName),
 })

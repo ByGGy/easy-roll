@@ -1,3 +1,4 @@
+import * as React from 'react'
 import { useSelector } from 'react-redux'
 import { RootState } from '../store/store'
 
@@ -172,8 +173,46 @@ const ReRoll = ({ roll }: ReRollProps) => {
         initModifier={roll.request.modifier}
       />
 
+    case 'diceAction':
+    case 'diceTray':
+      window.electronAPI.checkCharacter(roll.request)
+      return null
+
     default:
-      return <p>{`${roll.request.kind} not supported yet`}</p>
+      return unreachable(roll.request)
+  }
+}
+
+type MaybeWrapForReRollProps = {
+  roll: RollResult
+  item: React.ReactElement
+}
+
+const MaybeWrapForReRoll = ({ roll, item }: MaybeWrapForReRollProps) => {
+  switch (roll.request.kind) {
+    case 'ariaCheckAttribute':
+    case 'ariaCheckAbility':
+    case 'rddCheckAttribute':
+    case 'basicCheckAttribute':
+    case 'basicCheckAbility':
+      return (
+        <CustomPopover
+          direction='down'
+          triggerComponent={item}
+          popoverContent={
+            <ReRoll roll={roll} />
+          }
+        />
+      )
+
+    case 'diceAction':
+    case 'diceTray': {
+      const handleClick = () => window.electronAPI.checkCharacter(roll.request)
+      return React.cloneElement(item, { onClick: handleClick })
+    }
+
+    default:
+      return unreachable(roll.request)
   }
 }
 
@@ -182,7 +221,7 @@ export const RollHistory = () => {
 
   const maxVisibleQty = rolls.length
   const fadedOutThreshold = 10
-  const fadedOutOpacity = 0.15
+  const fadedOutOpacity = 0.25
 
   return (
     <Stack padding={2} height='100%' overflow='hidden'>
@@ -207,9 +246,9 @@ export const RollHistory = () => {
                 color: (theme) => theme.palette.primary.main,
               },
             }}>
-            <CustomPopover
-              direction='down'
-              triggerComponent={
+            <MaybeWrapForReRoll
+              roll={roll}
+              item={
                 <ListItemButton sx={{ width: '100%' }}>
                   <Grid container alignItems='center' columnSpacing={1} wrap="nowrap">
                     <Grid item xs='auto'>
@@ -220,9 +259,6 @@ export const RollHistory = () => {
                     </Grid>
                   </Grid>
                 </ListItemButton>
-              }
-              popoverContent={
-                <ReRoll roll={roll} />
               }
             />
           </ListItem>          

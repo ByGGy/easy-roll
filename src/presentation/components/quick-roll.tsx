@@ -51,7 +51,12 @@ export const QuickRoll = ({ character }: Props) => {
   }
 
   const handleRoll = (expression: string) => {
-    window.electronAPI.diceTrayEvaluate(character.id, expression)
+    window.electronAPI.checkCharacter({
+      game: 'Aria',
+      characterId: character.id,
+      kind: 'diceTray',
+      expression
+    })
   }
 
   // TODO: Card / CardContent should be added from Popover component instead of repeated
