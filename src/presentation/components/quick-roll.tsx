@@ -1,4 +1,8 @@
 import { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState, AppDispatch } from '../store/store'
+import { rememberExpression } from '../store/uiOptionsSlice'
+
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import { CardContent, Divider } from '@mui/material'
@@ -25,7 +29,10 @@ type ValidationResult = {
 }
 
 export const QuickRoll = ({ character }: Props) => {
-  const [expression, setExpression] = useState('3d8<12')
+  const dispatch = useDispatch<AppDispatch>()
+  const initExpression = useSelector((state: RootState) => state.uiOptions.lastQuickRollExpression)
+
+  const [expression, setExpression] = useState(initExpression)
   const [validationResult, setValidationResult] = useState<ValidationResult | null>(null)
 
   useEffect(() => {
@@ -41,6 +48,7 @@ export const QuickRoll = ({ character }: Props) => {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setExpression(event.target.value)
+    dispatch(rememberExpression(event.target.value))
     window.electronAPI.diceTrayValidate(event.target.value)
   }
 
