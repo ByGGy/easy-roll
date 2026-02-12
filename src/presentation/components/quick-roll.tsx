@@ -31,25 +31,26 @@ type ValidationResult = {
 export const QuickRoll = ({ character }: Props) => {
   const dispatch = useDispatch<AppDispatch>()
   const initExpression = useSelector((state: RootState) => state.uiOptions.lastQuickRollExpression)
+  const expressionValidations = useSelector((state: RootState) => state.uiOptions.expressionValidations)
 
   const [expression, setExpression] = useState(initExpression)
   const [validationResult, setValidationResult] = useState<ValidationResult | null>(null)
 
   useEffect(() => {
-    window.electronAPI.onMessage('Domain.DiceTray.validation', (data: string) => {
-      const parserResult = JSON.parse(data)
+    const parserResult = expressionValidations[expression]
+    if (parserResult) {
       setValidationResult({
         isExpressionValid: parserResult.operand !== null,
         errorMessage: parserResult.errorMessage,
         helpMessage: parserResult.helpMessage
       })
-    })
-  }, [])
+    }
+  }, [expressionValidations])
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setExpression(event.target.value)
     dispatch(rememberExpression(event.target.value))
-    window.electronAPI.diceTrayValidate(event.target.value)
+    window.electronAPI.diceTrayValidate([event.target.value])
   }
 
   const handleKeyDown = (event: React.KeyboardEvent) => {

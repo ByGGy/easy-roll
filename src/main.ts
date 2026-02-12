@@ -282,8 +282,8 @@ const handleCheckCharacter = (event: unknown, request: CharacterRollRequest) => 
   }
 }
 
-const handleDiceTrayValidate = (event: unknown, expression: string) => {
-  diceTrayEngine.validate(expression)
+const handleDiceTrayValidate = (event: unknown, expressions: Array<string>) => {
+  diceTrayEngine.validate(expressions)
 }
 
 app.whenReady().then(() => {

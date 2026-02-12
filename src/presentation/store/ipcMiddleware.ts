@@ -4,6 +4,7 @@ import { updateCollection as updateCharacterCollection, updateCharacter } from '
 import { updateCollection as updateSessionCollection, updateSession } from './sessionCollectionSlice'
 import { add as addToHistory } from './rollHistorySlice'
 import { pickCharacter, forgetCharacter } from './selectionSlice'
+import { receiveValidations } from './uiOptionsSlice'
 
 import { EntityId } from '../../domain/common/types'
 
@@ -47,6 +48,11 @@ export const ipcMiddleware: Middleware = (store) => {
         }
       }
     }
+  })
+
+  window.electronAPI.onMessage('Domain.DiceTray.validation', (data: string) => {
+    const validationResult = JSON.parse(data)
+    store.dispatch(receiveValidations(validationResult))
   })
 
   window.electronAPI.onMessage('Domain.Roll.new', (data: string) => {

@@ -6,14 +6,22 @@ import { CharacterData } from '../character/character'
 import { createRPG02 } from './calculator/factory'
 import { diceRolls } from './calculator/core/operators'
 import { OperatorResult } from './calculator/core/types'
+import { ParserResult } from './calculator/input/parser'
 
 const calculator = createRPG02()
 
-const validate = (expression: string): boolean => {
-  const result = calculator.validate(expression)
+const validate = (expressions: Array<string>): boolean => {
+  let areValid = true
+
+  const result = expressions.reduce((acc, expression) => {
+    const r = calculator.validate(expression)
+    acc[expression] = r
+    areValid = areValid && r.operand !== null
+    return acc
+  }, {} as Record<string, ParserResult>)
   
   messageBus.emit('Domain.DiceTray.validation', result)
-  return result.operand !== null
+  return areValid
 }
 
 type ComparisonResult = OperatorResult & { value: boolean }

@@ -36,5 +36,5 @@ contextBridge.exposeInMainWorld('electronAPI', {
   evaluateCharacterSuccessRatio : (request: CharacterRollRequest) => ipcRenderer.invoke('evaluateCharacterSuccessRatio', request),
   checkCharacter: (request: CharacterRollRequest) => ipcRenderer.invoke('checkCharacter', request),
 
-  diceTrayValidate: (expression: string) => ipcRenderer.invoke('diceTrayValidate', expression),
+  diceTrayValidate: (expressions: Array<string>) => ipcRenderer.invoke('diceTrayValidate', expressions),
 })
