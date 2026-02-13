@@ -3,7 +3,7 @@ import Popover from '@mui/material/Popover'
 import IconButton, { IconButtonOwnProps } from '@mui/material/IconButton'
 import { unreachable } from '../../../domain/common/tools'
 
-type Direction = 'down' | 'right'
+type Direction = 'down-right' | 'down-left' | 'right'
 
 type Props = {
   direction?: Direction
@@ -11,7 +11,7 @@ type Props = {
   popoverContent: React.ReactNode
 }
 
-export const CustomPopover = ({ direction ='down', triggerComponent, popoverContent }: Props) => {
+export const CustomPopover = ({ direction ='down-right', triggerComponent, popoverContent }: Props) => {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null)
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -25,7 +25,7 @@ export const CustomPopover = ({ direction ='down', triggerComponent, popoverCont
   const anchorProps = React.useMemo(() => {
     switch (direction) {
       default:  return unreachable(direction)
-      case 'down':
+      case 'down-right':
         return {
           anchorOrigin: {
             vertical: 'bottom',
@@ -36,6 +36,17 @@ export const CustomPopover = ({ direction ='down', triggerComponent, popoverCont
             horizontal: 'left',            
           }
         } as const
+      case 'down-left':
+        return {
+          anchorOrigin: {
+            vertical: 'bottom',
+            horizontal: 'right'
+          },
+          transformOrigin: {
+            vertical: 'top',
+            horizontal: 'right',            
+          }
+        } as const        
       case 'right':
         return {
           anchorOrigin: {
@@ -76,7 +87,7 @@ type IconPopoverProps = {
   popoverContent: React.ReactNode
 }
 
-export const IconPopover = ({ direction ='down', size, triggerContent, popoverContent }: IconPopoverProps) => {
+export const IconPopover = ({ direction ='down-right', size, triggerContent, popoverContent }: IconPopoverProps) => {
   return <CustomPopover
     direction={direction}
     triggerComponent={

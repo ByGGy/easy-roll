@@ -35,7 +35,7 @@ export const CharacterHeader = ({ character }: Props) => {
         <DiscordConfiguration character={character} />
       </Grid>
       <Grid item xs='auto'>
-        <IconPopover triggerContent={<DiceIcon color='secondary' />} popoverContent={<QuickRoll character={character} />} />
+        <IconPopover direction='down-left' triggerContent={<DiceIcon color='secondary' />} popoverContent={<QuickRoll character={character} />} />
       </Grid>
     </Grid>
   )

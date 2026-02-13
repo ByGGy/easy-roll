@@ -61,7 +61,6 @@ export const BasicAbilities = ({ character }: Props) => {
               },
             }}>
             <CustomPopover
-              direction='down'
               triggerComponent={
                 <ListItemButton>
                   <Grid key={ability.name} container alignItems='center' columnSpacing={2}>

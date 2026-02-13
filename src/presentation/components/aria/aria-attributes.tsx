@@ -61,7 +61,6 @@ export const AriaAttributes = ({ character }: Props) => {
               },
             }}>
             <CustomPopover
-              direction='down'
               triggerComponent={
                 <ListItemButton>
                   <Grid key={attribute.name} container alignItems='center' columnSpacing={2}>

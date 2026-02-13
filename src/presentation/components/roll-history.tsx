@@ -197,7 +197,6 @@ const MaybeWrapForReRoll = ({ roll, item }: MaybeWrapForReRollProps) => {
     case 'basicCheckAbility':
       return (
         <CustomPopover
-          direction='down'
           triggerComponent={item}
           popoverContent={
             <ReRoll roll={roll} />
