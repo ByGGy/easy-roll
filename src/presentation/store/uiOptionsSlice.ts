@@ -24,7 +24,14 @@ export const uiOptionsSlice = createSlice({
       state.lastQuickRollExpression = action.payload
     },
     receiveValidations: (state, action: PayloadAction<Record<string, ParserResult>>) => {
-      state.expressionValidations = action.payload
+      // TODO: to infinity and beyond! (validations are never removed atm...)
+      const oldIds = Object.keys(state.expressionValidations)
+      const newIds = Object.keys(action.payload)
+      const dedupedIds = new Set([...oldIds, ...newIds])
+      state.expressionValidations = Array.from(dedupedIds).reduce((acc, id) => {
+        acc[id] = action.payload[id] ?? state.expressionValidations[id]
+        return acc
+      }, {} as Record<string, ParserResult>)
     }
   },
 })

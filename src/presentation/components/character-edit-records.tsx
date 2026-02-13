@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react'
+import { useSelector } from 'react-redux'
+import { RootState } from '../store/store'
 import Dialog from '@mui/material/Dialog'
 import DialogContent from '@mui/material/DialogContent'
 import DialogActions from '@mui/material/DialogActions'
@@ -70,6 +72,8 @@ type CharacterEditRecordsProps<T> = {
 const CharacterEditRecords = <T,>({ title, getDefaultValue, onChange, records }: CharacterEditRecordsProps<T>) => {
   const [lastCount, setLastCount] = useState(records.length +1)
   const [rows, setRows] = useState(createRows(records))
+
+  const expressionValidations = useSelector((state: RootState) => state.uiOptions.expressionValidations)
 
   useEffect(() => {
     const newRecords: Array<SimpleModel<T>> = rows.map(r => ({ name: r.name, value: r.value }))
@@ -155,6 +159,15 @@ const CharacterEditRecords = <T,>({ title, getDefaultValue, onChange, records }:
       align: 'left',
       headerAlign: 'left',
       editable: true,
+      cellClassName: ({ value }) => {
+        if (typeof getDefaultValue() === 'string') {
+          const relevantValidation = expressionValidations[value]
+          // TODO: ugly implementation detail that begins to spread too much
+          return relevantValidation === undefined || relevantValidation.operand !== null ? '' : 'error-cell'
+        }
+
+        return ''
+      }
     },
     {
       field: 'actions',
@@ -178,7 +191,13 @@ const CharacterEditRecords = <T,>({ title, getDefaultValue, onChange, records }:
   ]
 
   return (
-    <DataGrid sx={{ border: 'none' }}
+    <DataGrid sx={{
+        border: 'none',
+        '& .error-cell': {
+          color: (theme) => theme.palette.error.main,
+          fontWeight: 'bold',
+        }
+      }}
       initialState={{
         pagination: { paginationModel: { pageSize: -1 } }
       }}
@@ -305,6 +324,7 @@ export const CharacterEditDiceActionsDialog = ({ open, onClose, character }: Cha
   }
 
   const handleChange = (newRecords: Array<SimpleModel<string>>) => {
+    window.electronAPI.diceTrayValidate(newRecords.map((r) => r.value))
     setLastRecords(newRecords)
   }
 

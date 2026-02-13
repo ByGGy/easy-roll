@@ -23,7 +23,7 @@ export const create = (supportedOperators: Array<Operator>) => {
       return { operator, a: atomize(input.substring(0, position)), b: atomize(input.substring(position + operator.symbol.length, input.length)) }
     }
 
-    throw new Error(`invalid expression at "${input}"`)
+    throw new Error(`Invalid expression at "${input}"`)
   }
 
   const parse = (input: string): ParserResult => {
@@ -34,7 +34,7 @@ export const create = (supportedOperators: Array<Operator>) => {
       result = atomize(input.trim().replaceAll(' ', ''))
     } catch (e) {
       console.log(`debug: ${e}`)
-      errorMessage = e.toString()
+      errorMessage = e.message
     }
 
     return {

@@ -20,4 +20,16 @@ export const DarkTooltip = styled(({ className, ...props }: TooltipProps) => (
   },
 }))
 
+// TODO: copy & paste of Darktooltip with another palette color => factorize..
+export const ErrorTooltip = styled(({ className, ...props }: TooltipProps) => (
+  <Tooltip {...props} arrow classes={{ popper: className }} />
+))(({ theme }) => ({
+  [`& .${tooltipClasses.arrow}`]: {
+    color: theme.palette.error.dark,
+  },
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: theme.palette.error.dark,
+  },
+}))
+
 export const evaluateModifierColor = (value: number) => value < 0 ? 'warning.main' : value > 0 ? 'success.main' : ''
