@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import { RootState } from '../../store/store'
 
@@ -7,8 +7,10 @@ import { Box } from '@mui/material'
 export const TorchOverlay = () => {
   const isEnabled = useSelector((state: RootState) => state.uiOptions.isTorchOverlayEnabled)
 
+  const lastRequestAnimationFrame = useRef(-1)
   const mouse = useRef({ x: window.innerWidth / 2, y: window.innerHeight / 2 })
-  const [style, setStyle] = useState('')
+  const targetLight = useRef<HTMLDivElement>(null)
+  const targetNoise = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const onMove = (e: MouseEvent) => {
@@ -17,8 +19,6 @@ export const TorchOverlay = () => {
     }
 
     window.addEventListener('mousemove', onMove)
-
-    let raf: number
 
     const animate = () => {
       const t = performance.now()
@@ -34,7 +34,7 @@ export const TorchOverlay = () => {
 
       const glow = 0.1 + Math.sin(t / 120) * 0.03
 
-      setStyle(`
+      const fxStyle = `
         radial-gradient(
           circle ${radius}px at ${mouse.current.x + offset.x}px ${mouse.current.y + offset.y}px,
           rgba(255,220,160,${glow * 0.25}) 0%,
@@ -50,16 +50,24 @@ export const TorchOverlay = () => {
           rgba(255,255,255,${glow * 0.05}) 0%,
         rgba(0,0,0,0.20) 85%
         )
-      `)
+      `
 
-      raf = requestAnimationFrame(animate)
+      if (targetLight.current !== null) {
+        targetLight.current.style.background = fxStyle
+      }
+
+      if (targetNoise.current !== null) {
+        targetNoise.current.style.maskImage = fxStyle
+      }
+
+      lastRequestAnimationFrame.current = requestAnimationFrame(animate)
     }
 
     animate()
 
     return () => {
       window.removeEventListener('mousemove', onMove)
-      cancelAnimationFrame(raf)
+      cancelAnimationFrame(lastRequestAnimationFrame.current)
     }
   }, [])
 
@@ -78,20 +86,20 @@ export const TorchOverlay = () => {
     >
       {/* Torch gradient */}
       <Box
+        ref={targetLight}
         sx={{
           position: 'absolute',
           inset: 0,
-          background: style,
         }}
       />
 
       {/* Noise layer */}
       <Box
+        ref={targetNoise}
         sx={{
           position: 'absolute',
           inset: 0,
           backgroundImage: 'url(./images/noise.png)',
-          maskImage: style,
           maskMode: 'luminance'
         }}
       />
