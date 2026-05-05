@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { ParserResult } from '../../domain/dicetray/calculator/input/parser'
+import { ExpressionValidationResult } from '../../domain/dicetray/calculator/factory'
 
 export interface UIOptionsState {
   isTorchOverlayEnabled: boolean
   lastQuickRollExpression: string
-  expressionValidations: Record<string, ParserResult>
+  expressionValidations: Record<string, ExpressionValidationResult>
 }
 
 const initialState: UIOptionsState = {
@@ -23,7 +23,7 @@ export const uiOptionsSlice = createSlice({
     rememberExpression: (state, action: PayloadAction<string>) => {
       state.lastQuickRollExpression = action.payload
     },
-    receiveValidations: (state, action: PayloadAction<Record<string, ParserResult>>) => {
+    receiveValidations: (state, action: PayloadAction<Record<string, ExpressionValidationResult>>) => {
       // TODO: to infinity and beyond! (validations are never removed atm...)
       const oldIds = Object.keys(state.expressionValidations)
       const newIds = Object.keys(action.payload)
@@ -31,7 +31,7 @@ export const uiOptionsSlice = createSlice({
       state.expressionValidations = Array.from(dedupedIds).reduce((acc, id) => {
         acc[id] = action.payload[id] ?? state.expressionValidations[id]
         return acc
-      }, {} as Record<string, ParserResult>)
+      }, {} as Record<string, ExpressionValidationResult>)
     }
   },
 })

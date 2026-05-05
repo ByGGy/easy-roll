@@ -1,22 +1,29 @@
 export type InValue = number
-export type OutValue = number | boolean
-
-export type OperatorResult = {
-  operatorInfo: OperatorInfo
-  operands: Array<InValue>
-  value: OutValue
-  extra: Array<InValue>
-}
+export type Category = 'arithmetic' | 'comparative'
 
 export type OperatorInfo = {
   name: string
   symbol: string
   arity: number
+  category: Category
 }
 
-export type Operator = OperatorInfo & {
-  f: (...operands: Array<InValue>) => OperatorResult
+export type OperatorResult<TOutValue> = {
+  operatorInfo: OperatorInfo
+  operands: Array<InValue>
+  value: TOutValue
+  extra: Array<InValue>
 }
+
+export type BaseOperator<TOutValue> = OperatorInfo & {
+  f: (...operands: Array<InValue>) => OperatorResult<TOutValue>
+}
+
+export type ArithmeticOperator = BaseOperator<number>
+export type ComparativeOperator = BaseOperator<boolean>
+export type Operator = ArithmeticOperator | ComparativeOperator
+
+export type OutValue = ReturnType<Operator['f']>['value']
 
 export type Operation = {
   operator: Operator

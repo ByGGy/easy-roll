@@ -1,11 +1,12 @@
-import { Operator, InValue, OutValue, OperatorInfo } from './types'
+import { InValue, OperatorInfo, ArithmeticOperator, ComparativeOperator } from './types'
 import { rollDice } from '../../roll'
 
-const createOperator = (name: string, symbol: string, compute: (a: number, b: number) => { value: OutValue, extra: Array<InValue> }): Operator => {
+const createArithmeticOperator = (name: string, symbol: string, compute: (a: number, b: number) => { value: number, extra: Array<InValue> }): ArithmeticOperator => {
   const info: OperatorInfo = {
     name,
     symbol,
-    arity: 2
+    arity: 2,
+    category: 'arithmetic'
   }
 
   return {
@@ -22,15 +23,37 @@ const createOperator = (name: string, symbol: string, compute: (a: number, b: nu
   }
 }
 
-export const addition = createOperator('addition', '+', (a, b) => ({ value: a+b, extra: [] }))
-export const substraction = createOperator('substraction', '-', (a, b) => ({ value: a-b, extra: [] }))
-export const multiplication = createOperator('multiplication', '*', (a, b) => ({ value: a*b, extra: [] }))
-export const division = createOperator('division', '/', (a, b) => ({ value: a/b, extra: [] }))
+const createComparativeOperator = (name: string, symbol: string, compute: (a: number, b: number) => { value: boolean, extra: Array<InValue> }): ComparativeOperator => {
+  const info: OperatorInfo = {
+    name,
+    symbol,
+    arity: 2,
+    category: 'comparative'
+  }
 
-export const exponentiation = createOperator('exponentiation', '^', (a, b) => ({ value: a**b, extra: [] }))
-export const modulo = createOperator('modulo', '%', (a, b) => ({ value: a%b, extra: [] }))
+  return {
+    ...info,
+    f: (a: number, b: number) => {
+      const result = compute(a, b)
+      return {
+        operatorInfo: info,
+        operands: [a, b],
+        value: result.value,
+        extra: result.extra
+      }
+    }
+  }
+}
 
-export const diceRolls = createOperator('diceRolls', 'd', (a, b) => {
+export const addition = createArithmeticOperator('addition', '+', (a, b) => ({ value: a+b, extra: [] }))
+export const substraction = createArithmeticOperator('substraction', '-', (a, b) => ({ value: a-b, extra: [] }))
+export const multiplication = createArithmeticOperator('multiplication', '*', (a, b) => ({ value: a*b, extra: [] }))
+export const division = createArithmeticOperator('division', '/', (a, b) => ({ value: a/b, extra: [] }))
+
+export const exponentiation = createArithmeticOperator('exponentiation', '^', (a, b) => ({ value: a**b, extra: [] }))
+export const modulo = createArithmeticOperator('modulo', '%', (a, b) => ({ value: a%b, extra: [] }))
+
+export const diceRolls = createArithmeticOperator('diceRolls', 'd', (a, b) => {
   const rolls = [...Array(a)].map(_ => rollDice(b))
   const total = rolls.reduce((acc, value) => acc + value, 0)
 
@@ -40,9 +63,9 @@ export const diceRolls = createOperator('diceRolls', 'd', (a, b) => {
   }
 })
 
-export const lessThan = createOperator('lessThan', '<', (a, b) => ({ value: a<b, extra: [] }))
-export const lessThanOrEqualTo = createOperator('lessThanOrEqualTo', '<=', (a, b) => ({ value: a<=b, extra: [] }))
-export const greaterThan = createOperator('greaterThan', '>', (a, b) => ({ value: a>b, extra: [] }))
-export const greaterThanOrEqualTo = createOperator('greaterThanOrEqualTo', '>=', (a, b) => ({ value: a>=b, extra: [] }))
-export const equalTo = createOperator('equalTo', '==', (a, b) => ({ value: a===b, extra: [] }))
-export const notEqualTo = createOperator('notEqualTo', '!=', (a, b) => ({ value: a!==b, extra: [] }))
+export const lessThan = createComparativeOperator('lessThan', '<', (a, b) => ({ value: a<b, extra: [] }))
+export const lessThanOrEqualTo = createComparativeOperator('lessThanOrEqualTo', '<=', (a, b) => ({ value: a<=b, extra: [] }))
+export const greaterThan = createComparativeOperator('greaterThan', '>', (a, b) => ({ value: a>b, extra: [] }))
+export const greaterThanOrEqualTo = createComparativeOperator('greaterThanOrEqualTo', '>=', (a, b) => ({ value: a>=b, extra: [] }))
+export const equalTo = createComparativeOperator('equalTo', '==', (a, b) => ({ value: a===b, extra: [] }))
+export const notEqualTo = createComparativeOperator('notEqualTo', '!=', (a, b) => ({ value: a!==b, extra: [] }))

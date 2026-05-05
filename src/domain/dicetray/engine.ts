@@ -5,8 +5,8 @@ import { DiceActionRequest, DiceTrayRequest, RollCheckDetails, RollDiceDetails, 
 import { CharacterData } from '../character/character'
 import { createRPG02 } from './calculator/factory'
 import { diceRolls } from './calculator/core/operators'
-import { OperatorResult } from './calculator/core/types'
-import { ParserResult } from './calculator/input/parser'
+import { OperatorResult, OutValue } from './calculator/core/types'
+import { ExpressionValidationResult } from './calculator/factory'
 
 const calculator = createRPG02()
 
@@ -18,18 +18,18 @@ const validate = (expressions: Array<string>): boolean => {
     acc[expression] = r
     areValid = areValid && r.operand !== null
     return acc
-  }, {} as Record<string, ParserResult>)
+  }, {} as Record<string, ExpressionValidationResult>)
   
   messageBus.emit('Domain.DiceTray.validation', result)
   return areValid
 }
 
-type ComparisonResult = OperatorResult & { value: boolean }
-const isComparison = (operatorResult: OperatorResult): operatorResult is ComparisonResult => {
+type ComparisonResult = OperatorResult<boolean>
+const isComparison = (operatorResult: OperatorResult<OutValue>): operatorResult is ComparisonResult => {
   return typeof operatorResult.value === 'boolean'
 }
 
-const findComparison = (operatorResults: Array<OperatorResult>): ComparisonResult | undefined => {
+const findComparison = (operatorResults: Array<OperatorResult<OutValue>>): ComparisonResult | undefined => {
   return operatorResults.filter(isComparison)[0]
 }
 

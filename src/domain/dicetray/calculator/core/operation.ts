@@ -1,8 +1,8 @@
-import { Operand, IsOperation, InValue, OutValue, OperatorResult } from './types'
+import { Operand, IsOperation, InValue, OutValue, OperatorResult, Operator } from './types'
 
 export type SolverResult = {
   value: OutValue
-  details: Array<OperatorResult>
+  details: Array<OperatorResult<OutValue>>
 }
 
 type SolverResultOperand = SolverResult & {
@@ -14,6 +14,21 @@ const isSolverResultOperand = (r: SolverResult | null): r is SolverResultOperand
 }
 
 export const createSolver = () => {
+  const validate = (op: Operand) => {
+    const count = (operand: Operand, predicate: (operator: Operator) => boolean): number => {
+      if (IsOperation(operand)) {
+        return (predicate(operand.operator) ? 1 : 0) + count(operand.a, predicate) + count(operand.b, predicate)
+      }
+
+      return 0
+    }
+
+    const qty = count(op, (o: Operator) => o.category === 'comparative')
+    if (qty > 1) {
+      throw new Error(`Too many comparative operators (${qty} found)`)
+    }
+  }
+
   const solve = (op: Operand): SolverResult | null => {
     if (!IsOperation(op)) {
       return {
@@ -34,11 +49,11 @@ export const createSolver = () => {
       }
     }
 
-    // console.log(`invalid arguments for "${op.operator.name}": ${JSON.stringify(op.a)}, ${JSON.stringify(op.b)}`)
-    return null
+    throw new Error(`invalid arguments for "${op.operator.name}": ${JSON.stringify(op.a)}, ${JSON.stringify(op.b)}`)
   }
 
   return {
+    validate,
     solve
   }
 }

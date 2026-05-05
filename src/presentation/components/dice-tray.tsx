@@ -17,9 +17,9 @@ import { ErrorTooltip } from './common/style-helpers'
 
 import { DiceAction } from '../../domain/common/types'
 import { CharacterData } from '../../domain/character/character'
-import { ParserResult } from '../../domain/dicetray/calculator/input/parser'
+import { ExpressionValidationResult } from '../../domain/dicetray/calculator/factory'
 
-const isExpressionValid = (expressionValidations: Record<string, ParserResult>, expression: string) => {
+const isExpressionValid = (expressionValidations: Record<string, ExpressionValidationResult>, expression: string) => {
   const relevantValidation = expressionValidations[expression]
   // TODO: ugly implementation detail that begins to spread too much
   return relevantValidation === undefined || relevantValidation.operand !== null

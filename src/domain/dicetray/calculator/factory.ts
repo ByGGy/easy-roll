@@ -1,5 +1,5 @@
 import { create as createParser } from './input/parser'
-import { Operator } from './core/types'
+import { Operand, Operator } from './core/types'
 import {
   addition, substraction, multiplication, division, exponentiation, modulo,
   diceRolls,
@@ -7,19 +7,42 @@ import {
 } from './core/operators'
 import { createSolver } from './core/operation'
 
+export type ExpressionValidationResult = {
+  operand: Operand | null
+  errorMessage: string
+  helpMessage: string
+}
+
 const create = (supportedOperators: Array<Operator>) => {
   const parser = createParser(supportedOperators)
   const solver = createSolver()
 
-  const validate = (expression: string) => {
-    // TODO: parser success does not guaranty solver success anymore, e.g. multiple conditional operators
-    return parser.parse(expression)
+  const validate = (expression: string): ExpressionValidationResult => {
+    let maybeOperand: Operand | null = null
+    let errorMessage = ''
+
+    try {
+      maybeOperand = parser.parse(expression)
+      solver.validate(maybeOperand)
+    } catch (e) {
+      console.log(`debug: ${e}`)
+      maybeOperand = null
+      errorMessage = e.message
+    }
+
+    return {
+      operand: maybeOperand,
+      errorMessage,
+      helpMessage: `List of supported operators: ${supportedOperators.map(o => o.symbol).join(', ')}`
+    }
   }
 
   const compute = (expression: string) => {
-    const parserResult = parser.parse(expression)
-    if (parserResult.operand !== null) {
-      return solver.solve(parserResult.operand)
+    try {
+      const maybeOperand = parser.parse(expression)
+      return solver.solve(maybeOperand)
+    } catch (e) {
+      console.log(`debug: ${e}`)
     }
 
     return null

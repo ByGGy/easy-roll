@@ -4,7 +4,7 @@ import { messageBus } from '../events/messageBus'
 import { EntityId, RollResult } from '../common/types'
 import { Character } from '../character/character'
 import { Session } from '../session/session'
-import { ParserResult } from '../dicetray/calculator/input/parser'
+import { ExpressionValidationResult } from '../dicetray/calculator/factory'
 
 export const createRelay = (window: BrowserWindow) => {
 
@@ -41,7 +41,7 @@ export const createRelay = (window: BrowserWindow) => {
   transfer('Domain.Rdd.successRatio', handleNumber)
   transfer('Domain.Basic.successRatio', handleNumber)
 
-  const handleDiceTrayValidation = (eventName: string, validationResult: ParserResult) => {
+  const handleDiceTrayValidation = (eventName: string, validationResult: ExpressionValidationResult) => {
     window.webContents.send(eventName, JSON.stringify(validationResult))
   }
 

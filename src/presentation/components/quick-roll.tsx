@@ -37,12 +37,12 @@ export const QuickRoll = ({ character }: Props) => {
   const [validationResult, setValidationResult] = useState<ValidationResult | null>(null)
 
   useEffect(() => {
-    const parserResult = expressionValidations[expression]
-    if (parserResult) {
+    const validationResult = expressionValidations[expression]
+    if (validationResult) {
       setValidationResult({
-        isExpressionValid: parserResult.operand !== null,
-        errorMessage: parserResult.errorMessage,
-        helpMessage: parserResult.helpMessage
+        isExpressionValid: validationResult.operand !== null,
+        errorMessage: validationResult.errorMessage,
+        helpMessage: validationResult.helpMessage
       })
     }
   }, [expressionValidations])
