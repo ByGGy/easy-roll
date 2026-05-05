@@ -33,6 +33,10 @@ export const AppHeader = () => {
     window.electronAPI.createSession('BaSIC')
   }
 
+  const handleCreateDeadlandsSession = () => {
+    window.electronAPI.createSession('Deadlands')
+  }
+
   const handleCloseSession = () => {
     dispatch(closeSession())
   }
@@ -56,6 +60,9 @@ export const AppHeader = () => {
               </Button>
               <Button variant={noSessionFound ? 'contained' : 'outlined'} startIcon={<AddIcon />} onClick={handleCreateBasicSession}>
                 Create a 'BaSIC' session
+              </Button>
+              <Button variant={noSessionFound ? 'contained' : 'outlined'} startIcon={<AddIcon />} onClick={handleCreateDeadlandsSession}>
+                Create a 'Deadlands' session
               </Button>
             </Stack>
           }

@@ -7,5 +7,6 @@ export const findGameImagePath = (game: Game): string => {
     case 'Aria': return './images/Aria_Cover.jpg'
     case 'Rêve de Dragon': return './images/Reve-de-Dragon_Cover.jpg'
     case 'BaSIC': return './images/BaSIC_Cover.jpg'
+    case 'Deadlands': return './images/Deadlands_Cover.jpg'
   }
 }

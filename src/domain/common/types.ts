@@ -13,7 +13,7 @@ export type EntityWithState<T> = Entity & {
 
 //--
 
-export type Game = 'Aria' | 'Rêve de Dragon' | 'BaSIC'
+export type Game = 'Aria' | 'Rêve de Dragon' | 'BaSIC' | 'Deadlands'
 
 export type Attribute = Nominal<'Attribute', Readonly<{
   name: string

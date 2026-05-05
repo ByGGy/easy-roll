@@ -1,7 +1,7 @@
 import { app, BrowserWindow, ipcMain, dialog } from 'electron'
 import path from 'path'
 
-import { EntityId, Game, Attribute, Ability, NotificationLevel, DiceAction, createDiceAction, CharacterRollRequest } from './domain/common/types'
+import { EntityId, Game, Attribute, Ability, NotificationLevel, DiceAction, CharacterRollRequest } from './domain/common/types'
 import { isNotNull, unreachable } from './domain/common/tools'
 import { createMigrationService } from './persistence/migrationService'
 import { createRepository } from './persistence/common/repository'
