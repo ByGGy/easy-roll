@@ -16,6 +16,9 @@ import { RddAttributes } from './rdd/rdd-attributes'
 import { BasicAttributes } from './basic/basic-attributes'
 import { BasicAbilities } from './basic/basic-abilities'
 
+import { DeadlandsAttributes } from './deadlands/deadlands-attributes'
+import { DeadlandsAbilities } from './deadlands/deadlands-abilities'
+
 import { unreachable } from '../../domain/common/tools'
 import { CharacterData } from '../../domain/character/character'
 import { Game } from '../../domain/common/types'
@@ -49,6 +52,7 @@ const AttributesPanel = ({ game, character }: Props) => {
     case 'Aria': return <AriaAttributes character={character} />
     case 'Rêve de Dragon': return <RddAttributes character={character} />
     case 'BaSIC': return <BasicAttributes character={character} />
+    case 'Deadlands': return <DeadlandsAttributes character={character} />
   }
 }
 
@@ -58,6 +62,7 @@ const AbilitiesPanel = ({ game, character }: Props) => {
     case 'Aria': return <AriaAbilities character={character} />
     case 'Rêve de Dragon': return <RddAbilities character={character} />
     case 'BaSIC': return <BasicAbilities character={character} />
+    case 'Deadlands': return <DeadlandsAbilities character={character} />
   }
 }
 

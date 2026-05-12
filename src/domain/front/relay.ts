@@ -40,6 +40,7 @@ export const createRelay = (window: BrowserWindow) => {
   transfer('Domain.Aria.successRatio', handleNumber)
   transfer('Domain.Rdd.successRatio', handleNumber)
   transfer('Domain.Basic.successRatio', handleNumber)
+  transfer('Domain.Deadlands.successRatio', handleNumber)
 
   const handleDiceTrayValidation = (eventName: string, validationResult: ExpressionValidationResult) => {
     window.webContents.send(eventName, JSON.stringify(validationResult))
@@ -53,8 +54,9 @@ export const createRelay = (window: BrowserWindow) => {
 
   messageBus.on('Domain.DiceTray.roll', handleRollResult)
   messageBus.on('Domain.Aria.check', handleRollResult)
-  messageBus.on('Domain.Basic.check', handleRollResult)
   messageBus.on('Domain.Rdd.check', handleRollResult)
+  messageBus.on('Domain.Basic.check', handleRollResult)
+  messageBus.on('Domain.Deadlands.check', handleRollResult)
 
   return {}
 }

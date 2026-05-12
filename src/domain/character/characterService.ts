@@ -7,6 +7,7 @@ import { Character, create } from './character'
 import { createDefaultAttributes as createAriaDefaultAttributes, createDefaultAbilities as createAriaDefaultAbilities } from '../aria/characterTemplate'
 import { createDefaultAttributes as createRddDefaultAttributes, createDefaultAbilities as  createRddDefaultAbilities } from '../rdd/characterTemplate'
 import { createDefaultAttributes as createBasicDefaultAttributes, createDefaultAbilities as  createBasicDefaultAbilities } from '../basic/characterTemplate'
+import { createDefaultAttributes as createDeadlandsDefaultAttributes, createDefaultAbilities as  createDeadlandsDefaultAbilities } from '../deadlands/characterTemplate'
 
 export type CharacterService = {
   createFor: (game: Game) => Character
@@ -23,6 +24,7 @@ const createDefaultAttributesFor = (game: Game): Array<Attribute> => {
     case 'Aria': return createAriaDefaultAttributes()
     case 'Rêve de Dragon': return createRddDefaultAttributes()
     case 'BaSIC': return createBasicDefaultAttributes()
+    case 'Deadlands': return createDeadlandsDefaultAttributes()
   }
 }
 
@@ -32,6 +34,7 @@ const createDefaultAbilitiesFor = (game: Game): Array<Ability> => {
     case 'Aria': return createAriaDefaultAbilities()
     case 'Rêve de Dragon': return createRddDefaultAbilities()
     case 'BaSIC': return createBasicDefaultAbilities()
+    case 'Deadlands': return createDeadlandsDefaultAbilities()
   }
 }
 
@@ -41,6 +44,7 @@ const createDefaultDiceActionsFor = (game: Game): Array<DiceAction> => {
     case 'Aria':
     case 'Rêve de Dragon':
     case 'BaSIC':
+    case 'Deadlands':
       return []
   }
 }

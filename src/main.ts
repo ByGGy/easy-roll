@@ -12,6 +12,7 @@ import { engine as diceTrayEngine } from './domain/dicetray/engine'
 import { engine as ariaEngine } from './domain/aria/engine'
 import { engine as rddEngine } from './domain/rdd/engine'
 import { engine as basicEngine } from './domain/basic/engine'
+import { engine as deadlandsEngine } from './domain/deadlands/engine'
 import { createRelay as createDiscordRelay } from './domain/discord/relay'
 import { createRelay as createFrontRelay } from './domain/front/relay'
 
@@ -236,6 +237,14 @@ const handleEvaluateCharacterSuccessRatio = (event: unknown, request: CharacterR
         basicEngine.evaluateCheckAbilityRatio(currentCharacter, request)
         break
 
+      case 'deadlandsCheckAttribute':
+        deadlandsEngine.evaluateCheckAttributeRatio(currentCharacter, request)
+        break
+
+      case 'deadlandsCheckAbility':
+        deadlandsEngine.evaluateCheckAbilityRatio(currentCharacter, request)
+        break
+
       default:
         console.log(JSON.stringify(request))
         break
@@ -266,6 +275,14 @@ const handleCheckCharacter = (event: unknown, request: CharacterRollRequest) => 
       case 'basicCheckAbility':
         basicEngine.checkAbility(currentCharacter, request)
         break
+
+      case 'deadlandsCheckAttribute':
+        deadlandsEngine.checkAttribute(currentCharacter, request)
+        break
+
+      case 'deadlandsCheckAbility':
+        deadlandsEngine.checkAbility(currentCharacter, request)
+        break        
 
       case 'diceAction':
         diceTrayEngine.checkAction(currentCharacter, request)

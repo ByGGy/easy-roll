@@ -51,6 +51,8 @@ type CharacterRollKind = 'diceTray'
   | 'rddCheckAttribute'
   | 'basicCheckAttribute'
   | 'basicCheckAbility'
+  | 'deadlandsCheckAttribute'
+  | 'deadlandsCheckAbility'
 
 export type BaseCharacterRollRequest<T extends CharacterRollKind> = Readonly<{
   game: Game
@@ -94,6 +96,18 @@ export type BasicCheckAbilityRequest = BaseCharacterRollRequest<'basicCheckAbili
   modifier: number
 }>
 
+export type DeadlandsCheckAttributeRequest = BaseCharacterRollRequest<'deadlandsCheckAttribute'> & Readonly<{
+  attributeName: string
+  modifier: number
+  difficulty: number  
+}>
+
+export type DeadlandsCheckAbilityRequest = BaseCharacterRollRequest<'deadlandsCheckAbility'> & Readonly<{
+  abilityName: string
+  modifier: number
+  difficulty: number  
+}>
+
 export type CharacterRollRequest = DiceTrayRequest
   | DiceActionRequest
   | AriaCheckAttributeRequest
@@ -101,6 +115,8 @@ export type CharacterRollRequest = DiceTrayRequest
   | RDDCheckAttributeRequest
   | BasicCheckAttributeRequest
   | BasicCheckAbilityRequest
+  | DeadlandsCheckAttributeRequest
+  | DeadlandsCheckAbilityRequest
 
 //--
 

@@ -22,6 +22,8 @@ import { DiceIcon } from './common/dice-icon'
 import { AriaRoll } from './aria/aria-roll'
 import { RddRoll } from './rdd/rdd-roll'
 import { BasicRoll } from './basic/basic-roll'
+import { DeadlandsRoll } from './deadlands/deadlands-roll'
+
 
 const QualityBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
   '& .MuiBadge-badge': {
@@ -173,6 +175,24 @@ const ReRoll = ({ roll }: ReRollProps) => {
         initModifier={roll.request.modifier}
       />
 
+    case 'deadlandsCheckAttribute':
+      return <DeadlandsRoll
+        characterId={roll.request.characterId}
+        rollStat='Attribute'
+        statName={roll.request.attributeName}
+        initDifficulty={roll.request.difficulty}
+        initModifier={roll.request.modifier}
+      />
+
+    case 'deadlandsCheckAbility':
+      return <DeadlandsRoll
+        characterId={roll.request.characterId}
+        rollStat='Ability'
+        statName={roll.request.abilityName}
+        initDifficulty={roll.request.difficulty}
+        initModifier={roll.request.modifier}
+      />
+
     case 'diceAction':
     case 'diceTray':
       window.electronAPI.checkCharacter(roll.request)
@@ -195,6 +215,8 @@ const MaybeWrapForReRoll = ({ roll, item }: MaybeWrapForReRollProps) => {
     case 'rddCheckAttribute':
     case 'basicCheckAttribute':
     case 'basicCheckAbility':
+    case 'deadlandsCheckAttribute':
+    case 'deadlandsCheckAbility':
       return (
         <CustomPopover
           triggerComponent={item}
