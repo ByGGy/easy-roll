@@ -134,6 +134,7 @@ const sequence: Array<() => void> = [
   maybeUpdateFromFirstLowdbImplementation,
   maybeUpdateFromV1Repositories,
   maybeUpdateFromV2Repositories,
+  // TODO: need to handle moving game info from tags[0] to game in v3Repositories
 ]
 
 export type MigrationService = {

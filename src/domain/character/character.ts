@@ -1,10 +1,11 @@
 import { randomUUID } from 'crypto'
-import { EntityId, EntityWithState, Attribute, Ability, DiscordNotification, DiceAction } from '../common/types'
+import { EntityId, EntityWithState, Attribute, Ability, DiscordNotification, DiceAction, Game } from '../common/types'
 import { createState } from '../events/stateEmitter'
 
 // TODO: should have a creation date ?
 // TODO: should allow to assign tags, like Hero | Villain | PNJ | Monster
 export type CharacterState = {
+  game: Game
   name: string
   tags: Array<string>
   attributes: Array<Attribute>
@@ -17,6 +18,7 @@ export type CharacterData = EntityWithState<CharacterState>
 
 export type Character = CharacterData & {
   rename: (newName: string) => void
+  changeTags: (newTags: Array<string>) => void
   changeAttributes: (newAttributes: Array<Attribute>) => void
   changeAbilities: (newAbilities: Array<Ability>) => void
   changeDiceActions: (newDiceActions: Array<DiceAction>) => void
@@ -30,6 +32,10 @@ const createModel = (id: EntityId, state: CharacterState): Character => {
   
   const rename = (newName: string) => {
     emitterState.update('name', newName)
+  }
+
+  const changeTags = (newTags: Array<string>) => {
+    emitterState.update('tags', newTags)
   }
 
   const changeAttributes = (newAttributes: Array<Attribute>) => {
@@ -52,6 +58,7 @@ const createModel = (id: EntityId, state: CharacterState): Character => {
     id,
     state: emitterState,
     rename,
+    changeTags,
     changeAttributes,
     changeAbilities,
     changeDiceActions,

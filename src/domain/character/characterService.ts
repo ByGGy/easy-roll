@@ -55,8 +55,9 @@ export const createCharacterService = (): CharacterService => {
 
   const createFor = (game: Game): Character => {
     const defaultState = {
+      game,
       name: 'Average Joe',
-      tags: [game], 
+      tags: [], 
       attributes: createDefaultAttributesFor(game),
       abilities: createDefaultAbilitiesFor(game),
       diceActions: createDefaultDiceActionsFor(game),
@@ -124,8 +125,9 @@ export const createCharacterService = (): CharacterService => {
       }
 
       const state = {
+        game,
         name,
-        tags: [game], 
+        tags: [], 
         attributes,
         abilities,
         diceActions,

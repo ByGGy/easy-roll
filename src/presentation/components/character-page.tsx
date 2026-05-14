@@ -5,6 +5,7 @@ import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
 
 import { CharacterHeader } from './character-header'
+import { CharacterTags } from './character-tags'
 import { DiceTray } from './dice-tray'
 
 import { AriaAttributes } from './aria/aria-attributes'
@@ -76,6 +77,9 @@ export const CharacterPage = ({ game, character }: Props) => {
   return (
     <Stack spacing={1} padding={2} height='100%' overflow='hidden'>
       <CharacterHeader character={character} />
+      <Paper elevation={1}>
+        <CharacterTags character={character} />
+      </Paper>
       <Tabs
         value={currentTab}
         onChange={handleTabChange}

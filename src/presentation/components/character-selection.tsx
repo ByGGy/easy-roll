@@ -86,7 +86,7 @@ export const CharacterSelection = ({ session }: Props) => {
   const sortedCharacters = relevantCharacters.toSorted((cA, cB) => cA.state.name.localeCompare(cB.state.name))
   const selectedCharacterId = useSelector((state: RootState) => state.selection.characterId)
 
-  const availableCharactersToPick = allCharacters.filter(c => relevantCharacters.every(r => r.id !== c.id) && c.state.tags.includes(session.state.game))
+  const availableCharactersToPick = allCharacters.filter(c => relevantCharacters.every(r => r.id !== c.id) && c.state.game === session.state.game)
 
   const handleCreateCharacter = () => {
     window.electronAPI.createCharacterForSession(session.id)

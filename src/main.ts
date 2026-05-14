@@ -177,6 +177,13 @@ const handleRenameCharacter = (event: unknown, id: EntityId, newName: string) =>
   }
 }
 
+const handleChangeCharacterTags = (event: unknown, id: EntityId, newTags: Array<string>) => {
+  const targetCharacter = characterRepository.getById(id)
+  if (targetCharacter) {
+    targetCharacter.changeTags(newTags)
+  }
+}
+
 const handleChangeCharacterAttributes = (event: unknown, id: EntityId, newAttributes: Array<Attribute>) => {
   const targetCharacter = characterRepository.getById(id)
   if (targetCharacter) {
@@ -315,6 +322,7 @@ app.whenReady().then(() => {
   ipcMain.handle('removeCharacterFromSession', handleRemoveCharacterFromSession)
 
   ipcMain.handle('renameCharacter', handleRenameCharacter)
+  ipcMain.handle('changeCharacterTags', handleChangeCharacterTags)
   ipcMain.handle('changeCharacterAttributes', handleChangeCharacterAttributes)
   ipcMain.handle('changeCharacterAbilities', handleChangeCharacterAbilities)
   ipcMain.handle('changeCharacterDiceActions', handleChangeCharacterDiceActions)
