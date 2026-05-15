@@ -133,7 +133,7 @@ export const DeadlandsRoll = ({ characterId, rollStat, statName, initDifficulty=
                 <Box>
                   <Stack direction='row' spacing={2} sx={{ mb: 1 }} alignItems='baseline'>
                     <Typography color='text.secondary'>Difficulty</Typography>
-                    <Typography variant='body2'>{`${difficulty > 0 ? '+' :''}${difficulty}`}</Typography>
+                    <Typography variant='body2'>{`4 ${difficulty >= 0 ? '+' :''}${difficulty}`}</Typography>
                   </Stack>
                   <Slider
                     value={difficulty}
@@ -149,7 +149,7 @@ export const DeadlandsRoll = ({ characterId, rollStat, statName, initDifficulty=
                 </Box>
                 <Box>
                   <Stack direction='row' spacing={2} sx={{ mb: 1 }} alignItems='baseline'>
-                    <Typography color='text.secondary'>Modifier</Typography>
+                    <Typography color='text.secondary'>Dice Total Modifier</Typography>
                     <Typography variant='body2'>{`${modifier > 0 ? '+' :''}${modifier}`}</Typography>
                   </Stack>
                   <Slider

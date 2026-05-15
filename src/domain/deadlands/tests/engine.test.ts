@@ -14,6 +14,9 @@ const evaluate = (baseValue: number, jokerValue: number, totalValue: number, thr
 
 describe('Deadlands module', () => {
   test('checks engine roll evaluator is working correctly', () => {
+    // non joker cannot suffer from evil eye
+    expect(evaluate(1, 0, 1, 2)).toEqual({ outcome: 'failure', quality: 'normal' })
+
     // double 1 are always critical failure, no matter the threshold
     expect(evaluate(1, 1, 10, 1)).toEqual({ outcome: 'failure', quality: 'critical' })
 

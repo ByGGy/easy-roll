@@ -67,12 +67,16 @@ const evaluateFailureRatio = (maxDiceValue: number, currentValue: number, modifi
   return p
 }
 
+const isJokerCharacter = (character: CharacterData) => character.state.tags.some(tag => tag.toLowerCase() === 'joker')
+
 const evaluateCheckAttributeRatio = (character: CharacterData, request: DeadlandsCheckAttributeRequest) => {
   const attribute = character.state.attributes.find((a) => a.name === request.attributeName)
   if (attribute !== undefined) {
     const threshold = findCheckThreshold(request.difficulty)
     const baseFailure = evaluateFailureRatio(attribute.value, 0, request.modifier, threshold)
-    const jokerFailure = evaluateFailureRatio(6, 0, request.modifier, threshold)
+
+    const jokerFailure = isJokerCharacter(character) ? evaluateFailureRatio(6, 0, request.modifier, threshold) : 1
+
     const totalFailure = baseFailure * jokerFailure
     const ratio = 1 - totalFailure
 
@@ -88,7 +92,7 @@ const checkAttribute = (character: CharacterData, request: DeadlandsCheckAttribu
     const baseDiceValues = rollDiceWithRaise(attribute.value)
     const baseValue = baseDiceValues.reduce((acc, v) => acc += v, 0)
 
-    const jokerDiceValues = rollDiceWithRaise(6)
+    const jokerDiceValues = isJokerCharacter(character) ? rollDiceWithRaise(6) : []
     const jokerValue = jokerDiceValues.reduce((acc, v) => acc += v, 0)
 
     const totalValue = Math.max(baseValue, jokerValue) + request.modifier
@@ -154,7 +158,9 @@ const evaluateCheckAbilityRatio = (character: CharacterData, request: DeadlandsC
   if (ability !== undefined) {
     const threshold = findCheckThreshold(request.difficulty)
     const baseFailure = evaluateFailureRatio(ability.value, 0, request.modifier, threshold)
-    const jokerFailure = evaluateFailureRatio(6, 0, request.modifier, threshold)
+    
+    const jokerFailure = isJokerCharacter(character) ? evaluateFailureRatio(6, 0, request.modifier, threshold) : 1
+    
     const totalFailure = baseFailure * jokerFailure
     const ratio = 1 - totalFailure
 
@@ -170,7 +176,7 @@ const checkAbility = (character: CharacterData, request: DeadlandsCheckAbilityRe
     const baseDiceValues = rollDiceWithRaise(ability.value)
     const baseValue = baseDiceValues.reduce((acc, v) => acc += v, 0)
 
-    const jokerDiceValues = rollDiceWithRaise(6)
+    const jokerDiceValues = isJokerCharacter(character) ? rollDiceWithRaise(6) : []
     const jokerValue = jokerDiceValues.reduce((acc, v) => acc += v, 0)
 
     const totalValue = Math.max(baseValue, jokerValue) + request.modifier
