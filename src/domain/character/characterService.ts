@@ -14,6 +14,18 @@ export type CharacterService = {
   tryCreateFromFile: (path: string) => Character | null
 }
 
+const createDefaultTagsFor = (game: Game): Array<string> => {
+  switch (game) {
+    default: return unreachable(game)
+    case 'Aria':
+    case 'Rêve de Dragon':
+    case 'BaSIC':
+      return []
+    case 'Deadlands':
+      return ['Joker']
+  }
+}
+
 const createDefaultAttributesFor = (game: Game): Array<Attribute> => {
   switch (game) {
     default: return unreachable(game)
@@ -53,7 +65,7 @@ export const createCharacterService = (): CharacterService => {
     const defaultState = {
       game,
       name: 'Average Joe',
-      tags: [], 
+      tags: createDefaultTagsFor(game),
       attributes: createDefaultAttributesFor(game),
       abilities: createDefaultAbilitiesFor(game),
       diceActions: createDefaultDiceActionsFor(game),
@@ -73,6 +85,8 @@ export const createCharacterService = (): CharacterService => {
     if (isValidGame(game)) {
       const name = get(maybeSheet, 'name', 'Imported Joe')
     
+      const tags = createDefaultTagsFor(game)
+
       const attributes = createDefaultAttributesFor(game)
       const maybeAttributes = get(maybeSheet, 'attributes', [])
       maybeAttributes.forEach((maybeAttribute: Record<string, unknown>) => {
@@ -123,7 +137,7 @@ export const createCharacterService = (): CharacterService => {
       const state = {
         game,
         name,
-        tags: [], 
+        tags, 
         attributes,
         abilities,
         diceActions,
