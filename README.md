@@ -18,8 +18,8 @@ $ xattr -c <path/to/application.app>
 
 ### @ Users
 
-At the moment, three games are "supported":  
-<img src='./public/images/Aria_Cover.jpg' width=75> <img src='./public/images/Reve-de-Dragon_Cover.jpg' width=75> <img src='./public/images/BaSIC_Cover.jpg' width=75>
+At the moment, four games are "supported":  
+<img src='./public/images/Aria_Cover.jpg' width=75> <img src='./public/images/Reve-de-Dragon_Cover.jpg' width=75> <img src='./public/images/BaSIC_Cover.jpg' width=75> <img src='./public/images/Deadlands_Cover.jpg' width=75>
 
 You should first create a new `Session` for the game relevant to you.  
 <img src='./EasyRoll_UI_Start.png' width=600>
@@ -38,14 +38,18 @@ _(probably not needed anymore, kinda deprecated..)_
 
 ---
 
-Once a character has been added, select it and click one of the `pen` or `more` icons to edit its:  
+Once a character has been added, select it and edit its:  
 * name
+* tags
 * attributes
 * abilities
 * dice tray
 * discord configuration
 
 <img src='./EasyRoll_UI_EditCharacter.png' width=600>
+
+NB: make sure to manage the tag "`joker`" of a character in a Deadlands session   
+_(the additional 1d6 joker dice is used or not depending on this tag)_  
 
 NB: at the moment, each character has its own discord configuration.
 
@@ -70,6 +74,9 @@ NB: at the moment, it is not possible to delete a session or character.
 
 * BaSIC
   * Documentation: https://www.rolis.net/catalogue/jeu/93/basic
+
+* Deadlands
+  * Documentation: https://cdn.1j1ju.com/medias/4b/b5/6e-deadlands-reloaded-livre-de-base.pdf
 
 * Discord
   * API: https://discord.com/developers/docs/resources/channel#create-message

@@ -5,13 +5,6 @@ import { DeadlandsCheckAbilityRequest, DeadlandsCheckAttributeRequest, RollCheck
 import { CharacterData } from '../character/character'
 import { rollDice } from '../dicetray/roll'
 
-// livre règle: https://cdn.1j1ju.com/medias/4b/b5/6e-deadlands-reloaded-livre-de-base.pdf
-// https://docs.google.com/spreadsheets/d/143Yg9EwFzvayI78Wk-BtuJM3bc53B-69h6126Z2dzYI/edit?gid=0#gid=0
-// https://black-book-editions.fr/forums.php?topic_id=5981&srsltid=AfmBOoqXb1CTRcD3zCj8-BRUpLsYKpHYoZR_6AXFVAP5LdLva52yfTg6
-// https://arcane.forumgratuit.org/t16-deadlands-reloaded-le-systeme-de-jeu
-
-// PNJ do not have the joker dice !!
-
 export const evaluateOutcome = (baseValue: number, jokerValue: number, totalValue: number, threshold: number): RollCheckOutcome => {
   if (baseValue === 1 && jokerValue === 1) {
     return 'failure'
