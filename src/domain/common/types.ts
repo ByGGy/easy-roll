@@ -15,6 +15,10 @@ export type EntityWithState<T> = Entity & {
 
 export type Game = 'Aria' | 'Rêve de Dragon' | 'BaSIC' | 'Deadlands'
 
+export const isValidGame = (maybeGame: unknown): maybeGame is Game => {
+  return typeof(maybeGame) === 'string' && (maybeGame === 'Aria' || maybeGame === 'Rêve de Dragon' || maybeGame === 'BaSIC' || maybeGame === 'Deadlands')
+}
+
 export type Attribute = Nominal<'Attribute', Readonly<{
   name: string
   value: number

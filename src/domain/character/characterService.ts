@@ -2,7 +2,7 @@ import { readFileSync } from 'fs'
 import { get } from 'lodash'
 
 import { unreachable } from '../common/tools'
-import { Game, Attribute, Ability, DiscordNotification, DiceAction } from '../common/types'
+import { Game, isValidGame, Attribute, Ability, DiscordNotification, DiceAction } from '../common/types'
 import { Character, create } from './character'
 import { createDefaultAttributes as createAriaDefaultAttributes, createDefaultAbilities as createAriaDefaultAbilities } from '../aria/characterTemplate'
 import { createDefaultAttributes as createRddDefaultAttributes, createDefaultAbilities as  createRddDefaultAbilities } from '../rdd/characterTemplate'
@@ -12,10 +12,6 @@ import { createDefaultAttributes as createDeadlandsDefaultAttributes, createDefa
 export type CharacterService = {
   createFor: (game: Game) => Character
   tryCreateFromFile: (path: string) => Character | null
-}
-
-const isValidGame = (maybeGame: unknown): maybeGame is Game => {
-  return typeof(maybeGame) === 'string' && (maybeGame === 'Aria' || maybeGame === 'Rêve de Dragon' || maybeGame === 'BaSIC')
 }
 
 const createDefaultAttributesFor = (game: Game): Array<Attribute> => {

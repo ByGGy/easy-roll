@@ -5,6 +5,8 @@ import { globSync } from 'glob'
 import { randomUUID } from 'crypto'
 import { get, identity } from 'lodash'
 
+import { isValidGame } from '../domain/common/types'
+
 import { Character } from '../domain/character/character'
 import { Session } from '../domain/session/session'
 
@@ -129,12 +131,33 @@ const maybeUpdateFromV2Repositories = () => {
   }
 }
 
+const maybeUpdateFromV3Repositories = () => {
+  const pathToNextStorageVersion = path.join(app.getPath('userData'), 'lowdb', 'v4')
+  const isMigrationRequired = !fs.existsSync(pathToNextStorageVersion)
+
+  if (isMigrationRequired) {
+    updateRepository('characters.json', 3, (oldCharacter: Character) => {
+      const newCharacter = { ...oldCharacter }
+
+      const game = newCharacter.state.tags[0]
+      if (isValidGame(game)) {
+        newCharacter.state.game = game
+      }
+      newCharacter.state.tags = []
+
+      return newCharacter 
+    })
+
+    updateRepository('sessions.json', 3, identity)
+  }
+}
+
 const sequence: Array<() => void> = [
   maybeUpdateFromCharacterFiles,
   maybeUpdateFromFirstLowdbImplementation,
   maybeUpdateFromV1Repositories,
   maybeUpdateFromV2Repositories,
-  // TODO: need to handle moving game info from tags[0] to game in v3Repositories
+  maybeUpdateFromV3Repositories,
 ]
 
 export type MigrationService = {
