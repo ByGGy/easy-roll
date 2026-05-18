@@ -1,6 +1,6 @@
 import { describe, expect, test, jest } from '@jest/globals'
 
-import { rollDice } from '../roll'
+import { rollDice, rollExplodingDice } from '../roll'
 
 // To test if the observed frequencies are consistent with a fair dice (i.e., a uniform distribution of the sides),
 // we can perform a Chi-Square Goodness-of-Fit test:
@@ -80,5 +80,36 @@ describe('roll module', () => {
     console.log(`criticalValue = ${criticalValue}`)
   
     expect(chiSquareTotal <= criticalValue).toBe(true)
+  })
+
+  test('checks the exploding die minimum is correct', () => {
+    jest.spyOn(global.Math, 'random').mockReturnValue(0)
+
+    expect(rollExplodingDice(-20)).toEqual([-1])
+    expect(rollExplodingDice(-1)).toEqual([-1])
+    expect(rollExplodingDice(0)).toEqual([0])
+    expect(rollExplodingDice(1)).toEqual([1])
+    expect(rollExplodingDice(20)).toEqual([1])
+
+    jest.spyOn(global.Math, 'random').mockRestore()
+  })
+
+  test('checks the exploding die maximum is correct', () => {
+    let callQty = 0
+    const randomSpy = jest.spyOn(global.Math, 'random').mockImplementation(() => {
+      return ++callQty % 2 === 1 ? 1 - Number.EPSILON : 0
+    })
+
+    expect(rollExplodingDice(-20)).toEqual([-20, -1])
+    callQty = 0
+    expect(rollExplodingDice(-1)).toEqual([-1])
+    callQty = 0
+    expect(rollExplodingDice(0)).toEqual([0])
+    callQty = 0
+    expect(rollExplodingDice(1)).toEqual([1])
+    callQty = 0
+    expect(rollExplodingDice(20)).toEqual([20, 1])
+
+    randomSpy.mockRestore()
   })
 })

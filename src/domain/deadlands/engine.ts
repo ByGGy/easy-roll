@@ -3,7 +3,7 @@ import { messageBus } from '../events/messageBus'
 
 import { DeadlandsCheckAbilityRequest, DeadlandsCheckAttributeRequest, RollCheckDetails, RollCheckOutcome, RollCheckQuality, RollDiceDetails, RollResult } from '../common/types'
 import { CharacterData } from '../character/character'
-import { rollDice } from '../dicetray/roll'
+import { rollExplodingDice } from '../dicetray/roll'
 
 export const evaluateOutcome = (baseValue: number, jokerValue: number, totalValue: number, threshold: number): RollCheckOutcome => {
   if (baseValue === 1 && jokerValue === 1) {
@@ -32,14 +32,6 @@ export const evaluateQuality = (outcome: 'success' | 'failure', baseValue: numbe
 
 const findCheckThreshold = (difficulty: number): number => {
   return Math.max(0, 4 + difficulty)
-}
-
-const rollDiceWithRaise = (maxDiceValue: number): Array<number> => {
-  const result: Array<number> = []
-  while (result.length === 0 || result[result.length -1] === maxDiceValue) {
-    result.push(rollDice(maxDiceValue))
-  }
-  return result
 }
 
 const evaluateFailureRatio = (maxDiceValue: number, currentValue: number, modifier: number, threshold: number) => {
@@ -82,10 +74,10 @@ const checkAttribute = (character: CharacterData, request: DeadlandsCheckAttribu
   if (attribute !== undefined) {
     const title = attribute.name
 
-    const baseDiceValues = rollDiceWithRaise(attribute.value)
+    const baseDiceValues = rollExplodingDice(attribute.value)
     const baseValue = baseDiceValues.reduce((acc, v) => acc += v, 0)
 
-    const jokerDiceValues = isJokerCharacter(character) ? rollDiceWithRaise(6) : []
+    const jokerDiceValues = isJokerCharacter(character) ? rollExplodingDice(6) : []
     const jokerValue = jokerDiceValues.reduce((acc, v) => acc += v, 0)
 
     const totalValue = Math.max(baseValue, jokerValue) + request.modifier
@@ -166,10 +158,10 @@ const checkAbility = (character: CharacterData, request: DeadlandsCheckAbilityRe
   if (ability !== undefined) {
     const title = ability.name
 
-    const baseDiceValues = rollDiceWithRaise(ability.value)
+    const baseDiceValues = rollExplodingDice(ability.value)
     const baseValue = baseDiceValues.reduce((acc, v) => acc += v, 0)
 
-    const jokerDiceValues = isJokerCharacter(character) ? rollDiceWithRaise(6) : []
+    const jokerDiceValues = isJokerCharacter(character) ? rollExplodingDice(6) : []
     const jokerValue = jokerDiceValues.reduce((acc, v) => acc += v, 0)
 
     const totalValue = Math.max(baseValue, jokerValue) + request.modifier
