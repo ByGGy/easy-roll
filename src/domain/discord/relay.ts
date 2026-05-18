@@ -46,7 +46,7 @@ export const createRelay = (repository: Repository<Character, CharacterState>) =
       const details = []
       if (relevantCharacter.state.discordNotification.level === 'Verbose') {
         roll.diceDetails.groups.forEach(g => {
-          details.push(`${g.diceQty}d${g.diceFaceQty} = ${g.rolls.join(', ')}`)  
+          details.push(`${g.diceQty}${g.symbol}${g.diceFaceQty} = ${g.rolls.join(', ')}`)  
         })
         
         if (roll.checkDetails !== null) {

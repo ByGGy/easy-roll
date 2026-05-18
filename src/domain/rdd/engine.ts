@@ -85,6 +85,7 @@ const checkAttribute = (character: CharacterData, request: RDDCheckAttributeRequ
     const diceDetails: RollDiceDetails = {
       groups: [{
         diceQty: 1,
+        symbol: 'd',
         diceFaceQty: 100,
         rolls: [diceValue],
       }],   

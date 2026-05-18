@@ -1,5 +1,5 @@
 export type InValue = number
-export type Category = 'arithmetic' | 'comparative'
+export type Category = 'arithmetic' | 'comparative' | 'diceRoll'
 
 export type OperatorInfo = {
   name: string
@@ -21,7 +21,8 @@ export type BaseOperator<TOutValue> = OperatorInfo & {
 
 export type ArithmeticOperator = BaseOperator<number>
 export type ComparativeOperator = BaseOperator<boolean>
-export type Operator = ArithmeticOperator | ComparativeOperator
+export type DiceRollOperator = BaseOperator<number>
+export type Operator = ArithmeticOperator | ComparativeOperator | DiceRollOperator
 
 export type OutValue = ReturnType<Operator['f']>['value']
 

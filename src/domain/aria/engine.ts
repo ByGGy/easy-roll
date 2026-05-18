@@ -66,6 +66,7 @@ const checkAttribute = (character: CharacterData, request: AriaCheckAttributeReq
     const diceDetails: RollDiceDetails = {
       groups: [{
         diceQty: 1,
+        symbol: 'd',
         diceFaceQty: 100,
         rolls: [diceValue],
       }],
@@ -129,6 +130,7 @@ const checkAbility = (character: CharacterData, request: AriaCheckAbilityRequest
     const diceDetails: RollDiceDetails = {
       groups: [{
         diceQty: 1,
+        symbol: 'd',
         diceFaceQty: 100,
         rolls: [diceValue],
       }],   

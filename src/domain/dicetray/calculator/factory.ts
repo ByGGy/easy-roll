@@ -2,7 +2,7 @@ import { create as createParser } from './input/parser'
 import { Operand, Operator } from './core/types'
 import {
   addition, substraction, multiplication, division, exponentiation, modulo,
-  diceRolls,
+  diceRolls, explodingDiceRolls,
   lessThan, greaterThan, lessThanOrEqualTo, greaterThanOrEqualTo, equalTo, notEqualTo,
 } from './core/operators'
 import { createSolver } from './core/operation'
@@ -67,5 +67,5 @@ export const createRPG02 = () => create([
   lessThanOrEqualTo, lessThan, greaterThanOrEqualTo, greaterThan, equalTo, notEqualTo,
   modulo,
   addition, substraction, multiplication, division,
-  diceRolls
+  explodingDiceRolls, diceRolls
 ])

@@ -49,7 +49,7 @@ const RollItem = ({ roll, opacity }: RollItemProps) => {
   // TODO: duplicated code with /src/domain/discord/relay.handleRollResult function
   const details = []
   roll.diceDetails.groups.forEach(g => {
-    details.push(`${g.diceQty}d${g.diceFaceQty} = ${g.rolls.join(', ')}`)  
+    details.push(`${g.diceQty}${g.symbol}${g.diceFaceQty} = ${g.rolls.join(', ')}`)  
   })
 
   if (roll.checkDetails !== null) {

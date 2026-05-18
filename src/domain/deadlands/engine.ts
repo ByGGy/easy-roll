@@ -110,11 +110,13 @@ const checkAttribute = (character: CharacterData, request: DeadlandsCheckAttribu
     const diceDetails: RollDiceDetails = {
       groups: [{
         diceQty: 1,
+        symbol: 'ed',
         diceFaceQty: attribute.value,
         rolls: baseDiceValues,
       },
       {
         diceQty: 1,
+        symbol: 'ed',
         diceFaceQty: 6,
         rolls: jokerDiceValues,
       }],   
@@ -194,11 +196,13 @@ const checkAbility = (character: CharacterData, request: DeadlandsCheckAbilityRe
     const diceDetails: RollDiceDetails = {
       groups: [{
         diceQty: 1,
+        symbol: 'ed',
         diceFaceQty: ability.value,
         rolls: baseDiceValues,
       },
       {
         diceQty: 1,
+        symbol: 'ed',
         diceFaceQty: 6,
         rolls: jokerDiceValues,
       }],   

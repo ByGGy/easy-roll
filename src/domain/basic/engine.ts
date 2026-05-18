@@ -66,6 +66,7 @@ const checkAttribute = (character: CharacterData, request: BasicCheckAttributeRe
     const diceDetails: RollDiceDetails = {
       groups: [{
         diceQty: 1,
+        symbol: 'd',
         diceFaceQty: 100,
         rolls: [diceValue],
       }],   
@@ -134,6 +135,7 @@ const checkAbility = (character: CharacterData, request: BasicCheckAbilityReques
     const diceDetails: RollDiceDetails = {
       groups: [{
         diceQty: 1,
+        symbol: 'd',
         diceFaceQty: 100,
         rolls: [diceValue],
       }],   

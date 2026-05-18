@@ -146,6 +146,7 @@ export type RollCheckDetails = {
 
 export type RollDiceGroup = {
   diceQty: number
+  symbol: string
   diceFaceQty: number
   rolls: Array<number>
 }

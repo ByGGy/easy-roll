@@ -3,10 +3,8 @@ import { messageBus } from '../events/messageBus'
 
 import { DiceActionRequest, DiceTrayRequest, RollCheckDetails, RollDiceDetails, RollOutcomeDetails, RollResult } from '../common/types'
 import { CharacterData } from '../character/character'
-import { createRPG02 } from './calculator/factory'
-import { diceRolls } from './calculator/core/operators'
+import { createRPG02, ExpressionValidationResult } from './calculator/factory'
 import { OperatorResult, OutValue } from './calculator/core/types'
-import { ExpressionValidationResult } from './calculator/factory'
 
 const calculator = createRPG02()
 
@@ -37,7 +35,7 @@ const findComparison = (operatorResults: Array<OperatorResult<OutValue>>): Compa
 const evaluate = (name: string, expression: string): Omit<RollResult, 'id' | 'request'> | null => {
   const calcResult = calculator.compute(expression)
   if (calcResult !== null ) {
-    const rolls = calcResult.details.filter(d => d.operatorInfo.name === diceRolls.name)
+    const rolls = calcResult.details.filter(d => d.operatorInfo.category === 'diceRoll')
     const condition = findComparison(calcResult.details)
 
     const title = name
@@ -58,6 +56,7 @@ const evaluate = (name: string, expression: string): Omit<RollResult, 'id' | 're
       groups: rolls.map(r => (
         {
           diceQty: r.operands[0],
+          symbol: r.operatorInfo.symbol,
           diceFaceQty: r.operands[1],
           rolls: r.extra,
         })),
