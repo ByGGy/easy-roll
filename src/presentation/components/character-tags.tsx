@@ -63,7 +63,7 @@ export const CharacterTags = ({ character }: Props) => {
   return (
     <Stack spacing={1} paddingLeft={2} paddingRight={2} direction='row' alignItems='center'>
       <Typography variant='subtitle2' color='primary'>Tags</Typography>
-      {character.state.tags.map(tag => <Chip label={tag}  variant='outlined' onDelete={() => handleDelete(tag)} />)}
+      {character.state.tags.map(tag => <Chip key={tag} label={tag}  variant='outlined' onDelete={() => handleDelete(tag)} />)}
       <IconPopover direction='down-left' triggerContent={<StyleIcon color='primary' />} popoverContent={<CreateTag onApply={handleCreate} />} />
     </Stack>
   )

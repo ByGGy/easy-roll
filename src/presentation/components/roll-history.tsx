@@ -19,6 +19,7 @@ import { unreachable } from '../../domain/common/tools'
 import { CustomPopover } from './common/pop-over'
 import { DarkTooltip } from './common/style-helpers'
 import { DiceIcon } from './common/dice-icon'
+import { PaintSplash } from './common/paint-splash'
 import { AriaRoll } from './aria/aria-roll'
 import { RddRoll } from './rdd/rdd-roll'
 import { BasicRoll } from './basic/basic-roll'
@@ -27,7 +28,7 @@ import { DeadlandsRoll } from './deadlands/deadlands-roll'
 
 const QualityBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
   '& .MuiBadge-badge': {
-    // right: '-0.5em',
+    right: '-0.5em',
     // top:'0em',
     backgroundColor: `${theme.palette.background.paper}`,
     border: `2px solid ${theme.palette.background.paper}`,
@@ -77,8 +78,29 @@ const RollItem = ({ roll, opacity }: RollItemProps) => {
     details.push(`quality: ${roll.outcomeDetails.quality}`)
   }
 
+  const getIntensity = () => {
+    switch (roll.outcomeDetails.quality) {
+      case 'normal': return 0
+      case 'significant': return 0.3
+      case 'particular': return 0.65
+      case 'critical': return 1
+    }
+  }
+
+  // TODO: use tiniColor2 module to create the palette with different modes, e.g. complementary, shades, monochromatic
+  // TODO: use styled() to get the theme as props in order to derive the palette from theme' colors ?
+  // e.g. before it was something like (theme) => outcome === 'value' ? theme.palette.info.light : outcome === 'success' ? theme.palette.success.main : theme.palette.error.main,
+  // vertical vs horizontal stroke in the paintsplash for failures vs success ?
+  const getPalette = () => {
+    switch (roll.outcome) {
+      case 'value': return ['#00A4B8', '#B86F02', '#B83000']
+      case 'success': return ['#44B053', /*'#c78039',*/ '#6645B0'] // ['#88BA34', '#BA34A0', '#7134BB']
+      case 'failure': return ['#B81B00', '#522821', '#852A1B']
+    }
+  }
+
   return (
-    <Stack padding={2} spacing={2} direction='row' sx={{ opacity }} alignItems='flex-start'>
+    <Stack padding={1} spacing={1} direction='row' sx={{ opacity }} alignItems='flex-center'>
       <Stack sx={{ width: 200 }}>
         <Typography variant='body1'>{title}</Typography>
         <Stack spacing={1} direction='row' alignItems='center'>
@@ -88,7 +110,7 @@ const RollItem = ({ roll, opacity }: RollItemProps) => {
           <Typography variant='subtitle2' color={roll.request.characterId === selectedCharacterId ? 'text.primary' : 'text.secondary'}>{characterName}</Typography>
         </Stack>
       </Stack>
-      <DarkTooltip title={<span style={{ whiteSpace: 'pre-line' }}>{details.join('\n')}</span>} placement='right'>
+      <PaintSplash sx={{ width: 80 }} seed={roll.id} intensity={getIntensity()} palette={getPalette()}>
         <QualityBadge
           anchorOrigin={{
             vertical: 'bottom',
@@ -101,28 +123,19 @@ const RollItem = ({ roll, opacity }: RollItemProps) => {
           }
           invisible={roll.outcomeDetails.quality === 'normal'}
         >
-          <Stack
-            direction='row'
-            padding={0.5}
-            spacing={1}
-            alignItems='center'
-            sx={{
-              backgroundColor: roll.outcome === 'value' ? 'info.light' : roll.outcome === 'success' ? 'success.main' : 'error.main',
-              color:'background.paper',
-              borderRadius: 4
-            }}
-          >
-            <DiceIcon color='inherit' strokeWidth={roll.outcomeDetails.quality === 'normal' ? 1 : 2} />
-            <Typography variant='h6' pr={1}
+          <DarkTooltip title={<span style={{ whiteSpace: 'pre-line' }}>{details.join('\n')}</span>} placement='right'>
+            <Typography
+              variant='h6'
               sx={{
                 fontWeight: roll.outcomeDetails.quality === 'normal' ? '' : 'bold',
-                color: 'inherit',
+                color: 'black',
+                textShadow: '2px 2px 4px rgba(0,0,0,0.65)',
               }}>
               {roll.diceDetails.total}
             </Typography>
-          </Stack>
+          </DarkTooltip>
         </QualityBadge>
-      </DarkTooltip>
+      </PaintSplash>
     </Stack>
   )
 }

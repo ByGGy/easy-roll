@@ -1,6 +1,7 @@
 import { useSelector } from 'react-redux'
 import { RootState } from '../store/store'
 
+import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
 import Paper from '@mui/material/Paper'
 import Avatar from '@mui/material/Avatar'
@@ -41,7 +42,9 @@ export const SessionPage = () => {
             </Stack>
           }
         </Paper>
-        <RollHistory />
+        <Box flex={1} height='100%' overflow='hidden'>
+          <RollHistory />
+        </Box>
       </Stack>
     )
   }
