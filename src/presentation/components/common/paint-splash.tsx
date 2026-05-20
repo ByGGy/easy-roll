@@ -5,10 +5,10 @@ import Box from '@mui/material/Box'
 
 import seedrandom from 'seedrandom'
 
-const stroke1Texture = './images/paint_textures/stroke1.png'
-const stroke2Texture = './images/paint_textures/stroke2.png'
-const splatTexture = './images/paint_textures/splat1.png'
-const detailTexture = './images/paint_textures/details.png'
+const stroke1Texture = './images/textures/paint/stroke1.png'
+const stroke2Texture = './images/textures/paint/stroke2.png'
+const splatTexture = './images/textures/paint/splat1.png'
+const detailTexture = './images/textures/paint/details.png'
 
 type PaintCanvasProps = {
   sx?: SxProps<Theme>

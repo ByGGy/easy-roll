@@ -99,7 +99,7 @@ export const TorchOverlay = () => {
         sx={{
           position: 'absolute',
           inset: 0,
-          backgroundImage: 'url(./images/noise.png)',
+          backgroundImage: 'url(./images/textures/noise.png)',
           maskMode: 'luminance'
         }}
       />
