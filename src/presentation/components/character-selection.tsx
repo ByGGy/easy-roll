@@ -168,12 +168,12 @@ export const CharacterSelection = ({ session }: Props) => {
             >
               <ListItemButton onClick={() => handleSelection(c.id)}>
                 <ListItemAvatar>
-                  <Avatar sx={{ bgcolor: c.id === selectedCharacterId ? 'text.primary' : '' }}>
+                  <Avatar sx={ c.id === selectedCharacterId ? { bgcolor: 'text.primary' } : { scale: '0.9', opacity: 0.75 }}>
                     <Jdenticon value={c.state.name} />
                   </Avatar>
                 </ListItemAvatar>
                 <ListItemText primary={
-                  <Typography color={c.id === selectedCharacterId ? '' : 'text.secondary'} variant='body1'>{c.state.name}</Typography>
+                  <Typography color={c.id === selectedCharacterId ? '' : 'text.secondary'} variant={c.id === selectedCharacterId ? 'body1' : 'body2'}>{c.state.name}</Typography>
                 } />
               </ListItemButton>
             </ListItem>
