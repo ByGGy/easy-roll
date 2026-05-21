@@ -1,6 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit'
 
 import { ipcMiddleware } from './ipcMiddleware'
+import { hmrMiddleware, recoverState } from './hmrMiddleware'
+
 import selectionReducer from './selectionSlice'
 import characterCollectionReducer from './characterCollectionSlice'
 import sessionCollectionReducer from './sessionCollectionSlice'
@@ -16,8 +18,17 @@ export const store = configureStore({
     rollHistory: rollHistoryReducer,
     uiOptions: uiOptionsReducer,
   },
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(ipcMiddleware),
+  middleware: (getDefaultMiddleware) => {
+    const middleware = getDefaultMiddleware().concat(ipcMiddleware)
+
+    if (import.meta.env.DEV) {
+      middleware.push(hmrMiddleware)
+    }
+
+    return middleware
+  },
+    
+  preloadedState: recoverState()
 })
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

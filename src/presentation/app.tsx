@@ -1,8 +1,10 @@
-import { ThemeProvider, ThemeOptions, createTheme } from '@mui/material/styles'
-import CssBaseline from '@mui/material/CssBaseline'
 import { createRoot } from 'react-dom/client'
 import { store } from './store/store'
 import { Provider } from 'react-redux'
+
+import { ThemeProvider, ThemeOptions, createTheme } from '@mui/material/styles'
+import CssBaseline from '@mui/material/CssBaseline'
+
 import Box from '@mui/material/Box'
 import Paper from '@mui/material/Paper'
 

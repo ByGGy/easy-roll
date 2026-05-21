@@ -15,8 +15,10 @@ declare global {
 // NB: the other way is a lot easier, i.e. Main process to renderer, cause everything is goin through the onMessage
 // but we're loosing data typing; btw, it's lost both ways: Window.electronAPI?: any
 contextBridge.exposeInMainWorld('electronAPI', {
+  // Back ----> Front
   onMessage: (channel: string, callback: (data: string) => void) => ipcRenderer.on(channel, (event, data) => callback(data)),
 
+  // Back <---- Front
   getAppVersion: () => ipcRenderer.invoke('getAppVersion'),
 
   createSession: (game: Game) => ipcRenderer.invoke('createSession', game),
